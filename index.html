@@ -1,0 +1,3054 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="收支估算">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <title>收支估算</title>
+  <style>
+    /* Hallmark · genre: modern-minimal · macrostructure: Workbench · tone: utilitarian · anchor hue: cobalt */
+    :root {
+      color-scheme: light;
+      --color-paper: oklch(97% 0.012 255);
+      --color-paper-2: oklch(94% 0.018 255);
+      --color-surface: oklch(99% 0.006 255);
+      --color-surface-2: oklch(96.5% 0.013 255);
+      --color-ink: oklch(19% 0.035 255);
+      --color-muted: oklch(48% 0.045 255);
+      --color-muted-2: oklch(68% 0.035 255);
+      --color-rule: oklch(88% 0.026 255);
+      --color-rule-2: oklch(93% 0.018 255);
+      --color-accent: oklch(52% 0.19 255);
+      --color-accent-2: oklch(62% 0.16 255);
+      --color-focus: oklch(60% 0.18 255);
+      --color-success: oklch(51% 0.14 158);
+      --color-danger: oklch(53% 0.17 25);
+      --color-danger-soft: oklch(96% 0.025 25);
+      --color-scrim: oklch(20% 0.035 255 / 0.36);
+      --bg: var(--color-paper);
+      --panel: var(--color-surface);
+      --panel-2: var(--color-surface-2);
+      --ink: var(--color-ink);
+      --muted: var(--color-muted);
+      --muted-2: var(--color-muted-2);
+      --line: var(--color-rule);
+      --line-2: var(--color-rule-2);
+      --accent: var(--color-accent);
+      --accent-2: var(--color-accent-2);
+      --soft: oklch(93% 0.035 255);
+      --soft-2: oklch(97% 0.016 255);
+      --income: var(--color-accent);
+      --saved: var(--color-success);
+      --spend: var(--color-danger);
+      --space-2xs: 4px;
+      --space-xs: 8px;
+      --space-sm: 12px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --radius-card: 8px;
+      --radius-pill: 999px;
+      --dur-fast: 120ms;
+      --dur-short: 180ms;
+      --dur-modal: 260ms;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --shadow: 0 1px 2px oklch(30% 0.04 255 / 0.05);
+      --shadow-soft: 0 1px 2px oklch(30% 0.04 255 / 0.06);
+      --font-display: ui-rounded, -apple-system, BlinkMacSystemFont, "SF Pro Rounded", "SF Pro Display", sans-serif;
+      --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      font-family: var(--font-body);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { overflow-x: clip; }
+
+    [hidden] { display: none !important; }
+
+    body[data-entry-type="income"] #currentValueField,
+    body[data-entry-type="income"] #computedProfitField {
+      display: none !important;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      background:
+        linear-gradient(180deg, #ffffff 0, var(--bg) 190px),
+        var(--bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      font-variant-numeric: tabular-nums;
+    }
+
+    button, input, select, textarea { font: inherit; }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.16s ease, background 0.16s ease, color 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    button:active { transform: translateY(1px); }
+
+    h1, h2, p { margin: 0; }
+
+    .app {
+      min-height: 100dvh;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: calc(18px + var(--safe-top)) 16px calc(96px + var(--safe-bottom));
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .metric, .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .metric {
+      min-width: 0;
+      padding: 15px 14px;
+      background:
+        linear-gradient(180deg, #ffffff 0%, var(--panel-2) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .overview-only .metric {
+      min-height: 104px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-color: transparent;
+    }
+
+    .overview-only .metric::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      height: 3px;
+      background: var(--accent);
+    }
+
+    .period-summary {
+      grid-template-columns: repeat(4, 1fr);
+      margin-bottom: 14px;
+    }
+
+    .period-summary .metric {
+      padding: 12px 10px;
+      box-shadow: none;
+      background: #fbfdff;
+    }
+
+    .period-summary .metric strong {
+      font-size: clamp(15px, 4.1vw, 20px);
+    }
+
+    #entryPeriodSummary {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    body[data-entry-type="income"] #entryPeriodSummary {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .metric span {
+      display: block;
+      margin-bottom: 9px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 760;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: clamp(24px, 7vw, 34px);
+      line-height: 1;
+      overflow-wrap: anywhere;
+      color: var(--accent);
+      letter-spacing: 0;
+    }
+
+    .income-color { color: var(--income) !important; }
+    .saved-color { color: var(--saved) !important; }
+    .spend-color { color: var(--spend) !important; }
+    .muted-color { color: var(--muted) !important; }
+
+    .panel {
+      padding: 14px;
+      margin-bottom: 16px;
+      border-color: #dbe6f5;
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .panel-title h2 {
+      font-size: 16px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .entry-list-header {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line-2);
+    }
+
+    .period-tools {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .period-mode, .year-switcher {
+      display: grid;
+      gap: 3px;
+      background: #eef5ff;
+      border-radius: 8px;
+      padding: 4px;
+      border: 1px solid #dce9fb;
+    }
+
+    .period-mode { grid-template-columns: 1fr 1fr; }
+
+    .year-switcher {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mode-btn {
+      min-height: 36px;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 820;
+      padding: 0 14px;
+    }
+
+    .mode-btn.active, .tab-btn.active {
+      background: #fff;
+      color: var(--accent);
+      box-shadow: 0 6px 16px rgba(23, 101, 216, 0.12);
+    }
+
+    .icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 7px;
+      display: grid;
+      place-items: center;
+      background: transparent;
+      color: var(--ink);
+    }
+
+    .icon-btn:active { background: #fff; }
+
+    #yearLabel {
+      min-width: 64px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 860;
+    }
+
+    #entryYearLabel {
+      min-width: 64px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 860;
+    }
+
+    .period-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .period-cell {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      padding: 9px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+    }
+
+    .period-cell:not(.is-empty) {
+      border-color: #cbdcf0;
+    }
+
+    .period-cell .label {
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.05;
+    }
+
+    .mini-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.25;
+      min-width: 0;
+    }
+
+    .mini-row strong {
+      font-size: 11px;
+      text-align: right;
+      overflow-wrap: anywhere;
+      min-width: 0;
+    }
+
+    .period-cell.is-empty {
+      background: #ffffff;
+      border-color: #e2eaf5;
+    }
+
+    .period-cell.is-empty .mini-row strong { color: var(--muted-2) !important; }
+
+    .income-cell-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 2px;
+    }
+
+    .income-cell-head strong {
+      color: var(--income);
+      font-size: 15px;
+      line-height: 1.05;
+      text-align: right;
+      overflow-wrap: anywhere;
+      letter-spacing: 0;
+    }
+
+    .income-cell-head strong.muted-color {
+      color: var(--muted) !important;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    .date-row {
+      display: block;
+    }
+
+    .date-chip {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 11px 12px;
+      background: #fff;
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-weight: 850;
+      font-size: 16px;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+    }
+
+    .date-chip button {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: #eef5ff;
+      color: var(--muted);
+      display: grid;
+      place-items: center;
+      font-size: 17px;
+      line-height: 1;
+    }
+
+    .check-field {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 46px;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--soft-2);
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .check-field input {
+      width: 18px;
+      min-height: 18px;
+      height: 18px;
+      padding: 0;
+      accent-color: var(--accent);
+    }
+
+    label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 760;
+    }
+
+    .required {
+      color: var(--spend);
+      margin-left: 3px;
+      font-weight: 900;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      border-radius: 8px;
+      padding: 11px 12px;
+      outline: none;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 72px;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(29, 95, 209, 0.13);
+    }
+
+    .calculated-value {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid var(--line);
+      background: var(--soft-2);
+      color: var(--muted);
+      border-radius: 8px;
+      padding: 11px 12px;
+      display: flex;
+      align-items: center;
+      font-weight: 900;
+      overflow-wrap: anywhere;
+    }
+
+    .primary {
+      width: 100%;
+      min-height: 50px;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #2475e6, var(--accent));
+      color: #fff;
+      font-weight: 850;
+      margin-top: 12px;
+      box-shadow: 0 12px 22px rgba(23, 101, 216, 0.22);
+    }
+
+    .entry-toggle {
+      margin-top: 0;
+      min-height: 52px;
+    }
+
+    .entry-dropdown {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 16px 16px calc(16px + var(--safe-bottom));
+      background: rgba(15, 23, 42, 0.28);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .entry-modal {
+      width: min(100%, 560px);
+      max-height: min(84dvh, 720px);
+      overflow-y: auto;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 24px 68px rgba(15, 23, 42, 0.24);
+    }
+
+    .secondary {
+      min-height: 42px;
+      padding: 0 14px;
+      border-radius: 8px;
+      background: #eef5ff;
+      color: var(--accent);
+      font-weight: 800;
+      border: 1px solid #dce9fb;
+    }
+
+    .danger {
+      background: #fff3f3;
+      color: var(--spend);
+      border-color: #f4cbcb;
+    }
+
+    .records {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .record-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: start;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.9) inset;
+    }
+
+    .record-main { min-width: 0; }
+
+    .record-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      margin-bottom: 10px;
+    }
+
+    .record-title-row strong {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: #eef5ff;
+      color: var(--accent);
+      font-size: 12px;
+      line-height: 1;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .record-title-row .record-date {
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.2;
+      font-weight: 850;
+      overflow-wrap: anywhere;
+    }
+
+    .record-meta-grid {
+      display: grid;
+      gap: 7px;
+    }
+
+    .record-meta-row {
+      display: grid;
+      grid-template-columns: 64px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .record-meta-row span:first-child {
+      color: var(--muted-2);
+      white-space: nowrap;
+    }
+
+    .record-meta-row span:last-child {
+      color: var(--muted);
+      font-weight: 720;
+      overflow-wrap: anywhere;
+    }
+
+    .record-side {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 9px;
+      min-width: 88px;
+    }
+
+    .amount {
+      font-weight: 900;
+      font-size: 17px;
+      white-space: nowrap;
+      line-height: 1.05;
+      text-align: right;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      border-radius: 999px;
+      padding: 0 8px;
+      background: #eef5ff;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .mini-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .mini-actions button {
+      width: 32px;
+      height: 30px;
+      border-radius: 7px;
+      background: #eef5ff;
+      color: var(--muted);
+      font-weight: 850;
+    }
+
+    .search-row {
+      display: grid;
+      grid-template-columns: 1fr 128px;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+
+    .note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 26px 12px;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      line-height: 1.45;
+      background: #fbfdff;
+    }
+
+    .tabs {
+      position: fixed;
+      left: max(10px, env(safe-area-inset-left, 0px));
+      right: max(10px, env(safe-area-inset-right, 0px));
+      bottom: 0;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 8px 8px calc(8px + var(--safe-bottom));
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(216, 228, 243, 0.92);
+      border-bottom: 0;
+      border-radius: 8px 8px 0 0;
+      box-shadow: 0 -10px 28px rgba(32, 86, 154, 0.09);
+    }
+
+    .tab-btn {
+      min-height: 50px;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 850;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      font-size: 12px;
+    }
+
+    .tab-btn.active {
+      background: #edf5ff;
+    }
+
+    .tab-btn svg {
+      width: 19px;
+      height: 19px;
+      stroke-width: 2.3;
+    }
+
+    .view { display: none; }
+    .view.active { display: block; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(82px + var(--safe-bottom));
+      z-index: 20;
+      max-width: calc(100% - 32px);
+      transform: translateX(-50%) translateY(16px);
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.2s ease;
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: var(--ink);
+      color: #fff;
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 420px) {
+      .app {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .summary { gap: 9px; }
+
+      .metric { padding: 12px 10px; }
+
+      .form-grid, .search-row { grid-template-columns: 1fr; }
+
+      .period-tools {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .period-grid { gap: 7px; }
+
+      .period-cell {
+        padding: 8px 7px;
+      }
+
+      .record-card {
+        gap: 10px;
+        padding: 12px;
+      }
+
+      .record-meta-row {
+        grid-template-columns: 56px minmax(0, 1fr);
+        gap: 8px;
+      }
+
+      .record-side {
+        min-width: 74px;
+      }
+
+      .amount {
+        font-size: 16px;
+      }
+    }
+
+    /* Hallmark visual pass: app workbench */
+    body {
+      background:
+        linear-gradient(180deg, oklch(99% 0.006 255) 0, var(--color-paper) 150px),
+        var(--color-paper);
+      letter-spacing: 0;
+    }
+
+    button {
+      transition:
+        background-color var(--dur-short) var(--ease-out),
+        border-color var(--dur-short) var(--ease-out),
+        color var(--dur-short) var(--ease-out),
+        opacity var(--dur-short) var(--ease-out),
+        transform var(--dur-fast) var(--ease-out);
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: 2px solid var(--color-focus);
+      outline-offset: 2px;
+    }
+
+    button:active { transform: translateY(1px) scale(0.99); }
+
+    .app {
+      max-width: 720px;
+      padding: calc(var(--space-lg) + var(--safe-top)) var(--space-md) calc(92px + var(--safe-bottom));
+    }
+
+    .view.active {
+      animation: viewIn var(--dur-modal) var(--ease-out);
+    }
+
+    @keyframes viewIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .summary {
+      gap: var(--space-sm);
+      margin-bottom: var(--space-lg);
+    }
+
+    .metric,
+    .panel,
+    .period-cell,
+    .record-card {
+      border-radius: var(--radius-card);
+      box-shadow: var(--shadow);
+    }
+
+    .metric {
+      border-color: var(--color-rule);
+      background: var(--color-surface);
+      padding: var(--space-md);
+    }
+
+    .overview-only {
+      grid-template-columns: 1.18fr 0.82fr;
+    }
+
+    .overview-only .metric {
+      min-height: 118px;
+      padding: var(--space-lg);
+      border: 0;
+      background:
+        linear-gradient(160deg, oklch(99% 0.008 255), oklch(94% 0.03 255));
+    }
+
+    .overview-only .metric::before {
+      width: 34px;
+      right: auto;
+      left: var(--space-lg);
+      top: var(--space-md);
+      height: 3px;
+      border-radius: var(--radius-pill);
+      background: var(--color-accent);
+    }
+
+    .metric span,
+    label {
+      color: var(--color-muted);
+      font-size: 12px;
+      font-weight: 720;
+      line-height: 1.2;
+    }
+
+    .metric strong {
+      font-family: var(--font-display);
+      font-size: clamp(25px, 7vw, 36px);
+      font-weight: 850;
+      color: var(--color-accent);
+    }
+
+    .overview-only .metric strong {
+      font-size: clamp(28px, 8vw, 40px);
+    }
+
+    .panel {
+      padding: var(--space-md);
+      margin-bottom: var(--space-lg);
+      border-color: var(--color-rule);
+      background: oklch(99% 0.006 255);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .panel-title {
+      margin-bottom: var(--space-md);
+    }
+
+    .panel-title h2 {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 850;
+    }
+
+    .period-tools {
+      gap: var(--space-sm);
+    }
+
+    .period-mode,
+    .year-switcher {
+      min-height: 44px;
+      padding: 3px;
+      border: 1px solid var(--color-rule-2);
+      background: var(--color-paper-2);
+      box-shadow: inset 0 1px 0 oklch(100% 0 0 / 0.68);
+    }
+
+    .period-mode {
+      min-width: 126px;
+    }
+
+    .mode-btn {
+      min-height: 36px;
+      border-radius: 7px;
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .mode-btn.active,
+    .tab-btn.active {
+      background: var(--color-surface);
+      color: var(--color-accent);
+      box-shadow: 0 1px 2px oklch(30% 0.04 255 / 0.08);
+    }
+
+    .icon-btn {
+      color: var(--color-ink);
+    }
+
+    .icon-btn:active {
+      background: var(--color-surface);
+    }
+
+    #yearLabel,
+    #entryYearLabel {
+      min-width: 64px;
+      font-family: var(--font-display);
+      font-weight: 850;
+    }
+
+    .period-summary {
+      gap: var(--space-xs);
+      margin-bottom: var(--space-md);
+    }
+
+    .period-summary .metric {
+      padding: var(--space-sm);
+      border: 1px solid var(--color-rule-2);
+      background: var(--color-paper);
+      box-shadow: none;
+    }
+
+    .period-summary .metric span {
+      margin-bottom: var(--space-xs);
+    }
+
+    .period-summary .metric strong {
+      font-size: clamp(15px, 4vw, 20px);
+    }
+
+    .period-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-xs);
+    }
+
+    .period-cell {
+      min-height: 82px;
+      padding: var(--space-sm);
+      border: 1px solid var(--color-rule);
+      background: var(--color-surface);
+      box-shadow: none;
+    }
+
+    .period-cell:not(.is-empty) {
+      border-color: oklch(83% 0.04 255);
+    }
+
+    .period-cell .label {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .mini-row {
+      font-size: 11px;
+      color: var(--color-muted);
+    }
+
+    .mini-row strong {
+      font-size: 11px;
+      font-weight: 850;
+    }
+
+    .period-cell.is-empty {
+      background: oklch(98% 0.008 255);
+      border-color: var(--color-rule-2);
+    }
+
+    .income-cell-head strong {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .primary {
+      min-height: 52px;
+      border: 1px solid oklch(42% 0.18 255);
+      background: var(--color-accent);
+      color: oklch(98% 0.01 255);
+      box-shadow: 0 1px 2px oklch(30% 0.04 255 / 0.12);
+      font-weight: 850;
+      white-space: nowrap;
+    }
+
+    .primary:hover {
+      background: oklch(47% 0.19 255);
+    }
+
+    .entry-toggle {
+      margin-bottom: 0;
+    }
+
+    input,
+    select,
+    textarea,
+    .date-chip,
+    .calculated-value {
+      min-height: 48px;
+      border-color: var(--color-rule);
+      background: var(--color-surface);
+      color: var(--color-ink);
+      box-shadow: none;
+    }
+
+    textarea {
+      min-height: 84px;
+      line-height: 1.45;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--color-muted-2);
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 3px oklch(60% 0.18 255 / 0.16);
+    }
+
+    .date-chip {
+      font-family: var(--font-display);
+      font-weight: 850;
+    }
+
+    .date-chip button,
+    .secondary,
+    .mini-actions button {
+      background: var(--color-paper-2);
+      color: var(--color-accent);
+      border: 1px solid var(--color-rule);
+      white-space: nowrap;
+    }
+
+    .secondary {
+      box-shadow: none;
+    }
+
+    .danger {
+      background: var(--color-danger-soft);
+      color: var(--color-danger);
+      border-color: oklch(83% 0.08 25);
+    }
+
+    .entry-dropdown {
+      z-index: 400;
+      background: var(--color-scrim);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      animation: fadeIn var(--dur-modal) var(--ease-out);
+    }
+
+    .entry-modal {
+      width: min(100%, 540px);
+      padding: var(--space-lg);
+      border: 1px solid var(--color-rule);
+      background: var(--color-surface);
+      box-shadow: 0 16px 40px oklch(20% 0.035 255 / 0.22);
+      animation: sheetIn var(--dur-modal) var(--ease-out);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes sheetIn {
+      from { opacity: 0; transform: translateY(18px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .records {
+      gap: var(--space-xs);
+    }
+
+    .record-card {
+      padding: var(--space-md);
+      border: 1px solid var(--color-rule);
+      background: var(--color-surface);
+      box-shadow: none;
+    }
+
+    .record-title-row {
+      margin-bottom: var(--space-sm);
+    }
+
+    .record-title-row strong {
+      min-height: 22px;
+      background: var(--color-paper-2);
+      color: var(--color-accent);
+      font-weight: 850;
+    }
+
+    .record-title-row .record-date {
+      font-family: var(--font-display);
+      font-weight: 850;
+      color: var(--color-ink);
+    }
+
+    .record-meta-grid {
+      gap: var(--space-xs);
+    }
+
+    .record-meta-row {
+      grid-template-columns: 58px minmax(0, 1fr);
+      gap: var(--space-sm);
+    }
+
+    .record-meta-row span:first-child {
+      color: var(--color-muted-2);
+    }
+
+    .record-meta-row span:last-child {
+      color: var(--color-muted);
+      font-weight: 720;
+    }
+
+    .record-side {
+      gap: var(--space-sm);
+      min-width: 82px;
+    }
+
+    .amount {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .empty {
+      border-color: var(--color-rule);
+      background: var(--color-paper);
+      color: var(--color-muted);
+    }
+
+    .search-row {
+      grid-template-columns: minmax(0, 1fr) 118px;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-md);
+    }
+
+    .tabs {
+      z-index: 200;
+      left: 0;
+      right: 0;
+      max-width: none;
+      padding: 6px 6px calc(6px + var(--safe-bottom));
+      border: 1px solid var(--color-rule);
+      border-bottom: 0;
+      background: oklch(99% 0.006 255 / 0.88);
+      box-shadow: 0 -8px 20px oklch(30% 0.04 255 / 0.08);
+    }
+
+    .tab-btn {
+      min-height: 52px;
+      color: var(--color-muted);
+      font-weight: 820;
+      white-space: nowrap;
+    }
+
+    .tab-btn.active {
+      background: var(--color-paper-2);
+      color: var(--color-accent);
+    }
+
+    .tab-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke-width: 2.1;
+    }
+
+    .toast {
+      z-index: 500;
+      background: var(--color-ink);
+      color: var(--color-paper);
+      transition:
+        opacity var(--dur-modal) var(--ease-out),
+        transform var(--dur-modal) var(--ease-out);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 1ms !important;
+        transition-duration: 1ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .app {
+        padding-left: var(--space-sm);
+        padding-right: var(--space-sm);
+      }
+
+      .overview-only {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .overview-only .metric {
+        min-height: 104px;
+        padding: var(--space-md);
+      }
+
+      .overview-only .metric::before {
+        left: var(--space-md);
+      }
+
+      .period-tools {
+        align-items: stretch;
+      }
+
+      .period-mode {
+        min-width: 112px;
+      }
+
+      .year-switcher {
+        flex: 1;
+        justify-content: space-between;
+      }
+
+      .period-cell {
+        min-height: 76px;
+        padding: var(--space-xs);
+      }
+
+      .record-card {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .record-side {
+        min-width: 0;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .record-meta-row {
+        grid-template-columns: 56px minmax(0, 1fr);
+      }
+    }
+
+    /* Quiet iPhone pass: neutral surfaces, blue only for active controls */
+    :root {
+      --color-paper: #f7f7f8;
+      --color-paper-2: #f0f1f3;
+      --color-surface: #fbfbfc;
+      --color-surface-2: #ffffff;
+      --color-ink: #17181c;
+      --color-muted: #666b76;
+      --color-muted-2: #a0a4ad;
+      --color-rule: #e5e6eb;
+      --color-rule-2: #eeeeF2;
+      --color-accent: #1768d1;
+      --color-accent-2: #dce9fb;
+      --color-focus: #1768d1;
+      --color-success: #16825a;
+      --color-danger: #c2413f;
+      --color-danger-soft: #fff2f2;
+      --color-scrim: rgba(23, 24, 28, 0.32);
+      --bg: var(--color-paper);
+      --panel: var(--color-surface);
+      --panel-2: var(--color-surface-2);
+      --ink: var(--color-ink);
+      --muted: var(--color-muted);
+      --muted-2: var(--color-muted-2);
+      --line: var(--color-rule);
+      --line-2: var(--color-rule-2);
+      --accent: var(--color-accent);
+      --accent-2: var(--color-accent-2);
+      --soft: var(--color-paper-2);
+      --soft-2: var(--color-surface);
+      --income: var(--color-ink);
+      --saved: var(--color-success);
+      --spend: var(--color-danger);
+      --shadow: none;
+      --shadow-soft: none;
+      --font-number: "DIN Alternate", "DIN Condensed", "DIN 2014", "Avenir Next", var(--font-display);
+    }
+
+    body {
+      background: var(--color-paper);
+      color: var(--color-ink);
+    }
+
+    .app {
+      max-width: 680px;
+      padding-top: calc(14px + var(--safe-top));
+      padding-bottom: calc(112px + var(--safe-bottom));
+    }
+
+    .summary {
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .overview-only {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .metric,
+    .panel,
+    .period-cell,
+    .record-card {
+      border-radius: 8px;
+      box-shadow: none;
+    }
+
+    .overview-only .metric {
+      min-height: 78px;
+      padding: 10px;
+      border: 1px solid var(--color-rule);
+      background: var(--color-surface-2);
+    }
+
+    .overview-only .metric::before {
+      display: none;
+    }
+
+    .metric {
+      border-color: var(--color-rule);
+      background: var(--color-surface-2);
+    }
+
+    .metric span,
+    label {
+      color: var(--color-muted);
+      font-weight: 650;
+    }
+
+    .metric strong {
+      font-family: var(--font-number);
+      color: var(--color-ink);
+      font-weight: 820;
+    }
+
+    .overview-only .metric strong {
+      font-size: clamp(27px, 7.4vw, 38px);
+    }
+
+    .income-color {
+      color: var(--color-ink) !important;
+    }
+
+    .saved-color {
+      color: var(--color-success) !important;
+    }
+
+    .spend-color {
+      color: var(--color-danger) !important;
+    }
+
+    .muted-color {
+      color: var(--color-muted-2) !important;
+    }
+
+    .panel {
+      padding: 14px;
+      border: 1px solid var(--color-rule);
+      background: var(--color-surface-2);
+    }
+
+    .panel-title h2 {
+      color: var(--color-ink);
+      font-size: 16px;
+      font-weight: 760;
+    }
+
+    .period-mode,
+    .year-switcher {
+      min-height: 42px;
+      border: 0;
+      background: var(--color-paper-2);
+      box-shadow: none;
+    }
+
+    .mode-btn,
+    .icon-btn {
+      color: var(--color-muted);
+    }
+
+    .mode-btn.active,
+    .tab-btn.active {
+      background: var(--color-surface-2);
+      color: var(--color-accent);
+      box-shadow: none;
+    }
+
+    #yearLabel,
+    #entryYearLabel {
+      font-family: var(--font-number);
+      color: var(--color-ink);
+    }
+
+    .period-summary .metric {
+      border: 0;
+      background: var(--color-paper);
+    }
+
+    .period-grid {
+      gap: 7px;
+    }
+
+    .period-cell {
+      min-height: 78px;
+      padding: 10px;
+      border-color: var(--color-rule);
+      background: var(--color-surface-2);
+    }
+
+    .period-cell:not(.is-empty) {
+      border-color: var(--color-rule);
+    }
+
+    .period-cell.is-empty {
+      background: var(--color-surface-2);
+      border-color: var(--color-rule-2);
+    }
+
+    .period-cell .label {
+      font-size: 14px;
+      font-weight: 780;
+    }
+
+    .mini-row,
+    .mini-row strong {
+      font-size: 11px;
+    }
+
+    .mini-row strong {
+      font-family: var(--font-number);
+    }
+
+    .income-cell-head strong {
+      font-family: var(--font-number);
+      color: var(--color-ink);
+    }
+
+    .primary {
+      border: 0;
+      background: var(--color-ink);
+      color: #fff;
+      box-shadow: none;
+      font-weight: 760;
+    }
+
+    .primary:hover {
+      background: #2a2c32;
+    }
+
+    input,
+    select,
+    textarea,
+    .date-chip,
+    .calculated-value {
+      font-family: var(--font-number);
+      border-color: var(--color-rule);
+      background: var(--color-surface);
+      color: var(--color-ink);
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--color-accent);
+      box-shadow: 0 0 0 3px rgba(23, 104, 209, 0.14);
+    }
+
+    .date-chip button,
+    .secondary,
+    .mini-actions button {
+      background: var(--color-paper);
+      color: var(--color-muted);
+      border: 1px solid var(--color-rule);
+    }
+
+    .entry-dropdown {
+      background: var(--color-scrim);
+    }
+
+    .entry-modal {
+      border-color: var(--color-rule);
+      background: var(--color-surface-2);
+      box-shadow: 0 18px 42px rgba(23, 24, 28, 0.22);
+    }
+
+    .record-card {
+      padding: 14px;
+      border-color: var(--color-rule);
+      background: var(--color-surface-2);
+    }
+
+    .record-title-row strong {
+      background: var(--color-paper);
+      color: var(--color-muted);
+      font-weight: 720;
+    }
+
+    .record-title-row .record-date,
+    .amount {
+      font-family: var(--font-number);
+      color: var(--color-ink);
+    }
+
+    .record-meta-row span:first-child {
+      color: var(--color-muted-2);
+    }
+
+    .record-meta-row span:last-child {
+      color: var(--color-muted);
+    }
+
+    .mini-actions button {
+      font-size: 13px;
+    }
+
+    .search-row {
+      grid-template-columns: minmax(0, 1fr) 112px;
+    }
+
+    .empty {
+      background: var(--color-surface);
+      border-color: var(--color-rule);
+    }
+
+    .tabs {
+      left: 0;
+      right: 0;
+      max-width: none;
+      gap: 4px;
+      padding: 7px 7px calc(7px + var(--safe-bottom));
+      border-color: rgba(229, 230, 235, 0.82);
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 -10px 24px rgba(23, 24, 28, 0.07);
+    }
+
+    .tab-btn {
+      min-height: 54px;
+      border-radius: 8px;
+      color: var(--color-muted);
+      font-size: 11px;
+      font-weight: 720;
+      gap: 4px;
+    }
+
+    .tab-btn.active {
+      background: #f2f4f7;
+      color: var(--color-accent);
+    }
+
+    .tab-btn svg {
+      width: 22px;
+      height: 22px;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .tab-btn span {
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    /* Floating black capsule navigation */
+    .tabs {
+      left: 50%;
+      right: auto;
+      bottom: calc(16px + var(--safe-bottom));
+      width: min(292px, calc(100% - 88px));
+      max-width: none;
+      height: 64px;
+      transform: translateX(-50%);
+      display: grid;
+      grid-template-columns: repeat(4, 52px);
+      justify-content: space-between;
+      align-items: center;
+      justify-items: center;
+      padding: 6px;
+      border: 0;
+      border-radius: 999px;
+      background: #050505;
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.22);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    .tab-btn {
+      width: 52px;
+      height: 52px;
+      min-height: 52px;
+      border-radius: 999px;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.54);
+      font-size: 0;
+      gap: 0;
+      padding: 0;
+      display: grid;
+      place-items: center;
+    }
+
+    .tab-btn span {
+      display: none;
+    }
+
+    .tab-btn svg {
+      width: 25px;
+      height: 25px;
+      stroke-width: 1.7;
+    }
+
+    .tab-btn.active {
+      background: #ffffff;
+      color: #101114;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
+    }
+
+    .tab-btn:active {
+      transform: scale(0.96);
+    }
+
+    .excel-toolbar {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .excel-toolbar .secondary {
+      min-height: 44px;
+      padding: 0 8px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 360px) {
+      .excel-toolbar {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Dark asset card */
+    .overview-only {
+      display: grid;
+      grid-template-columns: 1.35fr 0.65fr;
+      gap: 0;
+      min-height: 142px;
+      padding: 18px;
+      margin-bottom: 18px;
+      border-radius: 8px;
+      background:
+        linear-gradient(145deg, #1c1c20 0%, #111216 58%, #20262d 100%);
+      color: #f7f7f8;
+      box-shadow: 0 18px 36px rgba(17, 18, 22, 0.18);
+    }
+
+    .overview-only .metric {
+      min-height: auto;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .overview-only .metric span {
+      color: rgba(247, 247, 248, 0.58);
+      font-size: 13px;
+      font-weight: 680;
+      margin-bottom: 12px;
+    }
+
+    .overview-only .metric strong {
+      color: #f7f7f8 !important;
+      line-height: 1;
+    }
+
+    .overview-only .metric:first-child strong {
+      font-size: clamp(36px, 10vw, 54px);
+      font-weight: 860;
+    }
+
+    .overview-only .metric:nth-child(2) {
+      align-items: flex-end;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      text-align: right;
+    }
+
+    .overview-only .metric:nth-child(2) strong {
+      font-size: clamp(22px, 5vw, 30px);
+      font-weight: 780;
+    }
+
+    .overview-only .metric:nth-child(2) strong.saved-color {
+      color: #52d18b !important;
+    }
+
+    .overview-only .metric:nth-child(2) strong.spend-color {
+      color: #ff7a76 !important;
+    }
+
+    .overview-only .metric:nth-child(2) strong.muted-color {
+      color: rgba(247, 247, 248, 0.48) !important;
+    }
+
+    #viewOverview .period-summary {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    #viewOverview .period-summary .metric {
+      padding: 10px;
+      min-height: 66px;
+    }
+
+    #viewOverview .period-summary .metric span {
+      margin-bottom: 8px;
+    }
+
+    #viewOverview .period-summary .metric strong {
+      font-size: clamp(14px, 3.8vw, 18px);
+    }
+
+    .period-mode .mode-btn.active {
+      background: #17181c;
+      color: #ffffff;
+    }
+
+    @media (max-width: 420px) {
+      .overview-only {
+        min-height: 132px;
+        padding: 16px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .app {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .overview-only .metric {
+        min-height: 96px;
+        padding: 16px 12px 14px;
+      }
+
+      .period-grid {
+        gap: 6px;
+      }
+
+      .period-cell {
+        padding: 9px 8px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="view active" id="viewOverview">
+      <section class="summary overview-only" aria-label="资产概览">
+        <div class="metric">
+          <span>存款总额</span>
+          <strong id="assetTotal" class="saved-color">0</strong>
+        </div>
+        <div class="metric">
+          <span>总盈亏</span>
+          <strong id="assetProfit">0</strong>
+        </div>
+      </section>
+
+      <div class="panel">
+        <div class="panel-title">
+          <div class="period-tools">
+            <div class="period-mode" aria-label="统计粒度">
+              <button class="mode-btn active" data-period-mode="month">月</button>
+              <button class="mode-btn" data-period-mode="year">年</button>
+            </div>
+            <div class="year-switcher" aria-label="时间切换">
+              <button class="icon-btn" id="prevYear" aria-label="上一段">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div id="yearLabel"></div>
+              <button class="icon-btn" id="nextYear" aria-label="下一段">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"><path d="m9 18 6-6-6-6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <section class="summary period-summary" aria-label="周期合计">
+          <div class="metric">
+            <span id="periodIncomeLabel">本年收入</span>
+            <strong id="periodIncome" class="income-color">0</strong>
+          </div>
+          <div class="metric">
+            <span id="periodSavedLabel">本年存入</span>
+            <strong id="periodSaved" class="saved-color">0</strong>
+          </div>
+          <div class="metric">
+            <span id="periodProfitLabel">本年收益</span>
+            <strong id="periodProfit" class="muted-color">0</strong>
+          </div>
+          <div class="metric">
+            <span id="periodSpendLabel">本年花销</span>
+            <strong id="periodSpend" class="spend-color">0</strong>
+          </div>
+        </section>
+        <div class="period-grid" id="periodGrid"></div>
+      </div>
+
+    </section>
+
+    <section class="view" id="viewEntry">
+      <div class="panel">
+        <button class="primary entry-toggle" type="button" id="openEntryForm">新增记录</button>
+        <div class="entry-dropdown" id="entryDropdown" hidden>
+          <div class="entry-modal">
+            <div class="panel-title">
+              <h2 id="formTitle">新增记录</h2>
+              <button class="secondary" id="cancelEdit" hidden>关闭</button>
+            </div>
+
+            <form id="entryForm">
+              <div class="form-grid">
+                <div class="field">
+                  <label for="amount" id="amountLabel">金额<span class="required">*</span></label>
+                  <input id="amount" inputmode="decimal" autocomplete="off" placeholder="0.00" required>
+                </div>
+                <div class="field" id="currentValueField" hidden>
+                  <label for="currentValue">当前存款总数<span class="required">*</span></label>
+                  <input id="currentValue" inputmode="decimal" autocomplete="off" placeholder="例如：12200" required>
+                </div>
+                <div class="field">
+                  <label for="date" id="dateLabel">日期<span class="required">*</span></label>
+                  <div class="date-row">
+                    <input id="date" type="date" min="2026-01-01" required>
+                    <span class="date-chip" id="dateChip" hidden>
+                      <span id="dateChipText"></span>
+                      <button type="button" id="clearDate" aria-label="清空日期">×</button>
+                    </span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="category" id="categoryLabel">分类<span class="required">*</span></label>
+                  <select id="category"></select>
+                </div>
+                <div class="field" id="ownerField">
+                  <label for="owner">收入人<span class="required">*</span></label>
+                  <select id="owner"></select>
+                </div>
+                <div class="field" id="computedProfitField" hidden>
+                  <label for="computedProfit">本月收益（自动）</label>
+                  <output class="calculated-value" id="computedProfit">0</output>
+                </div>
+                <div class="field full">
+                  <label for="note">备注</label>
+                  <textarea id="note" placeholder="可不填"></textarea>
+                </div>
+              </div>
+              <button class="primary" type="submit" id="saveBtn">保存</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">
+          <div class="period-tools">
+            <div class="period-mode" aria-label="模块统计粒度">
+              <button class="mode-btn active" data-entry-period-mode="month">月</button>
+              <button class="mode-btn" data-entry-period-mode="year">年</button>
+            </div>
+            <div class="year-switcher" aria-label="模块时间切换">
+              <button class="icon-btn" id="entryPrevYear" aria-label="上一段">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div id="entryYearLabel"></div>
+              <button class="icon-btn" id="entryNextYear" aria-label="下一段">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"><path d="m9 18 6-6-6-6"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <section class="summary period-summary" id="entryPeriodSummary" aria-label="模块周期合计"></section>
+        <div class="period-grid" id="entryPeriodGrid"></div>
+        <div class="panel-title entry-list-header">
+          <h2 id="entryListTitle">收入明细</h2>
+        </div>
+        <div class="records" id="entryList"></div>
+      </div>
+    </section>
+
+    <section class="view" id="viewData">
+      <div class="panel">
+        <div class="panel-title">
+          <h2>Excel</h2>
+        </div>
+        <div class="toolbar excel-toolbar">
+          <button class="secondary" id="exportExcelBtn" type="button">导出数据</button>
+          <button class="secondary" id="importExcelBtn" type="button">导入数据</button>
+          <button class="secondary" id="templateExcelBtn" type="button">导入模板</button>
+        </div>
+        <input id="importExcelFile" type="file" accept=".xls,.html,.htm" hidden>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">
+          <h2>全部明细</h2>
+        </div>
+        <div class="search-row">
+          <input id="search" placeholder="搜索分类/位置、收入人、备注">
+          <select id="filterType">
+            <option value="all">全部</option>
+            <option value="income">收入</option>
+            <option value="saved">存入</option>
+          </select>
+        </div>
+        <div class="records" id="allList"></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="tabs" aria-label="底部导航">
+    <button class="tab-btn active" data-view="viewOverview" aria-label="总览">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+        <path d="M5 5h6v6H5z"></path>
+        <path d="M13 5h6v6h-6z"></path>
+        <path d="M5 13h6v6H5z"></path>
+        <path d="M13 13h6v6h-6z"></path>
+      </svg>
+      <span>总览</span>
+    </button>
+    <button class="tab-btn" data-view="viewEntry" data-entry-preset="income" aria-label="收入">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+        <path d="M12 5v14"></path>
+        <path d="M5 12h14"></path>
+      </svg>
+      <span>收入</span>
+    </button>
+    <button class="tab-btn" data-view="viewEntry" data-entry-preset="saved" aria-label="存入">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+        <path d="M12 5v12"></path>
+        <path d="m7 12 5 5 5-5"></path>
+        <path d="M5 19h14"></path>
+      </svg>
+      <span>存入</span>
+    </button>
+    <button class="tab-btn" data-view="viewData" aria-label="数据">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+        <path d="M6 7h12"></path>
+        <path d="M6 12h12"></path>
+        <path d="M6 17h12"></path>
+      </svg>
+      <span>数据</span>
+    </button>
+  </nav>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const STORAGE_KEY = "income-savings-estimator-v1";
+    const LEGACY_KEY = "personal-savings-deposits-v1";
+    const MIN_YEAR = 2026;
+    const categories = {
+      income: ["工资", "奖金", "副业", "理财收益", "报销", "其他"],
+      saved: ["微众银行"]
+    };
+    const incomeOwners = ["陈", "梁"];
+    const state = {
+      entries: [],
+      editingId: null,
+      entryType: "income",
+      viewYear: Math.max(MIN_YEAR, new Date().getFullYear()),
+      periodMode: "month",
+      entryViewYear: Math.max(MIN_YEAR, new Date().getFullYear()),
+      entryPeriodMode: "month"
+    };
+
+    const els = {
+      periodIncomeLabel: document.getElementById("periodIncomeLabel"),
+      periodSavedLabel: document.getElementById("periodSavedLabel"),
+      periodProfitLabel: document.getElementById("periodProfitLabel"),
+      periodSpendLabel: document.getElementById("periodSpendLabel"),
+      periodIncome: document.getElementById("periodIncome"),
+      periodSaved: document.getElementById("periodSaved"),
+      periodProfit: document.getElementById("periodProfit"),
+      periodSpend: document.getElementById("periodSpend"),
+      assetTotal: document.getElementById("assetTotal"),
+      assetProfit: document.getElementById("assetProfit"),
+      yearLabel: document.getElementById("yearLabel"),
+      periodGrid: document.getElementById("periodGrid"),
+      entryYearLabel: document.getElementById("entryYearLabel"),
+      entryPeriodSummary: document.getElementById("entryPeriodSummary"),
+      entryPeriodGrid: document.getElementById("entryPeriodGrid"),
+      allList: document.getElementById("allList"),
+      entryListTitle: document.getElementById("entryListTitle"),
+      entryList: document.getElementById("entryList"),
+      openEntryForm: document.getElementById("openEntryForm"),
+      entryDropdown: document.getElementById("entryDropdown"),
+      form: document.getElementById("entryForm"),
+      formTitle: document.getElementById("formTitle"),
+      saveBtn: document.getElementById("saveBtn"),
+      cancelEdit: document.getElementById("cancelEdit"),
+      amountLabel: document.getElementById("amountLabel"),
+      amount: document.getElementById("amount"),
+      date: document.getElementById("date"),
+      dateLabel: document.getElementById("dateLabel"),
+      dateChip: document.getElementById("dateChip"),
+      dateChipText: document.getElementById("dateChipText"),
+      clearDate: document.getElementById("clearDate"),
+      categoryLabel: document.getElementById("categoryLabel"),
+      category: document.getElementById("category"),
+      ownerField: document.getElementById("ownerField"),
+      owner: document.getElementById("owner"),
+      currentValueField: document.getElementById("currentValueField"),
+      currentValue: document.getElementById("currentValue"),
+      computedProfitField: document.getElementById("computedProfitField"),
+      computedProfit: document.getElementById("computedProfit"),
+      note: document.getElementById("note"),
+      search: document.getElementById("search"),
+      filterType: document.getElementById("filterType"),
+      exportExcelBtn: document.getElementById("exportExcelBtn"),
+      importExcelBtn: document.getElementById("importExcelBtn"),
+      templateExcelBtn: document.getElementById("templateExcelBtn"),
+      importExcelFile: document.getElementById("importExcelFile"),
+      toast: document.getElementById("toast")
+    };
+
+    function toDateInput(date) {
+      const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+      return local.toISOString().slice(0, 10);
+    }
+
+    function currentYear() {
+      return new Date().getFullYear();
+    }
+
+    function currentMonth() {
+      return new Date().getMonth() + 1;
+    }
+
+    function maxVisibleMonth(year) {
+      return year >= currentYear() ? currentMonth() : 12;
+    }
+
+    function clampVisibleYear(year) {
+      return Math.min(currentYear(), Math.max(MIN_YEAR, year));
+    }
+
+    function money(value) {
+      return new Intl.NumberFormat("zh-CN", { maximumFractionDigits: 2 }).format(value || 0);
+    }
+
+    function percent(value) {
+      if (!Number.isFinite(value)) return "0%";
+      return `${value.toFixed(value >= 10 ? 1 : 2)}%`;
+    }
+
+    function escapeHtml(text) {
+      return String(text ?? "").replace(/[&<>"']/g, match => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#39;"
+      }[match]));
+    }
+
+    function parseNumber(value) {
+      const normalized = String(value || "").replace(/,/g, "").replace("，", "").trim();
+      const number = Number(normalized);
+      return Number.isFinite(number) ? number : 0;
+    }
+
+    function roundMoney(value) {
+      return Math.round((Number(value) || 0) * 100) / 100;
+    }
+
+    function savedAmount(item) {
+      return Number.isFinite(Number(item.amount)) ? Number(item.amount) : 0;
+    }
+
+    function savedCurrentValue(item) {
+      return Number.isFinite(Number(item.currentValue)) ? Number(item.currentValue) : savedAmount(item);
+    }
+
+    function compareSavedOrder(a, b) {
+      return (a.date || "").localeCompare(b.date || "") || (a.createdAt || 0) - (b.createdAt || 0);
+    }
+
+    function savedSnapshots() {
+      return state.entries
+        .filter(item => item.type === "saved")
+        .sort(compareSavedOrder);
+    }
+
+    function previousSavedSnapshot(item) {
+      const snapshots = savedSnapshots().filter(snapshot => snapshot.id !== item.id);
+      const nextIndex = snapshots.findIndex(snapshot => compareSavedOrder(item, snapshot) < 0);
+      return nextIndex === -1 ? snapshots[snapshots.length - 1] : snapshots[nextIndex - 1];
+    }
+
+    function calculatedProfit(item) {
+      if (item.type !== "saved") return 0;
+      const previous = previousSavedSnapshot(item);
+      if (!previous) {
+        return Number(item.schemaVersion) >= 2
+          ? 0
+          : (Number.isFinite(Number(item.periodProfit)) ? Number(item.periodProfit) : 0);
+      }
+      return savedCurrentValue(item) - savedCurrentValue(previous) - savedAmount(item);
+    }
+
+    function savedProfit(item) {
+      return roundMoney(calculatedProfit(item));
+    }
+
+    function recalculateSavedProfits() {
+      savedSnapshots().forEach(item => {
+        item.periodProfit = savedProfit(item);
+      });
+    }
+
+    function normalizeEntry(item) {
+      const type = item.type === "saved" ? "saved" : "income";
+      const rawAmount = Number(item.amount) || 0;
+      const fallbackDate = toDateInput(new Date(item.createdAt || Date.now()));
+      if (type === "saved") {
+        const rawSaved = item.savedAmount ?? item.depositAmount ?? item.monthlySaved ?? item.netSaved ?? item.amount;
+        const rawCurrent = item.currentValue ?? item.currentAmount ?? item.marketValue ?? item.amount;
+        const currentValue = Number.isFinite(Number(rawCurrent)) ? Number(rawCurrent) : rawAmount;
+        const rawProfit = item.periodProfit ?? item.monthlyProfit ?? item.profit;
+        const legacyProfit = Number.isFinite(Number(item.yieldAmount))
+          ? Number(item.yieldAmount)
+          : (Number.isFinite(Number(rawCurrent)) ? Number(rawCurrent) - rawAmount : 0);
+        const savedDate = item.date !== undefined ? item.date : (item.depositDate || fallbackDate);
+        return {
+          id: item.id || crypto.randomUUID(),
+          type,
+          schemaVersion: Number(item.schemaVersion) || 1,
+          amount: roundMoney(Number.isFinite(Number(rawSaved)) ? Number(rawSaved) : rawAmount),
+          currentValue: roundMoney(currentValue),
+          periodProfit: Number.isFinite(Number(rawProfit)) ? Number(rawProfit) : legacyProfit,
+          date: savedDate,
+          category: categories.saved.includes(item.category) ? item.category : "微众银行",
+          account: "",
+          note: item.note || "",
+          createdAt: item.createdAt || Date.now(),
+          updatedAt: item.updatedAt || Date.now()
+        };
+      }
+      return {
+        id: item.id || crypto.randomUUID(),
+        type,
+        schemaVersion: Number(item.schemaVersion) || 1,
+        amount: roundMoney(rawAmount),
+        currentValue: 0,
+        periodProfit: 0,
+        date: item.date || item.depositDate || fallbackDate,
+        category: item.category || "工资",
+        owner: incomeOwners.includes(item.owner) ? item.owner : "",
+        account: "",
+        note: item.note || "",
+        createdAt: item.createdAt || Date.now(),
+        updatedAt: item.updatedAt || Date.now()
+      };
+    }
+
+    function normalizeEntries(rows) {
+      const normalized = rows.map(normalizeEntry);
+      const rawById = new Map(normalized.map((item, index) => [item.id, rows[index] || {}]));
+      const snapshots = normalized.filter(item => item.type === "saved").sort(compareSavedOrder);
+      snapshots.forEach((item, index) => {
+        const raw = rawById.get(item.id) || {};
+        const hasNewSavedAmount = Number(raw.schemaVersion) >= 2
+          || raw.savedAmount !== undefined
+          || raw.depositAmount !== undefined
+          || raw.monthlySaved !== undefined
+          || raw.netSaved !== undefined;
+        const lookedLikeOldSnapshot = !hasNewSavedAmount && (
+          raw.currentValue !== undefined
+          || raw.currentAmount !== undefined
+          || raw.marketValue !== undefined
+          || raw.periodProfit !== undefined
+          || raw.monthlyProfit !== undefined
+          || raw.profit !== undefined
+        );
+        if (lookedLikeOldSnapshot) {
+          const previous = snapshots[index - 1];
+          const rawProfit = Number(raw.periodProfit ?? raw.monthlyProfit ?? raw.profit ?? 0);
+          item.amount = previous ? roundMoney(savedCurrentValue(item) - savedCurrentValue(previous) - rawProfit) : 0;
+        }
+      });
+      return normalized;
+    }
+
+    function save() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.entries));
+    }
+
+    function load() {
+      try {
+        state.entries = normalizeEntries(JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"));
+      } catch {
+        state.entries = [];
+      }
+      if (!state.entries.length) {
+        try {
+          const legacy = JSON.parse(localStorage.getItem(LEGACY_KEY) || "[]");
+          if (Array.isArray(legacy) && legacy.length) {
+            state.entries = normalizeEntries(legacy.map(item => ({
+              ...item,
+              type: "saved",
+              date: item.depositDate
+            })));
+            recalculateSavedProfits();
+            save();
+          }
+        } catch {
+          state.entries = [];
+        }
+      }
+      recalculateSavedProfits();
+    }
+
+    function showToast(text) {
+      els.toast.textContent = text;
+      els.toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => els.toast.classList.remove("show"), 1800);
+    }
+
+    function entriesForYear(year) {
+      return state.entries.filter(item => Number((item.date || "").slice(0, 4)) === year);
+    }
+
+    function totals(entries) {
+      const incomeEntries = entries.filter(item => item.type === "income");
+      const savedEntries = entries.filter(item => item.type === "saved");
+      const income = incomeEntries.reduce((sum, item) => sum + item.amount, 0);
+      const incomeByOwner = incomeOwners.reduce((result, owner) => {
+        result[owner] = incomeEntries
+          .filter(item => item.owner === owner)
+          .reduce((sum, item) => sum + item.amount, 0);
+        return result;
+      }, {});
+      const incomeOwnerCounts = incomeOwners.reduce((result, owner) => {
+        result[owner] = incomeEntries.filter(item => item.owner === owner).length;
+        return result;
+      }, {});
+      const saved = savedEntries.reduce((sum, item) => sum + savedAmount(item), 0);
+      const profit = savedEntries.reduce((sum, item) => sum + savedProfit(item), 0);
+      return {
+        income,
+        incomeByOwner,
+        incomeOwnerCounts,
+        saved,
+        profit,
+        spend: income - saved,
+        hasIncome: incomeEntries.length > 0,
+        hasSaved: savedEntries.length > 0,
+        hasProfit: savedEntries.length > 0
+      };
+    }
+
+    function dataText(value, hasData) {
+      return hasData ? money(value) : "--";
+    }
+
+    function spendText(summary) {
+      return summary.hasIncome ? money(summary.spend) : "--";
+    }
+
+    function spendClass(summary) {
+      if (!summary.hasIncome) return "muted-color";
+      return summary.spend < 0 ? "saved-color" : "spend-color";
+    }
+
+    function profitClass(value) {
+      return value < 0 ? "saved-color" : value > 0 ? "spend-color" : "muted-color";
+    }
+
+    function assetTotals() {
+      const snapshots = savedSnapshots();
+      const current = snapshots.reduce((sum, item) => {
+        return sum + (item.date ? savedAmount(item) : savedCurrentValue(item));
+      }, 0);
+      const profit = snapshots.reduce((sum, item) => sum + savedProfit(item), 0);
+      return { current, profit, hasData: snapshots.length > 0 };
+    }
+
+    function renderSummary() {
+      const assets = assetTotals();
+      els.assetTotal.textContent = dataText(assets.current, assets.hasData);
+      els.assetTotal.className = assets.hasData ? "saved-color" : "muted-color";
+      els.assetProfit.textContent = dataText(assets.profit, assets.hasData);
+      els.assetProfit.className = !assets.hasData ? "muted-color" : profitClass(assets.profit);
+    }
+
+    function renderMonthGrid() {
+      state.viewYear = clampVisibleYear(state.viewYear);
+      const yearTotals = totals(entriesForYear(state.viewYear));
+      const rows = Array.from({ length: maxVisibleMonth(state.viewYear) }, (_, index) => {
+        const month = index + 1;
+        const monthlyEntries = state.entries.filter(item => {
+          const year = Number((item.date || "").slice(0, 4));
+          const itemMonth = Number((item.date || "").slice(5, 7));
+          return year === state.viewYear && itemMonth === month;
+        });
+        return { label: `${month}月`, ...totals(monthlyEntries) };
+      });
+      els.yearLabel.textContent = `${state.viewYear}`;
+      renderPeriodSummary(yearTotals, "本年");
+      renderPeriodCells(rows);
+    }
+
+    function renderYearGrid() {
+      state.viewYear = clampVisibleYear(state.viewYear);
+      const offset = Math.max(0, state.viewYear - MIN_YEAR);
+      const startYear = MIN_YEAR + Math.floor(offset / 12) * 12;
+      const historyTotals = totals(state.entries.filter(item => Number((item.date || "").slice(0, 4)) >= MIN_YEAR));
+      const yearCount = Math.max(1, currentYear() - startYear + 1);
+      const rows = Array.from({ length: Math.min(12, yearCount) }, (_, index) => {
+        const year = startYear + index;
+        return { label: `${year}年`, ...totals(entriesForYear(year)) };
+      });
+      const endYear = startYear + rows.length - 1;
+      els.yearLabel.textContent = startYear === endYear ? `${startYear}` : `${startYear}-${endYear}`;
+      renderPeriodSummary(historyTotals, "历史");
+      renderPeriodCells(rows);
+    }
+
+    function renderPeriodSummary(summary, label) {
+      const hideHistory = state.periodMode === "year";
+      els.periodIncomeLabel.closest(".period-summary").hidden = hideHistory;
+      if (hideHistory) return;
+      els.periodIncomeLabel.closest(".period-summary").hidden = false;
+      const prefix = state.periodMode === "month" ? "" : label;
+      els.periodIncomeLabel.textContent = `${prefix}收入`;
+      els.periodSavedLabel.textContent = `${prefix}存入`;
+      els.periodProfitLabel.textContent = `${prefix}收益`;
+      els.periodSpendLabel.textContent = `${prefix}花销`;
+      els.periodIncome.textContent = dataText(summary.income, summary.hasIncome);
+      els.periodIncome.className = summary.hasIncome ? "income-color" : "muted-color";
+      els.periodSaved.textContent = dataText(summary.saved, summary.hasSaved);
+      els.periodSaved.className = !summary.hasSaved ? "muted-color" : summary.saved < 0 ? "spend-color" : "saved-color";
+      els.periodProfit.textContent = dataText(summary.profit, summary.hasProfit);
+      els.periodProfit.className = summary.hasProfit ? profitClass(summary.profit) : "muted-color";
+      els.periodSpend.textContent = spendText(summary);
+      els.periodSpend.className = spendClass(summary);
+    }
+
+    function renderPeriodCells(rows) {
+      els.periodGrid.innerHTML = rows.map(row => {
+        const empty = !row.hasIncome && !row.hasSaved && !row.hasProfit;
+        return `
+          <div class="period-cell ${empty ? "is-empty" : ""}">
+            <div class="label">${row.label}</div>
+            <div class="mini-row"><span>收入</span><strong class="${row.hasIncome ? "income-color" : "muted-color"}">${dataText(row.income, row.hasIncome)}</strong></div>
+            <div class="mini-row"><span>存入</span><strong class="${!row.hasSaved ? "muted-color" : row.saved < 0 ? "spend-color" : "saved-color"}">${dataText(row.saved, row.hasSaved)}</strong></div>
+            <div class="mini-row"><span>收益</span><strong class="${row.hasProfit ? profitClass(row.profit) : "muted-color"}">${dataText(row.profit, row.hasProfit)}</strong></div>
+            <div class="mini-row"><span>花销</span><strong class="${spendClass(row)}">${spendText(row)}</strong></div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderPeriodGrid() {
+      document.querySelectorAll("[data-period-mode]").forEach(button => {
+        button.classList.toggle("active", button.dataset.periodMode === state.periodMode);
+      });
+      if (state.periodMode === "year") renderYearGrid();
+      else renderMonthGrid();
+    }
+
+    function renderEntryPeriodSummary(summary, label) {
+      const hideIncomeHistory = state.entryType === "income" && state.entryPeriodMode === "year";
+      els.entryPeriodSummary.hidden = hideIncomeHistory;
+      if (hideIncomeHistory) {
+        els.entryPeriodSummary.innerHTML = "";
+        return;
+      }
+      if (state.entryType === "saved") {
+        const isYearMode = state.entryPeriodMode === "year";
+        const savedLabel = isYearMode ? "存款总额" : `${label}存入`;
+        const savedValue = isYearMode ? assetTotals().current : summary.saved;
+        const hasSavedValue = isYearMode ? savedSnapshots().length > 0 : summary.hasSaved;
+        const profitLabel = isYearMode ? "总盈亏" : `${label}收益`;
+        const profitValue = isYearMode ? assetTotals().profit : summary.profit;
+        const hasProfitValue = isYearMode ? assetTotals().hasData : summary.hasProfit;
+        els.entryPeriodSummary.innerHTML = `
+          <div class="metric">
+            <span>${savedLabel}</span>
+            <strong class="${hasSavedValue ? "saved-color" : "muted-color"}">${dataText(savedValue, hasSavedValue)}</strong>
+          </div>
+          <div class="metric">
+            <span>${profitLabel}</span>
+            <strong class="${hasProfitValue ? profitClass(profitValue) : "muted-color"}">${dataText(profitValue, hasProfitValue)}</strong>
+          </div>
+        `;
+        return;
+      }
+      const incomePrefix = state.entryPeriodMode === "month" ? "" : label;
+      els.entryPeriodSummary.innerHTML = `
+        <div class="metric">
+          <span>${incomePrefix}收入</span>
+          <strong class="${summary.hasIncome ? "income-color" : "muted-color"}">${dataText(summary.income, summary.hasIncome)}</strong>
+        </div>
+        <div class="metric">
+          <span>${incomePrefix}陈</span>
+          <strong class="${summary.incomeOwnerCounts["陈"] ? "income-color" : "muted-color"}">${dataText(summary.incomeByOwner["陈"], summary.incomeOwnerCounts["陈"])}</strong>
+        </div>
+        <div class="metric">
+          <span>${incomePrefix}梁</span>
+          <strong class="${summary.incomeOwnerCounts["梁"] ? "income-color" : "muted-color"}">${dataText(summary.incomeByOwner["梁"], summary.incomeOwnerCounts["梁"])}</strong>
+        </div>
+      `;
+    }
+
+    function renderEntryPeriodCells(rows) {
+      const isSaved = state.entryType === "saved";
+      els.entryPeriodGrid.innerHTML = rows.map(row => {
+        const empty = isSaved ? !row.hasSaved && !row.hasProfit : !row.hasIncome;
+        const detail = isSaved
+          ? `
+            <div class="mini-row"><span>存入</span><strong class="${!row.hasSaved ? "muted-color" : row.saved < 0 ? "spend-color" : "saved-color"}">${dataText(row.saved, row.hasSaved)}</strong></div>
+            <div class="mini-row"><span>收益</span><strong class="${row.hasProfit ? profitClass(row.profit) : "muted-color"}">${dataText(row.profit, row.hasProfit)}</strong></div>
+          `
+          : `
+            <div class="mini-row"><span>陈</span><strong class="${row.incomeOwnerCounts["陈"] ? "income-color" : "muted-color"}">${dataText(row.incomeByOwner["陈"], row.incomeOwnerCounts["陈"])}</strong></div>
+            <div class="mini-row"><span>梁</span><strong class="${row.incomeOwnerCounts["梁"] ? "income-color" : "muted-color"}">${dataText(row.incomeByOwner["梁"], row.incomeOwnerCounts["梁"])}</strong></div>
+          `;
+        return `
+          <div class="period-cell ${empty ? "is-empty" : ""}">
+            ${isSaved
+              ? `<div class="label">${row.label}</div>`
+              : `<div class="income-cell-head"><div class="label">${row.label}</div><strong class="${row.hasIncome ? "" : "muted-color"}">${dataText(row.income, row.hasIncome)}</strong></div>`}
+            ${detail}
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderEntryMonthGrid() {
+      state.entryViewYear = clampVisibleYear(state.entryViewYear);
+      const scopedEntries = state.entries.filter(item => item.type === state.entryType);
+      const yearTotals = totals(scopedEntries.filter(item => Number((item.date || "").slice(0, 4)) === state.entryViewYear));
+      const rows = Array.from({ length: maxVisibleMonth(state.entryViewYear) }, (_, index) => {
+        const month = index + 1;
+        const monthlyEntries = scopedEntries.filter(item => {
+          const year = Number((item.date || "").slice(0, 4));
+          const itemMonth = Number((item.date || "").slice(5, 7));
+          return year === state.entryViewYear && itemMonth === month;
+        });
+        return { label: `${month}月`, ...totals(monthlyEntries) };
+      });
+      els.entryYearLabel.textContent = `${state.entryViewYear}`;
+      renderEntryPeriodSummary(yearTotals, "本年");
+      renderEntryPeriodCells(rows);
+    }
+
+    function renderEntryYearGrid() {
+      state.entryViewYear = clampVisibleYear(state.entryViewYear);
+      const offset = Math.max(0, state.entryViewYear - MIN_YEAR);
+      const startYear = MIN_YEAR + Math.floor(offset / 12) * 12;
+      const scopedEntries = state.entries.filter(item => item.type === state.entryType);
+      const historyTotals = totals(scopedEntries.filter(item => Number((item.date || "").slice(0, 4)) >= MIN_YEAR));
+      const yearCount = Math.max(1, currentYear() - startYear + 1);
+      const rows = Array.from({ length: Math.min(12, yearCount) }, (_, index) => {
+        const year = startYear + index;
+        return {
+          label: `${year}年`,
+          ...totals(scopedEntries.filter(item => Number((item.date || "").slice(0, 4)) === year))
+        };
+      });
+      const endYear = startYear + rows.length - 1;
+      els.entryYearLabel.textContent = startYear === endYear ? `${startYear}` : `${startYear}-${endYear}`;
+      renderEntryPeriodSummary(historyTotals, "历史");
+      renderEntryPeriodCells(rows);
+    }
+
+    function renderEntryPeriodGrid() {
+      document.querySelectorAll("[data-entry-period-mode]").forEach(button => {
+        button.classList.toggle("active", button.dataset.entryPeriodMode === state.entryPeriodMode);
+      });
+      if (state.entryPeriodMode === "year") renderEntryYearGrid();
+      else renderEntryMonthGrid();
+    }
+
+    function sortedEntries(entries = state.entries) {
+      return [...entries].sort((a, b) => {
+        const dateCompare = (b.date || "").localeCompare(a.date || "");
+        if (dateCompare) return dateCompare;
+        return (b.updatedAt || 0) - (a.updatedAt || 0);
+      });
+    }
+
+    function entryMetaRows(item) {
+      const row = (label, value, className = "") => `
+        <div class="record-meta-row">
+          <span>${label}</span>
+          <span class="${className}">${value}</span>
+        </div>
+      `;
+      if (item.type === "saved") {
+        const profit = savedProfit(item);
+        return [
+          row("位置", escapeHtml(item.category)),
+          item.date ? row("本月存入", money(savedAmount(item))) : "",
+          row("当前总数", money(savedCurrentValue(item))),
+          row("本月收益", money(profit), profitClass(profit)),
+          item.note ? row("备注", escapeHtml(item.note)) : ""
+        ].join("");
+      }
+      return [
+        row("分类", escapeHtml(item.category)),
+        row("收入人", escapeHtml(item.owner || "未分配")),
+        item.note ? row("备注", escapeHtml(item.note)) : ""
+      ].join("");
+    }
+
+    function renderEntries(container, entries, emptyText) {
+      const list = sortedEntries(entries);
+      if (!list.length) {
+        container.innerHTML = `<div class="empty">${emptyText}</div>`;
+        return;
+      }
+      container.innerHTML = list.map(item => `
+        <article class="record-card">
+          <div class="record-main">
+            <div class="record-title-row">
+              <strong>${item.type === "income" ? "收入" : "存入"}</strong>
+              <span class="record-date">${item.type === "saved" ? (item.date || "期初") : item.date}</span>
+            </div>
+            <div class="record-meta-grid">${entryMetaRows(item)}</div>
+          </div>
+          <div class="record-side">
+            <div class="amount ${item.type === "income" ? "income-color" : "saved-color"}">${money(item.type === "saved" ? (item.date ? savedAmount(item) : savedCurrentValue(item)) : item.amount)}</div>
+            <div class="mini-actions">
+              <button data-action="edit" data-id="${item.id}" aria-label="编辑">✎</button>
+              <button data-action="delete" data-id="${item.id}" aria-label="删除">×</button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function filteredEntries() {
+      const query = els.search.value.trim().toLowerCase();
+      const type = els.filterType.value;
+      return state.entries
+        .filter(item => type === "all" || item.type === type)
+        .filter(item => {
+          const haystack = `${item.category} ${item.owner || ""} ${item.note}`.toLowerCase();
+          return !query || haystack.includes(query);
+        });
+    }
+
+    function renderEntryList() {
+      const isSaved = state.entryType === "saved";
+      els.entryListTitle.textContent = isSaved ? "存入明细" : "收入明细";
+      const selectedYear = clampVisibleYear(state.entryViewYear);
+      const entries = state.entries
+        .filter(item => item.type === state.entryType)
+        .filter(item => Number((item.date || "").slice(0, 4)) === selectedYear);
+      renderEntries(els.entryList, entries, isSaved ? "还没有存入记录。" : "还没有收入记录。");
+    }
+
+    function setEntryDropdown(open) {
+      els.entryDropdown.hidden = !open;
+      els.openEntryForm.hidden = open;
+      if (open) {
+        els.cancelEdit.hidden = false;
+      }
+    }
+
+    function render() {
+      renderSummary();
+      renderPeriodGrid();
+      renderEntryPeriodGrid();
+      renderEntryList();
+      renderEntries(els.allList, filteredEntries(), "没有符合条件的记录。");
+      updateComputedProfitPreview();
+      updateDateChip();
+    }
+
+    function updateDateChip() {
+      const showChip = state.entryType === "saved" && Boolean(els.date.value);
+      els.date.hidden = showChip;
+      els.dateChip.hidden = !showChip;
+      els.dateChipText.textContent = showChip ? els.date.value : "";
+      if (state.entryType !== "saved") {
+        els.date.hidden = false;
+      }
+    }
+
+    function setEntryType(type) {
+      state.entryType = type;
+      document.body.dataset.entryType = type;
+      els.category.innerHTML = categories[type].map(item => `<option>${item}</option>`).join("");
+      els.owner.innerHTML = incomeOwners.map(item => `<option>${item}</option>`).join("");
+      const isSaved = type === "saved";
+      els.openEntryForm.textContent = isSaved ? "新增存入" : "又赚一笔";
+      els.amountLabel.innerHTML = isSaved ? "本月存入" : '金额<span class="required">*</span>';
+      els.categoryLabel.innerHTML = isSaved ? '存款位置<span class="required">*</span>' : '分类<span class="required">*</span>';
+      els.amount.placeholder = isSaved ? "例如：1100，没存填 0" : "0.00";
+      els.amount.required = !isSaved;
+      els.ownerField.hidden = isSaved;
+      els.owner.required = !isSaved;
+      els.currentValueField.hidden = !isSaved;
+      els.currentValueField.style.display = isSaved ? "" : "none";
+      els.computedProfitField.hidden = !isSaved;
+      els.computedProfitField.style.display = isSaved ? "" : "none";
+      els.currentValue.required = isSaved;
+      if (!isSaved) {
+        els.currentValue.value = "";
+        els.computedProfit.textContent = "0";
+        els.computedProfit.className = "calculated-value";
+      }
+      els.date.required = !isSaved;
+      els.dateLabel.innerHTML = isSaved ? "日期" : '日期<span class="required">*</span>';
+      updateDateChip();
+      updateComputedProfitPreview();
+      renderEntryPeriodGrid();
+      renderEntryList();
+    }
+
+    function resetForm(type = state.entryType) {
+      state.editingId = null;
+      els.form.reset();
+      els.formTitle.textContent = type === "saved" ? "新增存入" : "又赚一笔";
+      els.saveBtn.textContent = "保存";
+      els.cancelEdit.textContent = "关闭";
+      els.cancelEdit.hidden = true;
+      setEntryType(type);
+      els.date.value = type === "saved" ? "" : toDateInput(new Date());
+      updateDateChip();
+      updateComputedProfitPreview();
+      setEntryDropdown(false);
+    }
+
+    function draftSavedEntry() {
+      const existing = state.entries.find(item => item.id === state.editingId);
+      return {
+        id: state.editingId || "__draft_saved_entry__",
+        type: "saved",
+        schemaVersion: 2,
+        amount: roundMoney(parseNumber(els.amount.value)),
+        currentValue: roundMoney(parseNumber(els.currentValue.value)),
+        periodProfit: 0,
+        date: els.date.value || "",
+        createdAt: existing?.createdAt || Date.now()
+      };
+    }
+
+    function updateComputedProfitPreview() {
+      if (state.entryType !== "saved" || !els.computedProfit) return;
+      if (!els.currentValue.value.trim()) {
+        els.computedProfit.textContent = "0";
+        els.computedProfit.className = "calculated-value";
+        return;
+      }
+      const profit = savedProfit(draftSavedEntry());
+      els.computedProfit.textContent = money(profit);
+      els.computedProfit.className = `calculated-value ${profitClass(profit)}`;
+    }
+
+    function upsertEntry(event) {
+      event.preventDefault();
+      const amount = parseNumber(els.amount.value);
+      const isSaved = state.entryType === "saved";
+      if (!isSaved && amount <= 0) {
+        showToast("金额要大于 0");
+        return;
+      }
+      if (isSaved && amount < 0) {
+        showToast("本月存入不能小于 0");
+        return;
+      }
+      const existing = state.entries.find(item => item.id === state.editingId);
+      if (!isSaved && !els.date.value) {
+        showToast("日期必填");
+        return;
+      }
+      if (!isSaved && !els.owner.value) {
+        showToast("收入人必填");
+        return;
+      }
+      const currentValue = isSaved ? parseNumber(els.currentValue.value) : 0;
+      if (isSaved && !els.currentValue.value.trim()) {
+        showToast("当前存款总数必填");
+        return;
+      }
+      if (isSaved && currentValue < 0) {
+        showToast("当前存款总数不能小于 0");
+        return;
+      }
+      const payload = {
+        id: state.editingId || crypto.randomUUID(),
+        type: state.entryType,
+        schemaVersion: 2,
+        amount: roundMoney(amount),
+        currentValue: isSaved ? roundMoney(currentValue) : 0,
+        periodProfit: 0,
+        date: els.date.value,
+        category: els.category.value,
+        owner: isSaved ? "" : els.owner.value,
+        account: "",
+        note: els.note.value.trim(),
+        createdAt: existing?.createdAt || Date.now(),
+        updatedAt: Date.now()
+      };
+      const index = state.entries.findIndex(item => item.id === payload.id);
+      if (index >= 0) state.entries[index] = payload;
+      else state.entries.push(payload);
+      recalculateSavedProfits();
+      save();
+      resetForm(payload.type);
+      render();
+      showToast(index >= 0 ? "已更新" : "已保存");
+    }
+
+    function editEntry(id) {
+      const item = state.entries.find(entry => entry.id === id);
+      if (!item) return;
+      state.editingId = id;
+      setEntryType(item.type);
+      els.amount.value = item.type === "saved" ? savedAmount(item) : item.amount;
+      els.date.value = item.date;
+      els.category.value = item.category;
+      els.owner.value = item.type === "income" && incomeOwners.includes(item.owner) ? item.owner : incomeOwners[0];
+      els.currentValue.value = item.type === "saved" ? savedCurrentValue(item) : "";
+      els.note.value = item.note || "";
+      els.formTitle.textContent = "编辑记录";
+      els.saveBtn.textContent = "保存修改";
+      els.cancelEdit.textContent = "取消编辑";
+      els.cancelEdit.hidden = false;
+      updateComputedProfitPreview();
+      updateDateChip();
+      setEntryDropdown(true);
+      switchView("viewEntry", document.querySelector(`[data-entry-preset="${item.type}"]`));
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function deleteEntry(id) {
+      if (!confirm("确定删除这条记录吗？")) return;
+      state.entries = state.entries.filter(item => item.id !== id);
+      recalculateSavedProfits();
+      save();
+      render();
+      showToast("已删除");
+    }
+
+    function handleListAction(event) {
+      const button = event.target.closest("button[data-action]");
+      if (!button) return;
+      if (button.dataset.action === "edit") editEntry(button.dataset.id);
+      if (button.dataset.action === "delete") deleteEntry(button.dataset.id);
+    }
+
+    const excelColumns = [
+      "类型",
+      "日期",
+      "金额/本月存入",
+      "当前存款总数",
+      "分类/存款位置",
+      "收入人",
+      "备注"
+    ];
+
+    function excelCell(value) {
+      return `<td>${escapeHtml(value ?? "")}</td>`;
+    }
+
+    function excelHtml(rows) {
+      return `<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    table { border-collapse: collapse; font-family: Arial, sans-serif; }
+    th, td { border: 1px solid #d9d9d9; padding: 8px; mso-number-format:"\\@"; }
+    th { background: #f2f2f2; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <table>
+    <thead><tr>${excelColumns.map(item => `<th>${escapeHtml(item)}</th>`).join("")}</tr></thead>
+    <tbody>${rows.map(row => `<tr>${excelColumns.map(column => excelCell(row[column])).join("")}</tr>`).join("")}</tbody>
+  </table>
+</body>
+</html>`;
+    }
+
+    function downloadExcel(filename, rows) {
+      const blob = new Blob([excelHtml(rows)], { type: "application/vnd.ms-excel;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function entryToExcelRow(item) {
+      return {
+        "类型": item.type === "income" ? "收入" : "存入",
+        "日期": item.date || "",
+        "金额/本月存入": item.type === "saved" ? savedAmount(item) : item.amount,
+        "当前存款总数": item.type === "saved" ? savedCurrentValue(item) : "",
+        "分类/存款位置": item.category || "",
+        "收入人": item.type === "income" ? (item.owner || "") : "",
+        "备注": item.note || ""
+      };
+    }
+
+    function exportExcel() {
+      const rows = sortedEntries(state.entries).map(entryToExcelRow);
+      downloadExcel(`finance-data-${toDateInput(new Date())}.xls`, rows);
+      showToast("已导出 Excel");
+    }
+
+    function downloadExcelTemplate() {
+      downloadExcel("finance-import-template.xls", [
+        {
+          "类型": "收入",
+          "日期": "2026-07-31",
+          "金额/本月存入": "10000",
+          "当前存款总数": "",
+          "分类/存款位置": "工资",
+          "收入人": "陈",
+          "备注": ""
+        },
+        {
+          "类型": "存入",
+          "日期": "2026-07-31",
+          "金额/本月存入": "3000",
+          "当前存款总数": "50000",
+          "分类/存款位置": "微众银行",
+          "收入人": "",
+          "备注": ""
+        }
+      ]);
+      showToast("已下载模板");
+    }
+
+    function parseExcelTable(html) {
+      const doc = new DOMParser().parseFromString(html, "text/html");
+      const table = doc.querySelector("table");
+      if (!table) return [];
+      const rows = Array.from(table.querySelectorAll("tr")).map(tr =>
+        Array.from(tr.children).map(cell => cell.textContent.trim())
+      ).filter(row => row.length);
+      if (rows.length < 2) return [];
+      const headers = rows[0];
+      return rows.slice(1).map(row => headers.reduce((result, header, index) => {
+        result[header] = row[index] || "";
+        return result;
+      }, {}));
+    }
+
+    function importExcel(file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const rows = parseExcelTable(String(reader.result || ""));
+        const imported = rows.map(row => {
+          const type = row["类型"] === "存入" ? "saved" : row["类型"] === "收入" ? "income" : "";
+          if (!type) return null;
+          const amount = roundMoney(parseNumber(row["金额/本月存入"]));
+          const currentValueText = (row["当前存款总数"] || "").trim();
+          const currentValue = roundMoney(parseNumber(currentValueText));
+          const date = (row["日期"] || "").trim();
+          const category = (row["分类/存款位置"] || "").trim();
+          const owner = (row["收入人"] || "").trim();
+          const note = (row["备注"] || "").trim();
+          if (type === "income" && (!date || amount <= 0 || !category || !incomeOwners.includes(owner))) return null;
+          if (type === "saved" && (!category || !currentValueText || currentValue < 0)) return null;
+          return normalizeEntry({
+            id: crypto.randomUUID(),
+            type,
+            schemaVersion: 2,
+            amount: type === "saved" ? amount : amount,
+            currentValue: type === "saved" ? currentValue : 0,
+            periodProfit: 0,
+            date,
+            category: type === "saved" && !categories.saved.includes(category) ? "微众银行" : category,
+            owner: type === "income" ? owner : "",
+            note,
+            createdAt: Date.now(),
+            updatedAt: Date.now()
+          });
+        }).filter(Boolean);
+        if (!imported.length) {
+          showToast("没有可导入的数据");
+          return;
+        }
+        state.entries.push(...imported);
+        recalculateSavedProfits();
+        save();
+        render();
+        showToast(`已导入 ${imported.length} 条`);
+      };
+      reader.readAsText(file);
+    }
+
+    function switchView(id, activeButton = null) {
+      document.querySelectorAll(".view").forEach(view => view.classList.toggle("active", view.id === id));
+      document.querySelectorAll(".overview-only").forEach(section => {
+        section.hidden = id !== "viewOverview";
+      });
+      document.querySelectorAll(".tab-btn").forEach(button => {
+        button.classList.toggle("active", activeButton ? button === activeButton : button.dataset.view === id);
+      });
+    }
+
+    document.querySelectorAll(".tab-btn").forEach(button => {
+      button.addEventListener("click", () => {
+        if (button.dataset.entryPreset) resetForm(button.dataset.entryPreset);
+        switchView(button.dataset.view, button);
+      });
+    });
+    document.querySelectorAll("[data-period-mode]").forEach(button => {
+      button.addEventListener("click", () => {
+        state.periodMode = button.dataset.periodMode;
+        render();
+      });
+    });
+    document.querySelectorAll("[data-entry-period-mode]").forEach(button => {
+      button.addEventListener("click", () => {
+        state.entryPeriodMode = button.dataset.entryPeriodMode;
+        render();
+      });
+    });
+    els.form.addEventListener("submit", upsertEntry);
+    els.openEntryForm.addEventListener("click", () => {
+      resetForm(state.entryType);
+      setEntryDropdown(true);
+    });
+    els.cancelEdit.addEventListener("click", () => resetForm());
+    els.entryDropdown.addEventListener("click", event => {
+      if (event.target === els.entryDropdown) resetForm();
+    });
+    els.amount.addEventListener("input", updateComputedProfitPreview);
+    els.currentValue.addEventListener("input", updateComputedProfitPreview);
+    els.date.addEventListener("change", () => {
+      updateComputedProfitPreview();
+      updateDateChip();
+    });
+    els.clearDate.addEventListener("click", () => {
+      els.date.value = "";
+      updateComputedProfitPreview();
+      updateDateChip();
+    });
+    els.entryList.addEventListener("click", handleListAction);
+    els.allList.addEventListener("click", handleListAction);
+    els.search.addEventListener("input", render);
+    els.filterType.addEventListener("change", render);
+    els.exportExcelBtn.addEventListener("click", exportExcel);
+    els.templateExcelBtn.addEventListener("click", downloadExcelTemplate);
+    els.importExcelBtn.addEventListener("click", () => els.importExcelFile.click());
+    els.importExcelFile.addEventListener("change", event => {
+      const file = event.target.files[0];
+      if (file) importExcel(file);
+      event.target.value = "";
+    });
+    document.getElementById("prevYear").addEventListener("click", () => {
+      state.viewYear = Math.max(MIN_YEAR, state.viewYear - (state.periodMode === "year" ? 12 : 1));
+      render();
+    });
+    document.getElementById("nextYear").addEventListener("click", () => {
+      state.viewYear = clampVisibleYear(state.viewYear + (state.periodMode === "year" ? 12 : 1));
+      render();
+    });
+    document.getElementById("entryPrevYear").addEventListener("click", () => {
+      state.entryViewYear = Math.max(MIN_YEAR, state.entryViewYear - (state.entryPeriodMode === "year" ? 12 : 1));
+      render();
+    });
+    document.getElementById("entryNextYear").addEventListener("click", () => {
+      state.entryViewYear = clampVisibleYear(state.entryViewYear + (state.entryPeriodMode === "year" ? 12 : 1));
+      render();
+    });
+    load();
+    resetForm();
+    render();
+  </script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
