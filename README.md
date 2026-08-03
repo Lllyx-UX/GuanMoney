@@ -1,17 +1,21 @@
 # 收支估算 PWA
 
-这个文件夹可以上传到 HTTPS 静态网站托管服务，然后用 iPhone Safari 打开并添加到主屏幕。
+这是用于 GitHub Pages 的 PWA 版本。
 
-## iPhone 使用步骤
+## 上传到 GitHub
 
-1. 上传本文件夹里的所有文件，保持目录结构不变。
-2. 用 iPhone Safari 打开发布后的 `https://.../index.html`。
-3. 点击 Safari 分享按钮。
-4. 选择“添加到主屏幕”。
-5. 以后从主屏幕图标打开。
+把本文件夹内的所有内容上传到仓库根目录：
 
-## 数据保存
+- `index.html`
+- `manifest.webmanifest`
+- `service-worker.js`
+- `README.md`
+- `icons/`
 
-数据保存在 iPhone 当前网址对应的本地浏览器存储中。请定期使用应用里的“导出数据”备份到 iCloud Drive。
+然后在仓库 `Settings -> Pages` 中选择 `Deploy from a branch`，分支选择 `main`，目录选择 `/root`。
 
-不要频繁更换网址；换网址后，Safari 会把它当成另一个应用，原网址下的本地数据不会自动迁移。
+## iPhone 使用
+
+用 iPhone Safari 打开 GitHub Pages 网址，点击分享按钮，选择“添加到主屏幕”。
+
+数据保存在 iPhone 本地浏览器存储中。请定期用应用里的“导出数据”备份到 iCloud Drive。
