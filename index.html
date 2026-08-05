@@ -8,7 +8,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="theme-color" content="#f8f6fb">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icons/icon.svg">
   <title>收支估算</title>
   <style>
     /* Hallmark · genre: modern-minimal · macrostructure: Workbench · tone: utilitarian · anchor hue: cobalt */
@@ -2954,6 +2955,75 @@
       grid-template-columns: 1fr;
     }
 
+    .detail-summary {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .detail-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .detail-summary-card {
+      min-width: 0;
+      padding: 12px;
+      border-radius: 12px;
+      background: #f6f8fc;
+    }
+
+    .detail-summary-card span {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--color-muted);
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1.2;
+    }
+
+    .detail-summary-card strong {
+      display: block;
+      color: var(--color-ink);
+      font-size: 16px;
+      font-weight: 760;
+      line-height: 1.15;
+      overflow-wrap: anywhere;
+    }
+
+    .detail-owner-summary {
+      display: grid;
+      gap: 6px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #fff8e5;
+    }
+
+    .detail-owner-summary-title {
+      color: var(--color-muted);
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1.2;
+    }
+
+    .detail-owner-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--color-muted);
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .detail-owner-row strong {
+      color: var(--color-ink);
+      font-weight: 760;
+      overflow-wrap: anywhere;
+      text-align: right;
+    }
+
     #viewEntry > .panel:first-child {
       padding: 0;
       border: 0;
@@ -3086,6 +3156,7 @@
     }
 
     .picker-trigger {
+      display: none !important;
       width: 100%;
       min-height: 48px;
       padding: 0 14px;
@@ -3432,6 +3503,1235 @@
       to { opacity: 1; transform: translate(-50%, 0); }
     }
 
+    /* Simplified overview header */
+    .asset-wallet-art,
+    .asset-back-card,
+    .asset-greeting,
+    .asset-stats-link,
+    .asset-pocket-icons,
+    .asset-add-saved {
+      display: none !important;
+    }
+
+    .overview-only {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      height: auto !important;
+      min-height: 0;
+      margin: 0 0 16px;
+      padding: 16px;
+      border: 1px solid var(--color-rule);
+      border-radius: 24px;
+      background: #ffffff;
+      box-shadow: 0 12px 30px rgba(61, 49, 84, 0.08);
+      overflow: visible;
+    }
+
+    .overview-only::before,
+    .overview-only::after {
+      display: none !important;
+    }
+
+    .overview-only .metric.asset-total-metric,
+    .overview-only .metric:first-of-type.asset-total-metric,
+    .overview-only .asset-profit-metric {
+      position: relative !important;
+      inset: auto !important;
+      width: auto !important;
+      height: auto !important;
+      min-height: 112px;
+      padding: 16px;
+      border: 0;
+      border-radius: 18px;
+      background: #f7f3ff;
+      box-shadow: none;
+      clip-path: none;
+      filter: none;
+      overflow: hidden;
+    }
+
+    .overview-only .asset-profit-metric {
+      background: #fff6fa;
+    }
+
+    .overview-only .metric.asset-total-metric span,
+    .overview-only .metric.asset-total-metric strong,
+    .overview-only .asset-profit-metric span,
+    .overview-only .asset-profit-metric strong {
+      position: relative;
+      left: auto !important;
+      right: auto !important;
+      top: auto !important;
+      z-index: 1;
+      color: inherit;
+    }
+
+    .overview-only .metric.asset-total-metric span,
+    .overview-only .asset-profit-metric span {
+      display: block;
+      margin-bottom: 22px;
+      color: var(--color-muted);
+      font-size: 14px;
+      font-weight: 760;
+    }
+
+    .overview-only .metric.asset-total-metric strong,
+    .overview-only .metric.asset-total-metric strong.saved-color,
+    .overview-only .asset-profit-metric strong {
+      display: block;
+      width: auto;
+      max-width: 100%;
+      color: var(--color-ink);
+      font-size: clamp(28px, 8vw, 42px);
+      line-height: 1;
+    }
+
+    .overview-actions {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      position: relative;
+      z-index: 4;
+    }
+
+    .overview-action {
+      min-height: 48px;
+      border-radius: 999px;
+      background: #8f7be8;
+      color: #ffffff;
+      font-weight: 820;
+      box-shadow: 0 10px 20px rgba(143, 123, 232, 0.22);
+    }
+
+    .overview-action.income-action {
+      background: #18151f;
+      box-shadow: 0 10px 20px rgba(24, 21, 31, 0.16);
+    }
+
+    .overview-only {
+      background: #18151f;
+      border-color: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      box-shadow: 0 18px 46px rgba(24, 21, 31, 0.22);
+    }
+
+    .overview-hero-copy {
+      grid-column: 1 / -1;
+      display: grid;
+      gap: 6px;
+      position: relative;
+      z-index: 4;
+      padding: 2px 2px 4px;
+    }
+
+    .overview-hero-copy span {
+      color: rgba(255, 255, 255, 0.58);
+      font-size: 12px;
+      font-weight: 720;
+    }
+
+    .overview-hero-copy h1 {
+      margin: 0;
+      color: #ffffff;
+      font-size: clamp(22px, 6vw, 32px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .overview-hero-copy p {
+      margin: 0;
+      max-width: 28em;
+      color: rgba(255, 255, 255, 0.62);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .overview-only .metric.asset-total-metric,
+    .overview-only .metric:first-of-type.asset-total-metric,
+    .overview-only .asset-profit-metric {
+      min-height: 104px;
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .overview-only .asset-profit-metric {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .overview-only .metric.asset-total-metric span,
+    .overview-only .asset-profit-metric span {
+      color: rgba(255, 255, 255, 0.58);
+    }
+
+    .overview-only .metric.asset-total-metric strong,
+    .overview-only .metric.asset-total-metric strong.saved-color,
+    .overview-only .asset-profit-metric strong {
+      color: #ffffff;
+    }
+
+    .overview-only .asset-profit-metric strong.loss-color {
+      color: #64d99a !important;
+    }
+
+    .overview-only .asset-profit-metric strong.spend-color {
+      color: #ff8c8e !important;
+    }
+
+    .overview-only .asset-profit-metric strong.muted-color {
+      color: rgba(255, 255, 255, 0.48) !important;
+    }
+
+    .overview-action {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10);
+    }
+
+    .overview-action.income-action {
+      background: #ffffff;
+      color: #18151f;
+      box-shadow: none;
+    }
+
+    /* Type scale normalization */
+    body {
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .overview-hero-copy span,
+    .metric span,
+    .period-summary .metric span,
+    label,
+    .picker-title,
+    .record-meta-label,
+    .period-cell .label,
+    .period-cell .line span:first-child {
+      font-size: 12px !important;
+      line-height: 1.35;
+      font-weight: 680 !important;
+    }
+
+    .overview-hero-copy h1 {
+      font-size: clamp(22px, 5.3vw, 28px) !important;
+      font-weight: 780;
+    }
+
+    .overview-hero-copy p {
+      font-size: 12px !important;
+      line-height: 1.42;
+    }
+
+    .panel-title h2,
+    .entry-modal h2,
+    .detail-header h2,
+    .record-title-row strong {
+      font-size: 16px !important;
+      line-height: 1.25;
+      font-weight: 780 !important;
+    }
+
+    .overview-only .metric.asset-total-metric span,
+    .overview-only .asset-profit-metric span {
+      margin-bottom: 16px;
+      font-size: 12px !important;
+      font-weight: 680 !important;
+    }
+
+    .overview-only .metric.asset-total-metric strong,
+    .overview-only .metric.asset-total-metric strong.saved-color {
+      font-size: clamp(24px, 6.4vw, 32px) !important;
+      font-weight: 760 !important;
+      letter-spacing: 0;
+    }
+
+    .overview-only .asset-profit-metric strong {
+      font-size: clamp(24px, 6.4vw, 32px) !important;
+      font-weight: 760 !important;
+      letter-spacing: 0;
+    }
+
+    .summary:not(.overview-only) .metric strong,
+    .period-summary .metric strong,
+    #entryPeriodSummary .metric strong {
+      font-size: clamp(12px, 4.5vw, 24px) !important;
+      line-height: 1.12;
+      font-weight: 760 !important;
+      letter-spacing: 0;
+    }
+
+    .period-cell h3,
+    .period-cell .period-title {
+      font-size: 20px !important;
+      line-height: 1.2;
+      font-weight: 780 !important;
+    }
+
+    .period-cell .amount,
+    .period-cell .line strong,
+    .period-cell strong {
+      font-size: 12px !important;
+      line-height: 1.25;
+      font-weight: 740 !important;
+      letter-spacing: 0;
+    }
+
+    .records,
+    .record-card,
+    .record-meta-grid,
+    .empty {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .record-amount,
+    .record-title-row .amount,
+    .record-card strong[data-amount] {
+      font-size: 16px !important;
+      line-height: 1.18;
+      font-weight: 760 !important;
+    }
+
+    input,
+    textarea,
+    select,
+    .picker-trigger,
+    .calculated-value {
+      font-size: 14px !important;
+      line-height: 1.3;
+      font-weight: 520 !important;
+    }
+
+    input::placeholder,
+    textarea::placeholder,
+    .picker-trigger.is-placeholder {
+      font-size: 14px !important;
+      font-weight: 400 !important;
+    }
+
+    button,
+    .primary,
+    .secondary,
+    .overview-action,
+    .entry-toggle,
+    .detail-actions .primary,
+    .picker-name,
+    .picker-add,
+    .tab-btn {
+      font-size: 14px !important;
+      line-height: 1.2;
+      font-weight: 700 !important;
+      letter-spacing: 0;
+    }
+
+    .mode-btn,
+    #overviewYearLabel,
+    #entryYearLabel,
+    .year-switcher {
+      font-size: 15px !important;
+      font-weight: 740 !important;
+    }
+
+    .tab-btn span {
+      font-size: 12px !important;
+      font-weight: 700 !important;
+    }
+
+    /* Alipay wealth style refresh */
+    :root {
+      --color-paper: #f5f7fb;
+      --color-paper-2: #eef4ff;
+      --color-surface: #ffffff;
+      --color-surface-2: #f7faff;
+      --color-ink: #1f2329;
+      --color-muted: #697386;
+      --color-muted-2: #a2aabc;
+      --color-rule: #e8edf5;
+      --color-rule-2: #f1f4f8;
+      --color-accent: #1677ff;
+      --color-accent-2: #4d9cff;
+      --color-focus: #1677ff;
+      --color-success: #16a46b;
+      --color-danger: #e94b5f;
+      --color-danger-soft: #fff0f3;
+      --bg: var(--color-paper);
+      --panel: var(--color-surface);
+      --panel-2: var(--color-surface-2);
+      --ink: var(--color-ink);
+      --muted: var(--color-muted);
+      --muted-2: var(--color-muted-2);
+      --line: var(--color-rule);
+      --line-2: var(--color-rule-2);
+      --accent: var(--color-accent);
+      --accent-2: var(--color-accent-2);
+      --soft: #eaf3ff;
+      --soft-2: #f7fbff;
+      --income: #1677ff;
+      --saved: #1f2329;
+      --spend: #e94b5f;
+      --shadow: 0 8px 24px rgba(31, 63, 113, 0.06);
+      --shadow-soft: 0 10px 28px rgba(31, 63, 113, 0.07);
+    }
+
+    body {
+      background:
+        linear-gradient(180deg, #eef5ff 0, #f5f7fb 188px, #f5f7fb 100%);
+      color: var(--color-ink);
+    }
+
+    .app {
+      padding-top: calc(14px + var(--safe-top));
+    }
+
+    .panel,
+    .metric,
+    .period-cell,
+    .record-card,
+    .entry-modal,
+    .picker-sheet {
+      border-color: var(--color-rule);
+      background: #ffffff;
+      box-shadow: 0 8px 22px rgba(31, 63, 113, 0.05);
+    }
+
+    .overview-only {
+      gap: 12px;
+      padding: 18px;
+      border: 0;
+      border-radius: 20px;
+      background: #ffffff;
+      color: var(--color-ink);
+      box-shadow: 0 14px 34px rgba(31, 63, 113, 0.10);
+    }
+
+    .overview-hero-copy {
+      padding-bottom: 2px;
+    }
+
+    .overview-hero-copy span {
+      color: #1677ff !important;
+      font-weight: 760 !important;
+    }
+
+    .overview-hero-copy h1 {
+      color: var(--color-ink);
+    }
+
+    .overview-hero-copy p {
+      color: var(--color-muted);
+    }
+
+    .overview-only .metric.asset-total-metric,
+    .overview-only .metric:first-of-type.asset-total-metric,
+    .overview-only .asset-profit-metric {
+      min-height: 96px;
+      padding: 14px;
+      border: 1px solid #dcecff;
+      border-radius: 16px;
+      background: #f4f9ff;
+      box-shadow: none;
+    }
+
+    .overview-only .asset-profit-metric {
+      border-color: #edf1f7;
+      background: #fbfcff;
+    }
+
+    .overview-only .metric.asset-total-metric span,
+    .overview-only .asset-profit-metric span {
+      color: var(--color-muted) !important;
+    }
+
+    .overview-only .metric.asset-total-metric strong,
+    .overview-only .metric.asset-total-metric strong.saved-color,
+    .overview-only .asset-profit-metric strong {
+      color: var(--color-ink) !important;
+    }
+
+    .overview-only .asset-profit-metric strong.loss-color,
+    .loss-color {
+      color: #16a46b !important;
+    }
+
+    .overview-only .asset-profit-metric strong.spend-color,
+    .spend-color {
+      color: #e94b5f !important;
+    }
+
+    .overview-only .asset-profit-metric strong.muted-color,
+    .muted-color {
+      color: var(--color-muted-2) !important;
+    }
+
+    .overview-actions {
+      gap: 10px;
+    }
+
+    .overview-action,
+    .entry-toggle,
+    .detail-actions .primary,
+    .settings-add .secondary,
+    .picker-save {
+      background: #1677ff !important;
+      color: #ffffff !important;
+      box-shadow: 0 10px 22px rgba(22, 119, 255, 0.22) !important;
+    }
+
+    .overview-action.income-action {
+      background: #eaf3ff !important;
+      color: #1677ff !important;
+      box-shadow: none !important;
+    }
+
+    .period-mode,
+    .year-switcher,
+    .tabs {
+      background: rgba(255, 255, 255, 0.92);
+      border-color: #edf1f7;
+      box-shadow: 0 10px 26px rgba(31, 63, 113, 0.06);
+    }
+
+    .mode-btn.active,
+    .tab-btn.active {
+      background: #1677ff !important;
+      color: #ffffff !important;
+      box-shadow: 0 10px 22px rgba(22, 119, 255, 0.22);
+    }
+
+    .icon-btn,
+    .secondary,
+    .picker-cancel,
+    .mini-actions button {
+      background: #f5f8fd !important;
+      color: #697386 !important;
+      border-color: #e8edf5 !important;
+      box-shadow: none !important;
+    }
+
+    .period-summary .metric:nth-child(4n + 1),
+    #entryPeriodSummary .metric:nth-child(3n + 1) {
+      background: #fff9ed !important;
+    }
+
+    .period-summary .metric:nth-child(4n + 2),
+    #entryPeriodSummary .metric:nth-child(3n + 2),
+    body[data-entry-type="saved"] #entryPeriodSummary .metric:nth-child(2n + 1) {
+      background: #eef6ff !important;
+    }
+
+    .period-summary .metric:nth-child(4n + 3),
+    #entryPeriodSummary .metric:nth-child(3n + 3),
+    body[data-entry-type="saved"] #entryPeriodSummary .metric:nth-child(2n + 2) {
+      background: #eefaf5 !important;
+    }
+
+    .period-summary .metric:nth-child(4n + 4) {
+      background: #fff1f4 !important;
+    }
+
+    #viewOverview .overview-period-summary {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #viewOverview .overview-period-summary .period-spend-metric {
+      display: none;
+    }
+
+    #viewOverview .overview-period-summary .metric:first-child {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    #viewOverview .overview-period-summary .metric:nth-child(3) {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    #viewOverview .overview-period-summary .period-allocation-metric {
+      display: grid;
+      grid-column: 1 / -1;
+      grid-row: 2;
+      gap: 0;
+      background: #f6f8fc !important;
+    }
+
+    #viewOverview .overview-period-summary .period-allocation-metric > span {
+      display: none;
+    }
+
+    .summary-allocation {
+      display: grid;
+      gap: 8px;
+      min-width: 0;
+      padding: 0;
+    }
+
+    .summary-allocation-values {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .summary-allocation-value {
+      display: grid;
+      gap: 0;
+      min-width: 0;
+    }
+
+    .summary-allocation-value.saved {
+      text-align: right;
+    }
+
+    .summary-allocation-value span {
+      min-width: 0;
+      color: var(--color-ink);
+      font-size: 12px;
+      font-weight: 760;
+      line-height: 1.2;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .summary-allocation-value strong {
+      min-width: 0;
+      font-size: clamp(18px, 4vw, 24px) !important;
+      font-weight: 760 !important;
+      line-height: 1;
+      overflow-wrap: anywhere;
+    }
+
+    .summary-allocation-value.spend strong:not(.muted-color) {
+      color: #1677ff !important;
+    }
+
+    .summary-allocation-value.saved strong:not(.muted-color) {
+      color: #ff8a00 !important;
+    }
+
+    .summary-allocation-bar {
+      display: flex;
+      height: 12px;
+      width: 100%;
+      min-width: 0;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e8edf5;
+    }
+
+    .summary-allocation-bar span {
+      display: block;
+      min-width: 0;
+      height: 100%;
+    }
+
+    .summary-allocation-spend {
+      flex: 0 0 var(--spend-share, 50%);
+      background: #1677ff;
+      border-radius: 999px 0 0 999px;
+    }
+
+    .summary-allocation-saved {
+      flex: 1 1 auto;
+      background: #ff8a00;
+      border-radius: 0 999px 999px 0;
+    }
+
+    .summary-allocation.is-empty .summary-allocation-spend,
+    .summary-allocation.is-empty .summary-allocation-saved {
+      background: #dfe6f2;
+    }
+
+    @media (max-width: 430px) {
+      #viewOverview .overview-period-summary {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .period-cell {
+      background: #ffffff;
+      border-color: #e9eef7;
+      box-shadow: 0 6px 18px rgba(31, 63, 113, 0.045);
+    }
+
+    .period-cell.is-current-month {
+      border-color: #1677ff;
+      background: #f4f9ff;
+      box-shadow: 0 8px 22px rgba(22, 119, 255, 0.12);
+    }
+
+    .period-cell h3,
+    .period-cell .period-title {
+      color: var(--color-ink);
+    }
+
+    .record-card.income-entry {
+      background: #fffaf0;
+      border-color: #f3e7c8;
+    }
+
+    .record-card.saved-entry {
+      background: #f5f9ff;
+      border-color: #dfeeff;
+    }
+
+    input,
+    textarea,
+    select,
+    .picker-trigger,
+    .calculated-value {
+      border-color: #e4eaf3;
+      background: #ffffff;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus,
+    .picker-trigger:focus-visible {
+      border-color: #1677ff;
+      box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.12);
+      outline: none;
+    }
+
+    .picker-item.active {
+      background: #edf5ff;
+    }
+
+    .picker-add {
+      color: #1677ff !important;
+    }
+
+    .tabs {
+      width: min(360px, calc(100vw - 48px));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tabs .tab-btn {
+      justify-content: center;
+    }
+
+    .overview-detail-panel {
+      margin-top: 14px;
+      padding-top: 16px;
+    }
+
+    .overview-detail-panel .panel-title {
+      margin-bottom: 12px;
+    }
+
+    .overview-detail-title {
+      align-items: flex-start;
+    }
+
+    .overview-detail-tabs {
+      width: min(210px, 100%);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .overview-detail-filters {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .detail-filter-field {
+      display: grid;
+      gap: 5px;
+      min-width: 0;
+    }
+
+    .detail-filter-field[hidden] {
+      display: none;
+    }
+
+    .detail-filter-field span {
+      color: var(--color-muted);
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1.2;
+    }
+
+    .detail-filter-field select {
+      min-height: 40px;
+      padding: 0 10px;
+      border-radius: 12px;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    .weight-toolbar {
+      display: grid;
+      gap: 12px;
+    }
+
+    .weight-toolbar-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 8px;
+      align-items: end;
+    }
+
+    .weight-toolbar-row .period-mode {
+      width: 100%;
+    }
+
+    .weight-person-field {
+      display: grid;
+      gap: 5px;
+    }
+
+    .weight-person-field span {
+      color: var(--color-muted);
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .weight-person-tabs {
+      display: inline-grid;
+      grid-auto-flow: column;
+      grid-auto-columns: 40px;
+      grid-template-columns: none;
+      justify-content: start;
+      justify-self: start;
+      width: auto !important;
+      gap: 8px;
+      padding: 0;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+    }
+
+    .weight-person-tabs .mode-btn {
+      width: 40px;
+      min-height: 40px;
+      padding: 0;
+      border-radius: 999px;
+      background: #f4f1ff;
+      color: #7d748c;
+      font-size: 14px;
+      font-weight: 760;
+    }
+
+    .weight-person-tabs .mode-btn.active {
+      background: var(--color-accent);
+      color: #ffffff;
+      box-shadow: 0 8px 18px rgba(123, 92, 246, 0.22);
+    }
+
+    .weight-period-mode {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .weight-view-mode {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      width: auto;
+      min-width: 92px;
+      padding: 3px;
+      border-radius: 999px;
+    }
+
+    .weight-view-mode .mode-btn {
+      width: 40px;
+      min-height: 32px;
+      padding: 0;
+      border-radius: 999px;
+    }
+
+    .weight-view-mode .mode-btn svg {
+      width: 17px;
+      height: 17px;
+      stroke-width: 1.9;
+    }
+
+    .weight-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .weight-actions .primary {
+      min-height: 42px;
+      border-radius: 999px;
+      padding: 0 16px;
+      font-size: 14px;
+    }
+
+    .weight-toolbar > .year-switcher {
+      justify-self: center;
+      width: fit-content;
+      min-width: 220px;
+    }
+
+    .weight-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .weight-grid.is-day-calendar {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .weight-weekday {
+      color: var(--color-muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1;
+      padding: 0 0 4px;
+    }
+
+    .weight-cell {
+      display: grid;
+      gap: 6px;
+      min-height: 94px;
+      padding: 12px;
+      border: 1px solid #edf0f6;
+      border-radius: 12px;
+      background: #fff;
+      text-align: left;
+    }
+
+    .weight-grid.is-day-calendar .weight-cell {
+      min-height: 72px;
+      gap: 4px;
+      padding: 8px 6px;
+      text-align: center;
+    }
+
+    .weight-grid.is-day-calendar .weight-cell.is-empty {
+      visibility: hidden;
+      min-height: 72px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+
+    .weight-cell.is-current {
+      border-color: #1677ff;
+      background: #eff6ff;
+    }
+
+    .weight-cell .weight-cell-title {
+      color: var(--color-ink);
+      font-size: 18px;
+      font-weight: 780;
+      line-height: 1.1;
+    }
+
+    .weight-grid.is-day-calendar .weight-cell .weight-cell-title {
+      font-size: 14px;
+      font-weight: 760;
+    }
+
+    .weight-cell .weight-value {
+      color: var(--color-ink);
+      font-size: 16px;
+      font-weight: 760;
+    }
+
+    .weight-grid.is-day-calendar .weight-cell .weight-value {
+      font-size: 12px;
+      font-weight: 720;
+    }
+
+    .weight-cell .weight-delta {
+      color: var(--color-muted-2);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .weight-grid.is-day-calendar .weight-cell .weight-delta {
+      font-size: 11px;
+      font-weight: 660;
+    }
+
+    .weight-cell .weight-delta.up {
+      color: var(--color-danger);
+    }
+
+    .weight-cell .weight-delta.down {
+      color: var(--color-success);
+    }
+
+    .weight-chart {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #fff;
+      border: 1px solid #edf0f6;
+    }
+
+    .weight-chart svg {
+      display: block;
+      width: 100%;
+      height: 220px;
+    }
+
+    .weight-dropdown {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 16px 16px calc(16px + var(--safe-bottom));
+      background: rgba(23, 24, 28, 0.34);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .weight-dropdown[hidden] {
+      display: none;
+    }
+
+    .weight-modal {
+      width: min(100%, 520px);
+      padding: 20px;
+      border-radius: 24px;
+      background: #fff;
+      box-shadow: 0 24px 58px rgba(61, 49, 84, 0.18);
+    }
+
+    @media (max-width: 430px) {
+      .overview-detail-filters,
+      .weight-toolbar-row,
+      .weight-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .weight-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 430px) {
+      .overview-detail-filters {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    /* Redesigned income / saved record cards */
+    .records {
+      display: grid;
+      gap: 10px;
+    }
+
+    .record-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: stretch;
+      padding: 14px 14px 14px 16px;
+      border: 1px solid #e8edf5;
+      border-radius: 14px;
+      background: #ffffff;
+      box-shadow: 0 8px 20px rgba(31, 63, 113, 0.045);
+      overflow: hidden;
+    }
+
+    .record-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 12px;
+      bottom: 12px;
+      width: 4px;
+      border-radius: 999px;
+      background: #1677ff;
+    }
+
+    .record-card.income-entry {
+      background:
+        linear-gradient(90deg, rgba(255, 184, 77, 0.12), rgba(255, 255, 255, 0) 46%),
+        #ffffff;
+      border-color: #f1e6cf;
+    }
+
+    .record-card.income-entry::before {
+      background: #ffad32;
+    }
+
+    .record-card.saved-entry {
+      background:
+        linear-gradient(90deg, rgba(22, 119, 255, 0.10), rgba(255, 255, 255, 0) 46%),
+        #ffffff;
+      border-color: #dfeeff;
+    }
+
+    .record-card.saved-entry::before {
+      background: #1677ff;
+    }
+
+    .record-main {
+      min-width: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .record-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .record-title-row strong {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 9px;
+      border-radius: 999px;
+      background: #edf5ff;
+      color: #1677ff;
+      font-size: 13px !important;
+      font-weight: 760 !important;
+      white-space: nowrap;
+    }
+
+    .record-card.income-entry .record-title-row strong {
+      background: #fff2dc;
+      color: #b86a00;
+    }
+
+    .record-card.saved-entry .record-title-row strong {
+      background: #edf5ff;
+      color: #1677ff;
+    }
+
+    .record-title-row .record-date {
+      min-width: 0;
+      color: var(--color-muted);
+      font-size: 13px;
+      font-weight: 520;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .record-meta-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .record-meta-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      min-height: 24px;
+      max-width: 100%;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(245, 248, 253, 0.92);
+      color: var(--color-muted);
+    }
+
+    .record-meta-row span:first-child {
+      color: #8a93a6;
+      font-size: 12px !important;
+      font-weight: 560 !important;
+      white-space: nowrap;
+    }
+
+    .record-meta-row span:last-child {
+      min-width: 0;
+      color: #3b4252;
+      font-size: 12px !important;
+      font-weight: 640 !important;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .record-side {
+      display: grid;
+      grid-template-rows: 1fr auto;
+      justify-items: end;
+      align-items: start;
+      gap: 10px;
+      min-width: 92px;
+    }
+
+    .record-side .amount {
+      max-width: 130px;
+      color: var(--color-ink);
+      font-size: 18px !important;
+      line-height: 1.12;
+      font-weight: 780 !important;
+      text-align: right;
+      word-break: break-all;
+    }
+
+    .record-side .amount.income-color {
+      color: #b86a00 !important;
+    }
+
+    .record-side .amount.saved-color {
+      color: #1677ff !important;
+    }
+
+    .mini-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .mini-actions button {
+      width: 30px;
+      height: 30px;
+      min-height: 30px;
+      border-radius: 999px;
+      background: #ffffff !important;
+      border: 1px solid #e8edf5 !important;
+      color: #8a93a6 !important;
+      box-shadow: 0 4px 10px rgba(31, 63, 113, 0.05) !important;
+    }
+
+    .mini-actions button[data-action="delete"] {
+      color: #a2aabc !important;
+    }
+
+    .mini-actions button svg {
+      width: 15px;
+      height: 15px;
+      stroke-width: 1.7;
+    }
+
+    @media (max-width: 430px) {
+      .record-card {
+        grid-template-columns: 1fr;
+      }
+
+      .record-side {
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto;
+        align-items: center;
+        justify-items: stretch;
+        min-width: 0;
+      }
+
+      .record-side .amount {
+        max-width: none;
+        text-align: left;
+      }
+
+      .mini-actions {
+        justify-content: flex-end;
+      }
+    }
+
+    #viewEntry > .entry-toggle {
+      display: none !important;
+    }
+
   </style>
 </head>
 <body>
@@ -3473,6 +4773,11 @@
             <path d="m9 18 6-6-6-6"></path>
           </svg>
         </button>
+        <div class="overview-hero-copy">
+          <span>家庭资产工作台</span>
+          <h1>嘿！财富自由的乖乖</h1>
+          <p>记录收入和存款变化，看清每个月留下了多少。</p>
+        </div>
         <div class="metric asset-total-metric">
           <span>存款总额</span>
           <strong id="assetTotal" class="saved-color">0</strong>
@@ -3485,6 +4790,10 @@
           <span aria-hidden="true">+</span>
           又存一笔
         </button>
+        <div class="overview-actions" aria-label="新增记录">
+          <button class="overview-action income-action" id="assetAddIncome" type="button">又赚一笔</button>
+          <button class="overview-action saved-action" id="assetAddSavedOverview" type="button">又存一笔</button>
+        </div>
         <div class="asset-pocket-icons" aria-hidden="true">
           <span></span>
           <span></span>
@@ -3509,25 +4818,81 @@
             </div>
           </div>
         </div>
-        <section class="summary period-summary" aria-label="周期合计">
+        <section class="summary period-summary overview-period-summary" aria-label="周期合计">
           <div class="metric">
             <span id="periodIncomeLabel">本年收入</span>
             <strong id="periodIncome" class="income-color">0</strong>
           </div>
-          <div class="metric">
-            <span id="periodSavedLabel">本年存入</span>
-            <strong id="periodSaved" class="saved-color">0</strong>
+          <div class="metric period-allocation-metric" id="periodAllocationMetric">
+            <span id="periodSavedLabel">存入 / 花销</span>
+            <strong id="periodSaved" class="saved-color" hidden>0</strong>
+            <div class="summary-allocation" id="periodAllocationChart">
+              <div class="summary-allocation-values">
+                <div class="summary-allocation-value spend">
+                  <span id="periodSpendShareLabel">年花销 --</span>
+                  <strong id="periodSpendShareAmount" class="muted-color">--</strong>
+                </div>
+                <div class="summary-allocation-value saved">
+                  <span id="periodSavedShareLabel">年存入 --</span>
+                  <strong id="periodSavedShareAmount" class="muted-color">--</strong>
+                </div>
+              </div>
+              <div class="summary-allocation-bar" aria-hidden="true">
+                <span class="summary-allocation-spend"></span>
+                <span class="summary-allocation-saved"></span>
+              </div>
+            </div>
           </div>
           <div class="metric">
             <span id="periodProfitLabel">本年收益</span>
             <strong id="periodProfit" class="muted-color">0</strong>
           </div>
-          <div class="metric">
+          <div class="metric period-spend-metric">
             <span id="periodSpendLabel">本年花销</span>
             <strong id="periodSpend" class="spend-color">0</strong>
           </div>
         </section>
         <div class="period-grid" id="periodGrid"></div>
+      </div>
+
+      <div class="panel overview-detail-panel">
+        <div class="panel-title overview-detail-title">
+          <div class="period-mode overview-detail-tabs" aria-label="明细类型">
+            <button class="mode-btn active" data-overview-detail-type="income">收入</button>
+            <button class="mode-btn" data-overview-detail-type="saved">存入</button>
+          </div>
+        </div>
+        <div class="overview-detail-filters" aria-label="明细筛选">
+          <label class="detail-filter-field">
+            <span>年份</span>
+            <select id="overviewDetailYear"></select>
+          </label>
+          <label class="detail-filter-field" id="overviewOwnerFilterField">
+            <span>收入人</span>
+            <select id="overviewOwnerFilter"></select>
+          </label>
+          <label class="detail-filter-field" id="overviewIncomeCategoryFilterField">
+            <span>分类</span>
+            <select id="overviewIncomeCategoryFilter"></select>
+          </label>
+          <label class="detail-filter-field" id="overviewSavedPlaceFilterField" hidden>
+            <span>存款位置</span>
+            <select id="overviewSavedPlaceFilter"></select>
+          </label>
+        </div>
+        <div class="records" id="overviewDetailList"></div>
+      </div>
+
+      <div class="panel overview-excel-panel">
+        <div class="panel-title">
+          <h2>Excel</h2>
+        </div>
+        <div class="toolbar excel-toolbar">
+          <button class="secondary" id="exportExcelBtn" type="button">导出数据</button>
+          <button class="secondary" id="importExcelBtn" type="button">导入数据</button>
+          <button class="secondary" id="templateExcelBtn" type="button">导入模板</button>
+        </div>
+        <input id="importExcelFile" type="file" accept=".csv,text/csv" hidden>
       </div>
 
     </section>
@@ -3564,32 +4929,53 @@
       </div>
     </section>
 
-    <section class="view" id="viewData">
+    <section class="view" id="viewWeight">
       <div class="panel">
         <div class="panel-title">
-          <h2>Excel</h2>
+          <h2>体重管理</h2>
+          <div class="period-mode weight-view-mode" aria-label="体重展示方式">
+            <button class="mode-btn active" data-weight-view="calendar" aria-label="日历视图" title="日历视图">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <rect x="4" y="5" width="16" height="15" rx="3"></rect>
+                <path d="M8 3v4M16 3v4M4 10h16M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"></path>
+              </svg>
+            </button>
+            <button class="mode-btn" data-weight-view="chart" aria-label="折线图视图" title="折线图视图">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                <path d="M4 19h16"></path>
+                <path d="M5 16l4-5 4 3 5-7"></path>
+                <path d="M9 11h.01M13 14h.01M18 7h.01"></path>
+              </svg>
+            </button>
+          </div>
         </div>
-        <div class="toolbar excel-toolbar">
-          <button class="secondary" id="exportExcelBtn" type="button">导出数据</button>
-          <button class="secondary" id="importExcelBtn" type="button">导入数据</button>
-          <button class="secondary" id="templateExcelBtn" type="button">导入模板</button>
+        <div class="weight-toolbar">
+          <div class="weight-toolbar-row">
+            <label class="weight-person-field">
+              <span>记录人</span>
+              <div class="period-mode weight-person-tabs" id="weightPerson" aria-label="记录人"></div>
+            </label>
+            <div class="period-mode weight-period-mode" aria-label="体重统计粒度">
+              <button class="mode-btn active" data-weight-period="day">日</button>
+              <button class="mode-btn" data-weight-period="month">月</button>
+              <button class="mode-btn" data-weight-period="year">年</button>
+            </div>
+          </div>
+          <div class="weight-actions">
+            <button class="primary" id="openWeightForm" type="button">记录体重</button>
+          </div>
+          <div class="year-switcher" aria-label="体重时间切换">
+            <button class="icon-btn" id="weightPrev" aria-label="上一段">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"><path d="m15 18-6-6 6-6"/></svg>
+            </button>
+            <div id="weightPeriodLabel"></div>
+            <button class="icon-btn" id="weightNext" aria-label="下一段">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"><path d="m9 18 6-6-6-6"/></svg>
+            </button>
+          </div>
         </div>
-        <input id="importExcelFile" type="file" accept=".csv,text/csv" hidden>
-      </div>
-
-      <div class="panel">
-        <div class="panel-title">
-          <h2>全部明细</h2>
-        </div>
-        <div class="search-row">
-          <input id="search" placeholder="搜索分类/位置、收入人、备注">
-          <select id="filterType">
-            <option value="all">全部</option>
-            <option value="income">收入</option>
-            <option value="saved">存入</option>
-          </select>
-        </div>
-        <div class="records" id="allList"></div>
+        <div class="weight-grid" id="weightGrid"></div>
+        <div class="weight-chart" id="weightChart" hidden></div>
       </div>
     </section>
 
@@ -3600,6 +4986,7 @@
           <h2 id="detailTitle">明细</h2>
         </div>
         <div class="detail-actions" id="detailActions"></div>
+        <div class="detail-summary" id="detailSummary"></div>
         <div class="records" id="detailList"></div>
       </div>
     </section>
@@ -3615,7 +5002,7 @@
           <div class="form-grid">
             <div class="field" id="ownerField">
               <label for="owner">收入人<span class="required">*</span></label>
-              <select id="owner" hidden></select>
+              <select id="owner"></select>
               <button class="picker-trigger" type="button" id="ownerPickerTrigger" data-picker="owner"></button>
             </div>
             <div class="field">
@@ -3638,7 +5025,7 @@
             </div>
             <div class="field">
               <label for="category" id="categoryLabel">分类<span class="required">*</span></label>
-              <select id="category" hidden></select>
+              <select id="category"></select>
               <button class="picker-trigger" type="button" id="categoryPickerTrigger" data-picker="category"></button>
             </div>
             <div class="field" id="computedProfitField" hidden>
@@ -3673,35 +5060,51 @@
       </svg>
       <span>总览</span>
     </button>
-    <button class="tab-btn" data-view="viewEntry" data-entry-preset="income" aria-label="收入">
+    <button class="tab-btn" data-view="viewWeight" aria-label="体重">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-        <path d="M12 5v14"></path>
-        <path d="M5 12h14"></path>
+        <path d="M6 18h12"></path>
+        <path d="M8 18l2-10h4l2 10"></path>
+        <path d="M10 8h4"></path>
       </svg>
-      <span>收入</span>
-    </button>
-    <button class="tab-btn" data-view="viewEntry" data-entry-preset="saved" aria-label="存入">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-        <path d="M12 5v12"></path>
-        <path d="m7 12 5 5 5-5"></path>
-        <path d="M5 19h14"></path>
-      </svg>
-      <span>存入</span>
-    </button>
-    <button class="tab-btn" data-view="viewData" aria-label="数据">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-        <path d="M6 7h12"></path>
-        <path d="M6 12h12"></path>
-        <path d="M6 17h12"></path>
-      </svg>
-      <span>数据</span>
+      <span>体重</span>
     </button>
   </nav>
 
   <div class="toast" id="toast"></div>
 
+  <div class="weight-dropdown" id="weightDropdown" hidden>
+    <div class="weight-modal">
+      <div class="panel-title">
+        <h2>记录体重</h2>
+        <button class="secondary" id="closeWeightForm" type="button">关闭</button>
+      </div>
+      <form id="weightForm">
+        <div class="form-grid">
+          <div class="field">
+            <label for="weightFormPerson">记录人<span class="required">*</span></label>
+            <select id="weightFormPerson"></select>
+          </div>
+          <div class="field">
+            <label for="weightDate">日期<span class="required">*</span></label>
+            <input id="weightDate" type="date" min="2026-01-01" required>
+          </div>
+          <div class="field">
+            <label for="weightValue">体重<span class="required">*</span></label>
+            <input id="weightValue" inputmode="decimal" autocomplete="off" placeholder="例如：52.5" required>
+          </div>
+          <div class="field full">
+            <label for="weightNote">备注</label>
+            <textarea id="weightNote" placeholder="可不填"></textarea>
+          </div>
+        </div>
+        <button class="primary" type="submit">保存</button>
+      </form>
+    </div>
+  </div>
+
   <script>
     const STORAGE_KEY = "income-savings-estimator-v1";
+    const WEIGHT_STORAGE_KEY = "household-weight-records-v1";
     const SETTINGS_KEY = "income-savings-estimator-settings-v1";
     const LEGACY_KEY = "personal-savings-deposits-v1";
     const MIN_YEAR = 2026;
@@ -3718,6 +5121,17 @@
       entryType: "income",
       viewYear: Math.max(MIN_YEAR, new Date().getFullYear()),
       periodMode: "month",
+      overviewDetailType: "income",
+      overviewDetailYear: Math.max(MIN_YEAR, new Date().getFullYear()),
+      overviewOwnerFilter: "all",
+      overviewIncomeCategoryFilter: "all",
+      overviewSavedPlaceFilter: "all",
+      weightEntries: [],
+      weightPerson: defaultIncomeOwners[0],
+      weightPeriod: "day",
+      weightView: "calendar",
+      weightYear: Math.max(MIN_YEAR, new Date().getFullYear()),
+      weightMonth: new Date().getMonth() + 1,
       entryViewYear: Math.max(MIN_YEAR, new Date().getFullYear()),
       entryPeriodMode: "month",
       detail: null,
@@ -3730,6 +5144,11 @@
       periodSavedLabel: document.getElementById("periodSavedLabel"),
       periodProfitLabel: document.getElementById("periodProfitLabel"),
       periodSpendLabel: document.getElementById("periodSpendLabel"),
+      periodAllocationChart: document.getElementById("periodAllocationChart"),
+      periodSavedShareLabel: document.getElementById("periodSavedShareLabel"),
+      periodSavedShareAmount: document.getElementById("periodSavedShareAmount"),
+      periodSpendShareLabel: document.getElementById("periodSpendShareLabel"),
+      periodSpendShareAmount: document.getElementById("periodSpendShareAmount"),
       periodIncome: document.getElementById("periodIncome"),
       periodSaved: document.getElementById("periodSaved"),
       periodProfit: document.getElementById("periodProfit"),
@@ -3738,14 +5157,34 @@
       assetProfit: document.getElementById("assetProfit"),
       yearLabel: document.getElementById("yearLabel"),
       periodGrid: document.getElementById("periodGrid"),
+      overviewDetailYear: document.getElementById("overviewDetailYear"),
+      overviewOwnerFilterField: document.getElementById("overviewOwnerFilterField"),
+      overviewOwnerFilter: document.getElementById("overviewOwnerFilter"),
+      overviewIncomeCategoryFilterField: document.getElementById("overviewIncomeCategoryFilterField"),
+      overviewIncomeCategoryFilter: document.getElementById("overviewIncomeCategoryFilter"),
+      overviewSavedPlaceFilterField: document.getElementById("overviewSavedPlaceFilterField"),
+      overviewSavedPlaceFilter: document.getElementById("overviewSavedPlaceFilter"),
+      overviewDetailList: document.getElementById("overviewDetailList"),
+      weightPerson: document.getElementById("weightPerson"),
+      weightPeriodLabel: document.getElementById("weightPeriodLabel"),
+      weightGrid: document.getElementById("weightGrid"),
+      weightChart: document.getElementById("weightChart"),
+      openWeightForm: document.getElementById("openWeightForm"),
+      weightDropdown: document.getElementById("weightDropdown"),
+      closeWeightForm: document.getElementById("closeWeightForm"),
+      weightForm: document.getElementById("weightForm"),
+      weightFormPerson: document.getElementById("weightFormPerson"),
+      weightDate: document.getElementById("weightDate"),
+      weightValue: document.getElementById("weightValue"),
+      weightNote: document.getElementById("weightNote"),
       entryYearLabel: document.getElementById("entryYearLabel"),
       entryPeriodSummary: document.getElementById("entryPeriodSummary"),
       entryPeriodGrid: document.getElementById("entryPeriodGrid"),
       detailBack: document.getElementById("detailBack"),
       detailTitle: document.getElementById("detailTitle"),
       detailActions: document.getElementById("detailActions"),
+      detailSummary: document.getElementById("detailSummary"),
       detailList: document.getElementById("detailList"),
-      allList: document.getElementById("allList"),
       entryListTitle: document.getElementById("entryListTitle"),
       entryList: document.getElementById("entryList"),
       openEntryForm: document.getElementById("openEntryForm"),
@@ -3772,8 +5211,6 @@
       computedProfitField: document.getElementById("computedProfitField"),
       computedProfit: document.getElementById("computedProfit"),
       note: document.getElementById("note"),
-      search: document.getElementById("search"),
-      filterType: document.getElementById("filterType"),
       exportExcelBtn: document.getElementById("exportExcelBtn"),
       importExcelBtn: document.getElementById("importExcelBtn"),
       templateExcelBtn: document.getElementById("templateExcelBtn"),
@@ -3782,6 +5219,8 @@
       pickerTitle: document.getElementById("pickerTitle"),
       pickerList: document.getElementById("pickerList"),
       assetAddSaved: document.getElementById("assetAddSaved"),
+      assetAddIncome: document.getElementById("assetAddIncome"),
+      assetAddSavedOverview: document.getElementById("assetAddSavedOverview"),
       assetStats: document.getElementById("assetStats"),
       toast: document.getElementById("toast")
     };
@@ -4012,8 +5451,21 @@
       return normalized;
     }
 
+    function normalizeWeightEntry(item) {
+      return {
+        id: item.id || crypto.randomUUID(),
+        person: item.person || incomeOwners[0] || defaultIncomeOwners[0],
+        date: item.date || toDateInput(new Date(item.createdAt || Date.now())),
+        weight: roundMoney(Number(item.weight) || 0),
+        note: item.note || "",
+        createdAt: item.createdAt || Date.now(),
+        updatedAt: item.updatedAt || Date.now()
+      };
+    }
+
     function save() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state.entries));
+      localStorage.setItem(WEIGHT_STORAGE_KEY, JSON.stringify(state.weightEntries));
     }
 
     function load() {
@@ -4022,6 +5474,13 @@
         state.entries = normalizeEntries(JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"));
       } catch {
         state.entries = [];
+      }
+      try {
+        state.weightEntries = JSON.parse(localStorage.getItem(WEIGHT_STORAGE_KEY) || "[]")
+          .map(normalizeWeightEntry)
+          .filter(item => item.weight > 0);
+      } catch {
+        state.weightEntries = [];
       }
       if (!state.entries.length) {
         try {
@@ -4176,7 +5635,7 @@
       els.periodIncomeLabel.closest(".period-summary").hidden = false;
       const prefix = state.periodMode === "month" ? "" : label;
       els.periodIncomeLabel.textContent = `${prefix}收入`;
-      els.periodSavedLabel.textContent = `${prefix}存入`;
+      els.periodSavedLabel.textContent = `${prefix}存入 / ${prefix}花销`;
       els.periodProfitLabel.textContent = `${prefix}收益`;
       els.periodSpendLabel.textContent = `${prefix}花销`;
       els.periodIncome.textContent = dataText(summary.income, summary.hasIncome);
@@ -4187,6 +5646,31 @@
       els.periodProfit.className = summary.hasProfit ? profitClass(summary.profit) : "muted-color";
       els.periodSpend.textContent = spendText(summary);
       els.periodSpend.className = spendClass(summary);
+      renderPeriodAllocation(summary);
+    }
+
+    function allocationShare(summary) {
+      const savedValue = summary.hasSaved ? Math.max(summary.saved, 0) : 0;
+      const spendValue = summary.hasIncome ? Math.max(summary.spend, 0) : 0;
+      const total = savedValue + spendValue;
+      if (total <= 0) {
+        return { hasData: false, savedPercent: 0, spendPercent: 0 };
+      }
+      const savedPercent = Math.round((savedValue / total) * 100);
+      return { hasData: true, savedPercent, spendPercent: 100 - savedPercent };
+    }
+
+    function renderPeriodAllocation(summary) {
+      const share = allocationShare(summary);
+      els.periodAllocationChart.classList.toggle("is-empty", !share.hasData);
+      els.periodAllocationChart.style.setProperty("--saved-share", `${share.savedPercent}%`);
+      els.periodAllocationChart.style.setProperty("--spend-share", share.hasData ? `${share.spendPercent}%` : "50%");
+      els.periodSavedShareLabel.textContent = share.hasData ? `年存入 ${share.savedPercent}%` : "年存入 --";
+      els.periodSpendShareLabel.textContent = share.hasData ? `年花销 ${share.spendPercent}%` : "年花销 --";
+      els.periodSavedShareAmount.textContent = dataTextInDetail(summary.saved, summary.hasSaved);
+      els.periodSavedShareAmount.className = !summary.hasSaved ? "muted-color" : summary.saved < 0 ? "loss-color" : "saved-color";
+      els.periodSpendShareAmount.textContent = spendTextInDetail(summary);
+      els.periodSpendShareAmount.className = spendClass(summary);
     }
 
     function renderPeriodCells(rows) {
@@ -4344,6 +5828,69 @@
       });
     }
 
+    function periodEntriesForDetail(detail) {
+      if (!detail) return [];
+      return state.entries.filter(item => {
+        const year = Number((item.date || "").slice(0, 4));
+        const month = Number((item.date || "").slice(5, 7));
+        if (year !== detail.year) return false;
+        return detail.month ? month === detail.month : true;
+      });
+    }
+
+    function currentSavedValueForDetail(detail) {
+      const snapshots = periodEntriesForDetail(detail)
+        .filter(item => item.type === "saved")
+        .sort((a, b) => {
+          const dateCompare = (b.date || "").localeCompare(a.date || "");
+          if (dateCompare) return dateCompare;
+          return (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0);
+        });
+      if (!snapshots.length) return { hasData: false, value: 0 };
+      return { hasData: true, value: savedCurrentValue(snapshots[0]) };
+    }
+
+    function renderDetailSummary(detail) {
+      const entries = periodEntriesForDetail(detail);
+      const summary = totals(entries);
+      const currentSaved = currentSavedValueForDetail(detail);
+      const ownerRows = incomeOwners.map(owner => `
+        <div class="detail-owner-row">
+          <span>${escapeHtml(owner)}</span>
+          <strong class="${summary.incomeOwnerCounts[owner] ? "income-color" : "muted-color"}">${dataTextInDetail(summary.incomeByOwner[owner], summary.incomeOwnerCounts[owner])}</strong>
+        </div>
+      `).join("");
+      const savedTotalLabel = detail.month ? "当月存款总数" : "当年存款总数";
+      els.detailSummary.innerHTML = `
+        <div class="detail-summary-grid">
+          <div class="detail-summary-card">
+            <span>收入总数</span>
+            <strong class="${summary.hasIncome ? "income-color" : "muted-color"}">${dataTextInDetail(summary.income, summary.hasIncome)}</strong>
+          </div>
+          <div class="detail-summary-card">
+            <span>${savedTotalLabel}</span>
+            <strong class="${currentSaved.hasData ? "saved-color" : "muted-color"}">${dataTextInDetail(currentSaved.value, currentSaved.hasData)}</strong>
+          </div>
+          <div class="detail-summary-card">
+            <span>存入</span>
+            <strong class="${summary.hasSaved ? "saved-color" : "muted-color"}">${dataTextInDetail(summary.saved, summary.hasSaved)}</strong>
+          </div>
+          <div class="detail-summary-card">
+            <span>收益</span>
+            <strong class="${summary.hasProfit ? profitClass(summary.profit) : "muted-color"}">${dataTextInDetail(summary.profit, summary.hasProfit)}</strong>
+          </div>
+          <div class="detail-summary-card">
+            <span>花销</span>
+            <strong class="${spendClass(summary)}">${spendTextInDetail(summary)}</strong>
+          </div>
+        </div>
+        <div class="detail-owner-summary">
+          <div class="detail-owner-summary-title">每人收入</div>
+          ${ownerRows || `<div class="detail-owner-row"><span>暂无收入人</span><strong class="muted-color">--</strong></div>`}
+        </div>
+      `;
+    }
+
     function renderDetailPage() {
       const detail = state.detail;
       if (!detail) return;
@@ -4357,6 +5904,7 @@
           <button class="primary" type="button" data-detail-add="saved">又存一笔</button>
         `
         : `<button class="primary" type="button" data-detail-add="${detail.type}">${detail.type === "saved" ? "又存一笔" : "又赚一笔"}</button>`;
+      renderDetailSummary(detail);
       renderEntries(els.detailList, entriesForDetail(detail), `这段时间还没有${typeLabel}记录。`);
     }
 
@@ -4392,12 +5940,7 @@
     function addFromDetail(type) {
       const detail = state.detail;
       if (!detail) return;
-      resetForm(type);
-      state.detail = detail;
-      els.date.value = type === "income" ? incomeDateForContext(els.owner.value, detail) : dateFromDetail(detail);
-      updateComputedProfitPreview();
-      updateDateChip();
-      setEntryDropdown(true);
+      openEntryModal(type, detail);
     }
 
     function sortedEntries(entries = state.entries) {
@@ -4492,10 +6035,271 @@
       renderEntries(els.entryList, entries, isSaved ? "还没有存入记录。" : "还没有收入记录。");
     }
 
+    function renderOverviewLists() {
+      ensurePickerList("owner");
+      ensurePickerList("category");
+      ensurePickerList("saved");
+      state.overviewDetailYear = clampVisibleYear(state.overviewDetailYear);
+      document.querySelectorAll("[data-overview-detail-type]").forEach(button => {
+        button.classList.toggle("active", button.dataset.overviewDetailType === state.overviewDetailType);
+      });
+
+      const years = Array.from(
+        new Set([
+          ...state.entries
+            .map(item => Number((item.date || "").slice(0, 4)))
+            .filter(year => Number.isFinite(year) && year >= MIN_YEAR && year <= currentYear()),
+          ...Array.from({ length: currentYear() - MIN_YEAR + 1 }, (_, index) => MIN_YEAR + index)
+        ])
+      ).sort((a, b) => b - a);
+
+      const optionHtml = (items, selected, allLabel = "全部") => [
+        `<option value="all">${allLabel}</option>`,
+        ...items.map(item => `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`)
+      ].join("");
+
+      els.overviewDetailYear.innerHTML = years.map(year => `<option value="${year}">${year}</option>`).join("");
+      els.overviewDetailYear.value = String(years.includes(state.overviewDetailYear) ? state.overviewDetailYear : years[0]);
+      state.overviewDetailYear = Number(els.overviewDetailYear.value);
+
+      els.overviewOwnerFilter.innerHTML = optionHtml(incomeOwners, state.overviewOwnerFilter);
+      els.overviewOwnerFilter.value = incomeOwners.includes(state.overviewOwnerFilter) ? state.overviewOwnerFilter : "all";
+      state.overviewOwnerFilter = els.overviewOwnerFilter.value;
+
+      els.overviewIncomeCategoryFilter.innerHTML = optionHtml(categories.income, state.overviewIncomeCategoryFilter);
+      els.overviewIncomeCategoryFilter.value = categories.income.includes(state.overviewIncomeCategoryFilter) ? state.overviewIncomeCategoryFilter : "all";
+      state.overviewIncomeCategoryFilter = els.overviewIncomeCategoryFilter.value;
+
+      els.overviewSavedPlaceFilter.innerHTML = optionHtml(categories.saved, state.overviewSavedPlaceFilter);
+      els.overviewSavedPlaceFilter.value = categories.saved.includes(state.overviewSavedPlaceFilter) ? state.overviewSavedPlaceFilter : "all";
+      state.overviewSavedPlaceFilter = els.overviewSavedPlaceFilter.value;
+
+      const isSaved = state.overviewDetailType === "saved";
+      els.overviewOwnerFilterField.hidden = isSaved;
+      els.overviewIncomeCategoryFilterField.hidden = isSaved;
+      els.overviewSavedPlaceFilterField.hidden = !isSaved;
+
+      const entries = state.entries
+        .filter(item => item.type === state.overviewDetailType)
+        .filter(item => {
+          const itemYear = Number((item.date || "").slice(0, 4));
+          if (Number.isFinite(itemYear) && itemYear >= MIN_YEAR) return itemYear === state.overviewDetailYear;
+          return isSaved && state.overviewDetailYear === MIN_YEAR;
+        })
+        .filter(item => {
+          if (isSaved) {
+            return state.overviewSavedPlaceFilter === "all" || item.category === state.overviewSavedPlaceFilter;
+          }
+          const ownerMatched = state.overviewOwnerFilter === "all" || item.owner === state.overviewOwnerFilter;
+          const categoryMatched = state.overviewIncomeCategoryFilter === "all" || item.category === state.overviewIncomeCategoryFilter;
+          return ownerMatched && categoryMatched;
+        });
+
+      renderEntries(els.overviewDetailList, entries, isSaved ? "还没有符合条件的存入记录。" : "还没有符合条件的收入记录。");
+    }
+
+    function weightText(value, hasData = true) {
+      return hasData ? `${Number(value).toFixed(1)} kg` : "--";
+    }
+
+    function weightDate(year, month, day) {
+      return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+    }
+
+    function daysInMonth(year, month) {
+      return new Date(year, month, 0).getDate();
+    }
+
+    function sortedWeights(person = state.weightPerson) {
+      return state.weightEntries
+        .filter(item => item.person === person)
+        .sort((a, b) => a.date.localeCompare(b.date) || (a.createdAt || 0) - (b.createdAt || 0));
+    }
+
+    function weightOnDate(date, person = state.weightPerson) {
+      const records = state.weightEntries
+        .filter(item => item.person === person && item.date === date)
+        .sort((a, b) => (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0));
+      return records[0] || null;
+    }
+
+    function previousWeightBefore(date, person = state.weightPerson) {
+      return sortedWeights(person).filter(item => item.date < date).at(-1) || null;
+    }
+
+    function lastWeightBetween(startDate, endDate, person = state.weightPerson) {
+      return sortedWeights(person).filter(item => item.date >= startDate && item.date <= endDate).at(-1) || null;
+    }
+
+    function latestWeightBeforeOrAt(date, person = state.weightPerson) {
+      return sortedWeights(person).filter(item => item.date <= date).at(-1) || null;
+    }
+
+    function weightDeltaClass(delta) {
+      if (!Number.isFinite(delta) || delta === 0) return "";
+      return delta > 0 ? "up" : "down";
+    }
+
+    function weightDeltaText(delta) {
+      if (!Number.isFinite(delta) || delta === 0) return "持平";
+      return `${delta > 0 ? "+" : ""}${delta.toFixed(1)} kg`;
+    }
+
+    function weightCellHtml({ label, value, hasData, delta, isCurrent }) {
+      return `
+        <div class="weight-cell ${isCurrent ? "is-current" : ""}">
+          <div class="weight-cell-title">${label}</div>
+          <div class="weight-value">${weightText(value, hasData)}</div>
+          <div class="weight-delta ${weightDeltaClass(delta)}">${hasData ? weightDeltaText(delta) : "--"}</div>
+        </div>
+      `;
+    }
+
+    function renderWeightDayGrid() {
+      const maxDay = state.weightYear === currentYear() && state.weightMonth === currentMonth()
+        ? new Date().getDate()
+        : daysInMonth(state.weightYear, state.weightMonth);
+      const firstWeekday = (new Date(state.weightYear, state.weightMonth - 1, 1).getDay() + 6) % 7;
+      const weekdays = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
+      els.weightPeriodLabel.textContent = `${state.weightYear}年${state.weightMonth}月`;
+      els.weightGrid.classList.add("is-day-calendar");
+      const weekdayHeader = weekdays.map(day => `<div class="weight-weekday">${day}</div>`).join("");
+      const leadingBlanks = Array.from({ length: firstWeekday }, () => `<div class="weight-cell is-empty" aria-hidden="true"></div>`).join("");
+      const dayCells = Array.from({ length: maxDay }, (_, index) => {
+        const day = index + 1;
+        const date = weightDate(state.weightYear, state.weightMonth, day);
+        const record = weightOnDate(date);
+        const previous = previousWeightBefore(date);
+        const delta = record && previous ? record.weight - previous.weight : NaN;
+        return weightCellHtml({
+          label: `${day}日`,
+          value: record?.weight,
+          hasData: Boolean(record),
+          delta,
+          isCurrent: state.weightYear === currentYear() && state.weightMonth === currentMonth() && day === new Date().getDate()
+        });
+      }).join("");
+      els.weightGrid.innerHTML = `${weekdayHeader}${leadingBlanks}${dayCells}`;
+    }
+
+    function renderWeightMonthGrid() {
+      const maxMonth = state.weightYear === currentYear() ? currentMonth() : 12;
+      els.weightPeriodLabel.textContent = `${state.weightYear}年`;
+      els.weightGrid.classList.remove("is-day-calendar");
+      els.weightGrid.innerHTML = Array.from({ length: maxMonth }, (_, index) => {
+        const month = index + 1;
+        const start = weightDate(state.weightYear, month, 1);
+        const end = weightDate(state.weightYear, month, daysInMonth(state.weightYear, month));
+        const record = lastWeightBetween(start, end);
+        const previous = previousWeightBefore(start);
+        const delta = record && previous ? record.weight - previous.weight : NaN;
+        return weightCellHtml({
+          label: `${month}月`,
+          value: record?.weight,
+          hasData: Boolean(record),
+          delta,
+          isCurrent: state.weightYear === currentYear() && month === currentMonth()
+        });
+      }).join("");
+    }
+
+    function renderWeightYearGrid() {
+      els.weightPeriodLabel.textContent = `${MIN_YEAR}-${currentYear()}`;
+      els.weightGrid.classList.remove("is-day-calendar");
+      els.weightGrid.innerHTML = Array.from({ length: currentYear() - MIN_YEAR + 1 }, (_, index) => {
+        const year = MIN_YEAR + index;
+        const start = `${year}-01-01`;
+        const end = `${year}-12-31`;
+        const record = lastWeightBetween(start, end);
+        const previous = previousWeightBefore(start);
+        const delta = record && previous ? record.weight - previous.weight : NaN;
+        return weightCellHtml({
+          label: `${year}`,
+          value: record?.weight,
+          hasData: Boolean(record),
+          delta,
+          isCurrent: year === currentYear()
+        });
+      }).join("");
+    }
+
+    function renderWeightChart() {
+      const records = sortedWeights().filter(item => {
+        const year = Number(item.date.slice(0, 4));
+        const month = Number(item.date.slice(5, 7));
+        if (state.weightPeriod === "day") return year === state.weightYear && month === state.weightMonth;
+        if (state.weightPeriod === "month") return year === state.weightYear;
+        return year >= MIN_YEAR && year <= currentYear();
+      });
+      if (state.weightPeriod === "day") els.weightPeriodLabel.textContent = `${state.weightYear}年${state.weightMonth}月`;
+      if (state.weightPeriod === "month") els.weightPeriodLabel.textContent = `${state.weightYear}年`;
+      if (state.weightPeriod === "year") els.weightPeriodLabel.textContent = `${MIN_YEAR}-${currentYear()}`;
+      if (records.length < 2) {
+        els.weightChart.innerHTML = `<div class="empty">至少记录 2 条体重后显示折线图。</div>`;
+        return;
+      }
+      const width = 360;
+      const height = 220;
+      const padding = 26;
+      const weights = records.map(item => item.weight);
+      const min = Math.min(...weights);
+      const max = Math.max(...weights);
+      const range = Math.max(1, max - min);
+      const points = records.map((item, index) => {
+        const x = padding + (index / Math.max(1, records.length - 1)) * (width - padding * 2);
+        const y = height - padding - ((item.weight - min) / range) * (height - padding * 2);
+        return { x, y, item };
+      });
+      const path = points.map((point, index) => `${index ? "L" : "M"} ${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join(" ");
+      els.weightChart.innerHTML = `
+        <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="体重折线图">
+          <path d="M ${padding} ${height - padding} H ${width - padding}" stroke="#e6eaf2" stroke-width="1" fill="none"/>
+          <path d="${path}" stroke="#1677ff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          ${points.map(point => `<circle cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="4" fill="#1677ff"><title>${point.item.date} ${weightText(point.item.weight)}</title></circle>`).join("")}
+          <text x="${padding}" y="18" fill="#6f6a78" font-size="12">${weightText(min)} - ${weightText(max)}</text>
+        </svg>
+      `;
+    }
+
+    function renderWeightPersonTabs() {
+      els.weightPerson.innerHTML = incomeOwners.map(person => `
+        <button class="mode-btn ${person === state.weightPerson ? "active" : ""}" type="button" data-weight-person="${escapeHtml(person)}">${escapeHtml(person)}</button>
+      `).join("");
+    }
+
+    function renderWeight() {
+      ensurePickerList("owner");
+      state.weightYear = clampVisibleYear(state.weightYear);
+      if (state.weightYear === currentYear()) state.weightMonth = Math.min(state.weightMonth, currentMonth());
+      state.weightMonth = Math.max(1, Math.min(12, state.weightMonth));
+      if (!incomeOwners.includes(state.weightPerson)) state.weightPerson = incomeOwners[0] || defaultIncomeOwners[0];
+      syncSelectOptions(els.weightFormPerson, incomeOwners);
+      renderWeightPersonTabs();
+      document.querySelectorAll("[data-weight-period]").forEach(button => {
+        button.classList.toggle("active", button.dataset.weightPeriod === state.weightPeriod);
+      });
+      document.querySelectorAll("[data-weight-view]").forEach(button => {
+        button.classList.toggle("active", button.dataset.weightView === state.weightView);
+      });
+      els.weightGrid.hidden = state.weightView !== "calendar";
+      els.weightChart.hidden = state.weightView !== "chart";
+      if (state.weightView === "chart") renderWeightChart();
+      else if (state.weightPeriod === "day") renderWeightDayGrid();
+      else if (state.weightPeriod === "month") renderWeightMonthGrid();
+      else renderWeightYearGrid();
+    }
+
     function settingList(kind) {
       if (kind === "owner") return incomeOwners;
       if (kind === "saved") return categories.saved;
       return categories.income;
+    }
+
+    function ensurePickerList(kind) {
+      if (kind === "owner" && !incomeOwners.length) incomeOwners = [...defaultIncomeOwners];
+      if (kind === "category" && !categories.income.length) categories.income = [...defaultCategories.income];
+      if (kind === "saved" && !categories.saved.length) categories.saved = [...defaultCategories.saved];
+      return settingList(kind);
     }
 
     function selectedSetting(kind) {
@@ -4504,9 +6308,17 @@
 
     function setSelectedSetting(kind, value) {
       if (kind === "owner") {
+        ensureSettingValue("owner", value);
+        if (![...els.owner.options].some(option => option.value === value)) {
+          els.owner.add(new Option(value, value));
+        }
         els.owner.value = value;
         applyIncomeDateFromOwner();
       } else {
+        ensureSettingValue(kind, value);
+        if (![...els.category.options].some(option => option.value === value)) {
+          els.category.add(new Option(value, value));
+        }
         els.category.value = value;
       }
       renderPickerTriggers();
@@ -4515,6 +6327,7 @@
     function renderPickerTriggers() {
       els.ownerPickerTrigger.textContent = els.owner.value || "请选择收入人";
       els.categoryPickerTrigger.textContent = els.category.value || (state.entryType === "saved" ? "请选择存款位置" : "请选择分类");
+      els.categoryPickerTrigger.dataset.pickerKind = state.entryType === "saved" ? "saved" : "category";
       els.ownerPickerTrigger.classList.toggle("is-placeholder", !els.owner.value);
       els.categoryPickerTrigger.classList.toggle("is-placeholder", !els.category.value);
     }
@@ -4532,19 +6345,19 @@
     function renderPicker() {
       const kind = state.pickerKind;
       if (!kind) return;
-      const list = settingList(kind);
+      const list = ensurePickerList(kind);
       els.pickerTitle.textContent = kind === "owner" ? "收入人" : (kind === "saved" ? "存款位置" : "分类");
       els.pickerList.innerHTML = `
-        ${list.map(item => `
-          <div class="picker-item ${selectedSetting(kind) === item ? "active" : ""}">
-            <button class="picker-name" type="button" data-picker-action="select" data-name="${escapeHtml(item)}">${escapeHtml(item)}</button>
-            <button class="picker-icon" type="button" data-picker-action="rename" data-name="${escapeHtml(item)}" aria-label="改名">
+        ${list.map((item, index) => `
+          <div class="picker-item ${selectedSetting(kind) === item ? "active" : ""}" data-picker-action="select" data-index="${index}">
+            <button class="picker-name" type="button" data-picker-action="select" data-index="${index}">${escapeHtml(item)}</button>
+            <button class="picker-icon" type="button" data-picker-action="rename" data-index="${index}" aria-label="改名">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
                 <path d="M12 20h9"></path>
                 <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
               </svg>
             </button>
-            <button class="picker-icon danger-icon" type="button" data-picker-action="delete" data-name="${escapeHtml(item)}" aria-label="删除">
+            <button class="picker-icon danger-icon" type="button" data-picker-action="delete" data-index="${index}" aria-label="删除">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
                 <path d="M3 6h18"></path>
                 <path d="M8 6V4h8v2"></path>
@@ -4570,6 +6383,8 @@
     function openPicker(kind) {
       state.pickerKind = kind;
       state.pickerAdding = false;
+      ensurePickerList(kind);
+      saveSettings();
       renderPicker();
       els.pickerLayer.hidden = false;
       syncModalState();
@@ -4664,11 +6479,16 @@
     }
 
     function handlePickerAction(event) {
-      const button = event.target.closest("[data-picker-action]");
+      const button = event.target.closest("button[data-picker-action]") || event.target.closest(".picker-item[data-picker-action]");
       if (!button) return;
+      event.preventDefault();
+      event.stopPropagation();
       const kind = state.pickerKind;
-      const { pickerAction, name } = button.dataset;
+      const { pickerAction } = button.dataset;
+      const list = ensurePickerList(kind);
+      const name = list[Number(button.dataset.index)];
       if (pickerAction === "select") {
+        if (!name) return;
         setSelectedSetting(kind, name);
         closePicker();
       }
@@ -4680,8 +6500,8 @@
         state.pickerAdding = false;
         renderPicker();
       }
-      if (pickerAction === "rename") renameSetting(kind, name);
-      if (pickerAction === "delete") deleteSetting(kind, name);
+      if (pickerAction === "rename" && name) renameSetting(kind, name);
+      if (pickerAction === "delete" && name) deleteSetting(kind, name);
     }
 
     function handlePickerSubmit(event) {
@@ -4712,13 +6532,20 @@
     function render() {
       renderSummary();
       renderPeriodGrid();
+      renderOverviewLists();
+      renderWeight();
       renderEntryPeriodGrid();
       renderEntryList();
-      renderEntries(els.allList, filteredEntries(), "没有符合条件的记录。");
       renderDetailPage();
       renderPickerTriggers();
       updateComputedProfitPreview();
       updateDateChip();
+    }
+
+    function syncSelectOptions(select, list) {
+      const current = select.value;
+      select.innerHTML = list.map(item => `<option>${escapeHtml(item)}</option>`).join("");
+      if (list.includes(current)) select.value = current;
     }
 
     function updateDateChip() {
@@ -4737,10 +6564,12 @@
       const previousType = state.entryType;
       state.entryType = type;
       document.body.dataset.entryType = type;
-      els.category.innerHTML = categories[type].map(item => `<option>${item}</option>`).join("");
-      els.owner.innerHTML = incomeOwners.map(item => `<option>${item}</option>`).join("");
+      ensurePickerList(type === "saved" ? "saved" : "category");
+      ensurePickerList("owner");
+      syncSelectOptions(els.category, categories[type]);
+      syncSelectOptions(els.owner, incomeOwners);
       els.category.value = type === "saved"
-        ? (previousType === type && categories[type].includes(previousCategory) ? previousCategory : "")
+        ? (categories[type].includes(previousCategory) ? previousCategory : (categories[type][0] || ""))
         : (categories[type].includes(previousCategory) ? previousCategory : (categories[type][0] || ""));
       els.owner.value = incomeOwners.includes(previousOwner) ? previousOwner : (incomeOwners[0] || "");
       const isSaved = type === "saved";
@@ -4765,6 +6594,7 @@
       els.dateLabel.innerHTML = isSaved ? "日期" : '日期<span class="required">*</span>';
       updateDateChip();
       updateComputedProfitPreview();
+      renderPickerTriggers();
       renderEntryPeriodGrid();
       renderEntryList();
     }
@@ -4777,14 +6607,78 @@
       els.cancelEdit.textContent = "关闭";
       els.cancelEdit.hidden = true;
       setEntryType(type);
-      if (type === "saved") {
-        els.category.value = "";
-      }
       els.date.value = type === "saved" ? "" : incomeDateForContext(els.owner.value, null);
       updateDateChip();
       updateComputedProfitPreview();
       renderPickerTriggers();
       setEntryDropdown(false);
+    }
+
+    function openEntryModal(type = state.entryType, detailContext = null) {
+      resetForm(type);
+      state.detail = detailContext || null;
+      if (type === "income") {
+        els.owner.value = incomeOwners.includes(els.owner.value) ? els.owner.value : (incomeOwners[0] || "");
+        els.date.value = incomeDateForContext(els.owner.value, detailContext);
+      } else {
+        els.date.value = detailContext ? dateFromDetail(detailContext) : "";
+      }
+      updateComputedProfitPreview();
+      updateDateChip();
+      renderPickerTriggers();
+      setEntryDropdown(true);
+    }
+
+    function setWeightDropdown(open) {
+      els.weightDropdown.hidden = !open;
+      document.documentElement.classList.toggle("modal-open", open || !els.entryDropdown.hidden || !els.pickerLayer.hidden);
+      document.body.classList.toggle("modal-open", open || !els.entryDropdown.hidden || !els.pickerLayer.hidden);
+    }
+
+    function openWeightModal() {
+      els.weightForm.reset();
+      syncSelectOptions(els.weightFormPerson, incomeOwners);
+      els.weightFormPerson.value = state.weightPerson;
+      els.weightDate.value = toDateInput(new Date());
+      els.weightValue.value = "";
+      els.weightNote.value = "";
+      setWeightDropdown(true);
+    }
+
+    function saveWeightEntry(event) {
+      event.preventDefault();
+      const weight = roundMoney(parseNumber(els.weightValue.value));
+      if (!els.weightFormPerson.value) {
+        showToast("记录人必填");
+        return;
+      }
+      if (!els.weightDate.value) {
+        showToast("日期必填");
+        return;
+      }
+      if (weight <= 0) {
+        showToast("体重要大于 0");
+        return;
+      }
+      const existingIndex = state.weightEntries.findIndex(item => item.person === els.weightFormPerson.value && item.date === els.weightDate.value);
+      const payload = normalizeWeightEntry({
+        id: existingIndex >= 0 ? state.weightEntries[existingIndex].id : crypto.randomUUID(),
+        person: els.weightFormPerson.value,
+        date: els.weightDate.value,
+        weight,
+        note: els.weightNote.value.trim(),
+        createdAt: existingIndex >= 0 ? state.weightEntries[existingIndex].createdAt : Date.now(),
+        updatedAt: Date.now()
+      });
+      if (existingIndex >= 0) state.weightEntries[existingIndex] = payload;
+      else state.weightEntries.push(payload);
+      state.weightPerson = payload.person;
+      state.weightYear = Number(payload.date.slice(0, 4));
+      state.weightMonth = Number(payload.date.slice(5, 7));
+      save();
+      renderWeight();
+      setWeightDropdown(false);
+      showToast(existingIndex >= 0 ? "体重已更新" : "体重已记录");
     }
 
     function draftSavedEntry() {
@@ -4891,10 +6785,8 @@
       els.cancelEdit.hidden = false;
       updateComputedProfitPreview();
       updateDateChip();
+      renderPickerTriggers();
       setEntryDropdown(true);
-      if (!detailBeforeEdit) {
-        switchView("viewEntry", document.querySelector(`[data-entry-preset="${item.type}"]`));
-      }
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -4919,11 +6811,11 @@
       const month = Number(button.dataset.month) || null;
       if (!year) return;
       const isEntryCalendar = button.dataset.scope === "entry";
-      const type = isEntryCalendar ? (button.dataset.type || state.entryType) : "all";
-      const sourceView = isEntryCalendar ? "viewEntry" : "viewOverview";
-      const sourceTab = isEntryCalendar
-        ? document.querySelector(`[data-entry-preset="${type}"]`)
-        : document.querySelector('[data-view="viewOverview"]');
+      const entryType = button.dataset.type || state.entryType;
+      const type = month ? "all" : (isEntryCalendar ? entryType : "all");
+      const activeView = document.querySelector(".view.active")?.id || "viewOverview";
+      const sourceView = document.querySelector(`[data-view="${activeView}"]`) ? activeView : "viewOverview";
+      const sourceTab = document.querySelector(`[data-view="${sourceView}"]`);
       state.detail = { year, month, type, sourceView };
       switchView("viewDetail", sourceTab);
       render();
@@ -5135,6 +7027,28 @@
         render();
       });
     });
+    document.querySelectorAll("[data-overview-detail-type]").forEach(button => {
+      button.addEventListener("click", () => {
+        state.overviewDetailType = button.dataset.overviewDetailType;
+        renderOverviewLists();
+      });
+    });
+    els.overviewDetailYear.addEventListener("change", () => {
+      state.overviewDetailYear = Number(els.overviewDetailYear.value);
+      renderOverviewLists();
+    });
+    els.overviewOwnerFilter.addEventListener("change", () => {
+      state.overviewOwnerFilter = els.overviewOwnerFilter.value;
+      renderOverviewLists();
+    });
+    els.overviewIncomeCategoryFilter.addEventListener("change", () => {
+      state.overviewIncomeCategoryFilter = els.overviewIncomeCategoryFilter.value;
+      renderOverviewLists();
+    });
+    els.overviewSavedPlaceFilter.addEventListener("change", () => {
+      state.overviewSavedPlaceFilter = els.overviewSavedPlaceFilter.value;
+      renderOverviewLists();
+    });
     document.querySelectorAll("[data-entry-period-mode]").forEach(button => {
       button.addEventListener("click", () => {
         state.entryPeriodMode = button.dataset.entryPeriodMode;
@@ -5142,23 +7056,72 @@
         render();
       });
     });
+    document.querySelectorAll("[data-weight-period]").forEach(button => {
+      button.addEventListener("click", () => {
+        state.weightPeriod = button.dataset.weightPeriod;
+        renderWeight();
+      });
+    });
+    document.querySelectorAll("[data-weight-view]").forEach(button => {
+      button.addEventListener("click", () => {
+        state.weightView = button.dataset.weightView;
+        renderWeight();
+      });
+    });
+    els.weightPerson.addEventListener("click", event => {
+      const button = event.target.closest("[data-weight-person]");
+      if (!button) return;
+      state.weightPerson = button.dataset.weightPerson;
+      renderWeight();
+    });
+    els.openWeightForm.addEventListener("click", openWeightModal);
+    els.closeWeightForm.addEventListener("click", () => setWeightDropdown(false));
+    els.weightDropdown.addEventListener("click", event => {
+      if (event.target === els.weightDropdown) setWeightDropdown(false);
+    });
+    els.weightForm.addEventListener("submit", saveWeightEntry);
+    document.getElementById("weightPrev").addEventListener("click", () => {
+      if (state.weightPeriod === "day") {
+        if (state.weightMonth === 1) {
+          state.weightYear = Math.max(MIN_YEAR, state.weightYear - 1);
+          state.weightMonth = 12;
+        } else {
+          state.weightMonth -= 1;
+        }
+      } else if (state.weightPeriod === "month") {
+        state.weightYear = Math.max(MIN_YEAR, state.weightYear - 1);
+      }
+      renderWeight();
+    });
+    document.getElementById("weightNext").addEventListener("click", () => {
+      if (state.weightPeriod === "day") {
+        if (state.weightYear === currentYear() && state.weightMonth >= currentMonth()) return;
+        if (state.weightMonth === 12) {
+          state.weightYear = clampVisibleYear(state.weightYear + 1);
+          state.weightMonth = 1;
+        } else {
+          state.weightMonth += 1;
+        }
+      } else if (state.weightPeriod === "month") {
+        state.weightYear = clampVisibleYear(state.weightYear + 1);
+      }
+      renderWeight();
+    });
     els.form.addEventListener("submit", upsertEntry);
     els.openEntryForm.addEventListener("click", () => {
-      resetForm(state.entryType);
-      setEntryDropdown(true);
+      openEntryModal(state.entryType);
+    });
+    els.assetAddIncome.addEventListener("click", () => {
+      openEntryModal("income");
+    });
+    els.assetAddSavedOverview.addEventListener("click", () => {
+      openEntryModal("saved");
     });
     els.assetAddSaved.addEventListener("click", () => {
-      const savedTab = document.querySelector('[data-entry-preset="saved"]');
-      resetForm("saved");
-      switchView("viewEntry", savedTab);
-      scrollPageTop();
-      setEntryDropdown(true);
+      openEntryModal("saved");
     });
     els.assetStats.addEventListener("click", () => {
-      const savedTab = document.querySelector('[data-entry-preset="saved"]');
-      resetForm("saved");
-      switchView("viewEntry", savedTab);
-      scrollPageTop();
+      document.querySelector(".overview-period-summary")?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
     els.cancelEdit.addEventListener("click", () => resetForm());
     els.entryDropdown.addEventListener("click", event => {
@@ -5177,7 +7140,7 @@
       updateDateChip();
     });
     els.entryList.addEventListener("click", handleListAction);
-    els.allList.addEventListener("click", handleListAction);
+    els.overviewDetailList.addEventListener("click", handleListAction);
     els.detailList.addEventListener("click", handleListAction);
     els.detailActions.addEventListener("click", event => {
       const button = event.target.closest("[data-detail-add]");
@@ -5194,15 +7157,11 @@
     els.detailBack.addEventListener("click", () => {
       const detail = state.detail;
       state.detail = null;
-      const sourceView = detail?.sourceView || "viewOverview";
-      const sourceTab = sourceView === "viewEntry"
-        ? document.querySelector(`[data-entry-preset="${detail?.type || state.entryType}"]`)
-        : document.querySelector(`[data-view="${sourceView}"]`);
+      const sourceView = document.querySelector(`[data-view="${detail?.sourceView}"]`) ? detail.sourceView : "viewOverview";
+      const sourceTab = document.querySelector(`[data-view="${sourceView}"]`);
       switchView(sourceView, sourceTab);
       render();
     });
-    els.search.addEventListener("input", render);
-    els.filterType.addEventListener("change", render);
     els.exportExcelBtn.addEventListener("click", exportExcel);
     els.templateExcelBtn.addEventListener("click", downloadExcelTemplate);
     els.importExcelBtn.addEventListener("click", () => els.importExcelFile.click());
@@ -5211,8 +7170,6 @@
       if (file) importExcel(file);
       event.target.value = "";
     });
-    els.ownerPickerTrigger.addEventListener("click", () => openPicker("owner"));
-    els.categoryPickerTrigger.addEventListener("click", () => openPicker(state.entryType === "saved" ? "saved" : "category"));
     els.pickerList.addEventListener("click", handlePickerAction);
     els.pickerList.addEventListener("submit", handlePickerSubmit);
     els.pickerLayer.addEventListener("click", event => {
@@ -5241,9 +7198,8 @@
     load();
     resetForm();
     render();
-  </script>
-  <script>
-    if ("serviceWorker" in navigator) {
+
+    if ("serviceWorker" in navigator && location.protocol !== "file:") {
       window.addEventListener("load", () => {
         navigator.serviceWorker.register("./service-worker.js").catch(() => {});
       });

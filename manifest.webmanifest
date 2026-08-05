@@ -1,31 +1,19 @@
 {
-  "name": "收支估算",
-  "short_name": "收支估算",
-  "description": "个人收支记录与估算工具",
+  "name": "生活管理工作台",
+  "short_name": "生活管理",
+  "description": "记录收入、存款、体重和家庭生活数据。",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f8f6fb",
-  "theme_color": "#f8f6fb",
+  "theme_color": "#7b5cf6",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "./icons/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "./icons/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "./icons/apple-touch-icon.png",
-      "sizes": "180x180",
-      "type": "image/png",
-      "purpose": "any"
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     }
   ]
 }
