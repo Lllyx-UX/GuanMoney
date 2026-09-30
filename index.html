@@ -6,10 +6,15 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="收支估算">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="theme-color" content="#f8f6fb">
+  <meta name="theme-color" content="#f5f7fb">
   <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
   <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
   <link rel="manifest" href="./manifest.webmanifest">
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => navigator.serviceWorker.register("./service-worker.js"));
+    }
+  </script>
   <title>收支估算</title>
   <style>
     /* Hallmark · genre: modern-minimal · macrostructure: Workbench · tone: utilitarian · anchor hue: cobalt */
@@ -3766,8 +3771,7 @@
     }
 
     body {
-      background:
-        linear-gradient(180deg, #eef5ff 0, #f5f7fb 188px, #f5f7fb 100%);
+      background: #f5f7fb;
       color: var(--color-ink);
     }
 
