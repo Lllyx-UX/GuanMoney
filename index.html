@@ -5392,6 +5392,28 @@
       .mini-actions {
         justify-content: flex-end;
       }
+
+      .checkin-period-row {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: 8px;
+        align-items: center;
+      }
+
+      .checkin-range {
+        display: grid;
+        grid-template-columns: 30px minmax(0, 1fr) 30px;
+        gap: 4px;
+        min-width: 0;
+        width: 100%;
+      }
+
+      .checkin-range-label {
+        min-width: 0;
+        overflow: hidden;
+        text-align: center;
+        text-overflow: ellipsis;
+      }
     }
 
     #viewEntry > .entry-toggle {
