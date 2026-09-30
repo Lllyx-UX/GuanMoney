@@ -3106,6 +3106,59 @@
       color: #fff;
     }
 
+    .picker-list.checkin-week-picker-list {
+      display: grid;
+      gap: 12px;
+      max-height: min(62vh, 480px);
+      overflow-y: auto;
+    }
+
+    .checkin-week-picker-toolbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+    }
+
+    .checkin-week-picker-years,
+    .checkin-week-picker-options {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .checkin-week-picker-options {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .checkin-week-picker-year,
+    .checkin-week-picker-shortcut {
+      min-height: 36px;
+      padding: 0 10px;
+      border: 0;
+      border-radius: 10px;
+      background: var(--color-paper-2);
+      color: var(--color-ink);
+      font: inherit;
+    }
+
+    .checkin-week-picker-year.is-selected,
+    .checkin-week-picker-shortcut {
+      background: #e8edf5;
+      color: var(--color-accent);
+      font-weight: 700;
+    }
+
+    .checkin-week-picker-option.is-current-week {
+      outline: 2px solid #99d98c;
+      outline-offset: -2px;
+    }
+
+    .checkin-week-picker-option.is-selected {
+      background: var(--color-accent);
+      color: #fff;
+    }
+
     .picker-item {
       display: grid;
       grid-template-columns: minmax(0, 1fr) 34px 34px;
@@ -5466,6 +5519,17 @@
         text-align: center;
         text-overflow: ellipsis;
       }
+
+      .picker-layer.is-year-picker {
+        align-items: center;
+        overflow-y: auto;
+      }
+
+      .picker-layer.is-year-picker .picker-sheet {
+        max-height: calc(100vh - var(--safe-top) - var(--safe-bottom) - 32px);
+        max-height: calc(100dvh - var(--safe-top) - var(--safe-bottom) - 32px);
+        overflow-y: auto;
+      }
     }
 
     #viewEntry > .entry-toggle {
@@ -5904,6 +5968,7 @@
     const WEIGHT_STORAGE_KEY = "household-weight-records-v1";
     const CHECKIN_STORAGE_KEY = "household-checkins-v1";
     const CHECKIN_COLORS = ["#FFC48A", "#99D98C", "#B5E48C", "#D9ED92", "#FEC5BB", "#64B5F6", "#90CAF9", "#BBDEFB", "#FFEC8F", "#93DCCD", "#FFB5D1", "#E7C7FF"];
+    const CHECKIN_PICKER_YEARS = [2026, 2027];
     const SETTINGS_KEY = "income-savings-estimator-settings-v1";
     const LEGACY_KEY = "personal-savings-deposits-v1";
     const MIN_YEAR = 2026;
@@ -5940,7 +6005,8 @@
       entryPeriodMode: "month",
       detail: null,
       pickerKind: null,
-      pickerAdding: false
+      pickerAdding: false,
+      checkinPickerYear: null
     };
 
     const els = {
@@ -7273,6 +7339,8 @@
       els.pickerLayer.hidden = true;
       els.pickerLayer.classList.remove("is-year-picker");
       els.pickerList.classList.remove("year-picker-grid");
+      els.pickerList.classList.remove("checkin-week-picker-list");
+      state.checkinPickerYear = null;
       syncModalState();
     }
 
@@ -7459,32 +7527,85 @@
     function openCheckinTimePicker() {
       if (state.checkinPeriod === "year") {
         const selectedYear = checkinDateObject(state.checkinDate).getFullYear();
-        const currentYear = new Date().getFullYear();
         state.pickerKind = "checkin-year";
         state.pickerAdding = false;
         els.pickerLayer.classList.add("is-year-picker");
         els.pickerTitle.textContent = "选择年份";
         els.pickerList.classList.add("year-picker-grid");
-        els.pickerList.innerHTML = Array.from({ length: currentYear - 1999 }, (_, index) => currentYear - index)
+        els.pickerList.innerHTML = CHECKIN_PICKER_YEARS
           .map(year => `<button class="year-picker-option ${year === selectedYear ? "active" : ""}" type="button" data-checkin-year="${year}" aria-pressed="${year === selectedYear}">${year}年</button>`)
           .join("");
         els.pickerLayer.hidden = false;
         syncModalState();
         return;
       }
-      els.pickerLayer.classList.remove("is-year-picker");
-      els.pickerList.classList.remove("year-picker-grid");
-      const picker = els.checkinTimePicker;
-      picker.type = state.checkinPeriod === "month" ? "month" : "date";
-      const today = toDateInput(new Date());
-      picker.max = state.checkinPeriod === "month" ? today.slice(0, 7) : today;
-      picker.value = state.checkinPeriod === "month" ? state.checkinDate.slice(0, 7) : state.checkinDate;
-      try {
-        picker.showPicker();
-      } catch {
-        picker.focus();
-        picker.click();
+
+      const selectedDate = checkinDateObject(state.checkinDate);
+      const currentDate = checkinDateObject(toDateInput(new Date()));
+      els.pickerLayer.classList.add("is-year-picker");
+      els.pickerList.classList.add("year-picker-grid");
+
+      if (state.checkinPeriod === "month") {
+        const selectedMonth = state.checkinDate.slice(0, 7);
+        const options = [];
+        for (const year of CHECKIN_PICKER_YEARS) {
+          for (let month = 1; month <= 12; month += 1) {
+            const value = `${year}-${String(month).padStart(2, "0")}`;
+            options.push(`<button class="year-picker-option ${value === selectedMonth ? "active" : ""}" type="button" data-checkin-month="${value}">${year}年${month}月</button>`);
+          }
+        }
+        state.pickerKind = "checkin-month";
+        state.pickerAdding = false;
+        els.pickerTitle.textContent = "选择月份";
+        els.pickerList.innerHTML = options.reverse().join("");
+        els.pickerLayer.hidden = false;
+        syncModalState();
+        return;
       }
+
+      const pickerYear = state.checkinPickerYear || selectedDate.getFullYear();
+      const currentWeekStart = (() => {
+        const start = new Date(currentDate);
+        start.setDate(start.getDate() - ((start.getDay() + 6) % 7));
+        return start;
+      })();
+      const selectedWeekStart = checkinPeriodDates()[0];
+      const formatWeekOption = start => {
+        const end = new Date(start);
+        end.setDate(start.getDate() + 6);
+        const format = date => `${String(date.getMonth() + 1).padStart(2, "0")}/${String(date.getDate()).padStart(2, "0")}`;
+        return `${format(start)} - ${format(end)}`;
+      };
+      const weekStart = new Date(pickerYear, 0, 1, 12);
+      weekStart.setDate(weekStart.getDate() - ((weekStart.getDay() + 6) % 7));
+      const lastWeekDate = new Date(pickerYear, 11, 31, 12);
+      const maxWeekDate = pickerYear === currentDate.getFullYear() && lastWeekDate > currentDate
+        ? currentDate
+        : lastWeekDate;
+      const weekOptions = [];
+      for (let start = new Date(weekStart); start <= maxWeekDate; start.setDate(start.getDate() + 7)) {
+        const value = toDateInput(start);
+        const isCurrentWeek = toDateInput(currentWeekStart) === value;
+        const isSelectedWeek = toDateInput(selectedWeekStart) === value;
+        weekOptions.push(`<button class="year-picker-option checkin-week-picker-option ${isSelectedWeek ? "is-selected" : ""} ${isCurrentWeek ? "is-current-week" : ""}" type="button" data-checkin-week-date="${value}">${formatWeekOption(start)}</button>`);
+      }
+      state.pickerKind = "checkin-week";
+      state.pickerAdding = false;
+      els.pickerTitle.textContent = "选择周";
+      els.pickerList.classList.remove("year-picker-grid");
+      els.pickerList.classList.add("checkin-week-picker-list");
+      const yearOptions = CHECKIN_PICKER_YEARS
+        .map(year => `<button class="checkin-week-picker-year ${year === pickerYear ? "is-selected" : ""}" type="button" data-checkin-week-year="${year}">${year}年</button>`)
+        .join("");
+      els.pickerList.innerHTML = `
+        <div class="checkin-week-picker-toolbar">
+          <button class="checkin-week-picker-shortcut" type="button" data-checkin-this-week>本周</button>
+          <div class="checkin-week-picker-years">${yearOptions}</div>
+        </div>
+        <div class="checkin-week-picker-options">${weekOptions.reverse().join("")}</div>
+      `;
+      els.pickerLayer.hidden = false;
+      syncModalState();
     }
 
     function selectCheckinTime() {
@@ -8367,11 +8488,39 @@
     });
     els.pickerList.addEventListener("click", handlePickerAction);
     els.pickerList.addEventListener("click", event => {
+      const thisWeekButton = event.target.closest("[data-checkin-this-week]");
+      if (thisWeekButton) {
+        state.checkinDate = toDateInput(new Date());
+        closePicker();
+        renderCheckins();
+        return;
+      }
+      const weekYearButton = event.target.closest("[data-checkin-week-year]");
+      if (weekYearButton) {
+        state.checkinPickerYear = Number(weekYearButton.dataset.checkinWeekYear);
+        openCheckinTimePicker();
+        return;
+      }
       const yearButton = event.target.closest("[data-checkin-year]");
-      if (!yearButton) return;
-      state.checkinDate = `${yearButton.dataset.checkinYear}-01-01`;
-      closePicker();
-      renderCheckins();
+      if (yearButton) {
+        state.checkinDate = `${yearButton.dataset.checkinYear}-01-01`;
+        closePicker();
+        renderCheckins();
+        return;
+      }
+      const monthButton = event.target.closest("[data-checkin-month]");
+      if (monthButton) {
+        state.checkinDate = `${monthButton.dataset.checkinMonth}-01`;
+        closePicker();
+        renderCheckins();
+        return;
+      }
+      const weekButton = event.target.closest("[data-checkin-week-date]");
+      if (weekButton) {
+        state.checkinDate = weekButton.dataset.checkinWeekDate;
+        closePicker();
+        renderCheckins();
+      }
     });
     els.pickerList.addEventListener("submit", handlePickerSubmit);
     els.pickerLayer.addEventListener("click", event => {
