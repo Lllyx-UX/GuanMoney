@@ -7,9 +7,9 @@
   <meta name="apple-mobile-web-app-title" content="收支估算">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="theme-color" content="#f8f6fb">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
   <link rel="manifest" href="./manifest.webmanifest">
-  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="./icons/icon.svg">
   <title>收支估算</title>
   <style>
     /* Hallmark · genre: modern-minimal · macrostructure: Workbench · tone: utilitarian · anchor hue: cobalt */
@@ -194,6 +194,7 @@
     .loss-color { color: var(--color-success) !important; }
     .spend-color { color: var(--spend) !important; }
     .muted-color { color: var(--muted) !important; }
+    .neutral-color { color: var(--color-ink) !important; }
 
     .panel {
       padding: 14px;
@@ -688,28 +689,29 @@
 
     .tabs {
       position: fixed;
-      left: max(10px, env(safe-area-inset-left, 0px));
-      right: max(10px, env(safe-area-inset-right, 0px));
+      left: 0;
+      right: 0;
       bottom: 0;
       z-index: 10;
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 8px 8px calc(8px + var(--safe-bottom));
-      background: rgba(255, 255, 255, 0.88);
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0;
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 4px 0 calc(4px + var(--safe-bottom));
+      background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(216, 228, 243, 0.92);
-      border-bottom: 0;
-      border-radius: 8px 8px 0 0;
-      box-shadow: 0 -10px 28px rgba(32, 86, 154, 0.09);
+      border: 0;
+      border-top: 1px solid rgba(216, 228, 243, 0.92);
+      border-radius: 0;
+      box-shadow: none;
     }
 
     .tab-btn {
-      min-height: 50px;
-      border-radius: 8px;
+      min-height: 48px;
+      border-radius: 0;
       background: transparent;
       color: var(--muted);
       font-weight: 850;
@@ -722,7 +724,8 @@
     }
 
     .tab-btn.active {
-      background: #edf5ff;
+      background: transparent;
+      color: var(--color-accent);
     }
 
     .tab-btn svg {
@@ -1620,63 +1623,6 @@
       white-space: nowrap;
     }
 
-    /* Floating black capsule navigation */
-    .tabs {
-      left: 50%;
-      right: auto;
-      bottom: calc(16px + var(--safe-bottom));
-      width: min(292px, calc(100% - 88px));
-      max-width: none;
-      height: 64px;
-      transform: translateX(-50%);
-      display: grid;
-      grid-template-columns: repeat(4, 52px);
-      justify-content: space-between;
-      align-items: center;
-      justify-items: center;
-      padding: 6px;
-      border: 0;
-      border-radius: 999px;
-      background: #050505;
-      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.22);
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
-    }
-
-    .tab-btn {
-      width: 52px;
-      height: 52px;
-      min-height: 52px;
-      border-radius: 999px;
-      background: transparent;
-      color: rgba(255, 255, 255, 0.54);
-      font-size: 0;
-      gap: 0;
-      padding: 0;
-      display: grid;
-      place-items: center;
-    }
-
-    .tab-btn span {
-      display: none;
-    }
-
-    .tab-btn svg {
-      width: 25px;
-      height: 25px;
-      stroke-width: 1.7;
-    }
-
-    .tab-btn.active {
-      background: #ffffff;
-      color: #101114;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.24);
-    }
-
-    .tab-btn:active {
-      transform: scale(0.96);
-    }
-
     .excel-toolbar {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2206,87 +2152,6 @@
 
       .overview-only .metric:first-child strong {
         font-size: clamp(32px, 10vw, 42px);
-      }
-    }
-
-    /* Light pill navigation with labeled active item */
-    .tabs {
-      left: 50%;
-      right: auto;
-      bottom: calc(16px + var(--safe-bottom));
-      width: min(390px, calc(100% - 28px));
-      max-width: none;
-      height: 62px;
-      transform: translateX(-50%);
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      align-items: center;
-      gap: 4px;
-      padding: 6px;
-      border: 1px solid rgba(255, 255, 255, 0.88);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 18px 38px rgba(61, 49, 84, 0.12);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-    }
-
-    .tab-btn {
-      width: 100%;
-      height: 50px;
-      min-height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      padding: 0 7px;
-      border-radius: 999px;
-      background: transparent;
-      color: var(--color-muted-2);
-      font-size: 12px;
-      font-weight: 760;
-      line-height: 1;
-      white-space: nowrap;
-    }
-
-    .tab-btn span {
-      display: inline;
-      line-height: 1;
-    }
-
-    .tab-btn svg {
-      width: 18px;
-      height: 18px;
-      flex: 0 0 auto;
-      stroke-width: 1.8;
-    }
-
-    .tab-btn.active {
-      background: #8f7be8;
-      color: #ffffff;
-      box-shadow: 0 8px 18px rgba(143, 123, 232, 0.25);
-    }
-
-    .tab-btn:active {
-      transform: scale(0.98);
-    }
-
-    @media (max-width: 360px) {
-      .tabs {
-        width: min(344px, calc(100% - 20px));
-        gap: 2px;
-        padding: 5px;
-      }
-
-      .tab-btn {
-        gap: 3px;
-        padding: 0 5px;
-        font-size: 11px;
-      }
-
-      .tab-btn svg {
-        width: 17px;
-        height: 17px;
       }
     }
 
@@ -3191,6 +3056,10 @@
       display: none;
     }
 
+    .picker-layer.is-year-picker {
+      align-items: center;
+    }
+
     .picker-sheet {
       width: min(100%, 420px);
       padding: 16px;
@@ -3209,6 +3078,27 @@
     .picker-list {
       display: grid;
       gap: 4px;
+    }
+
+    .picker-list.year-picker-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      max-height: min(58vh, 420px);
+      overflow-y: auto;
+    }
+
+    .year-picker-option {
+      min-height: 42px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--color-paper-2);
+      color: var(--color-ink);
+      font: inherit;
+    }
+
+    .year-picker-option.active {
+      background: var(--color-accent);
+      color: #fff;
     }
 
     .picker-item {
@@ -3850,9 +3740,9 @@
       --color-muted-2: #a2aabc;
       --color-rule: #e8edf5;
       --color-rule-2: #f1f4f8;
-      --color-accent: #1677ff;
+      --color-accent: #009bff;
       --color-accent-2: #4d9cff;
-      --color-focus: #1677ff;
+      --color-focus: #009bff;
       --color-success: #16a46b;
       --color-danger: #e94b5f;
       --color-danger-soft: #fff0f3;
@@ -3868,7 +3758,7 @@
       --accent-2: var(--color-accent-2);
       --soft: #eaf3ff;
       --soft-2: #f7fbff;
-      --income: #1677ff;
+      --income: #009bff;
       --saved: #1f2329;
       --spend: #e94b5f;
       --shadow: 0 8px 24px rgba(31, 63, 113, 0.06);
@@ -3911,7 +3801,7 @@
     }
 
     .overview-hero-copy span {
-      color: #1677ff !important;
+      color: #009bff !important;
       font-weight: 760 !important;
     }
 
@@ -3932,6 +3822,13 @@
       border-radius: 16px;
       background: #f4f9ff;
       box-shadow: none;
+    }
+
+    .overview-only .metric.asset-total-metric,
+    .overview-only .metric:first-of-type.asset-total-metric {
+      grid-column: 1 / -1;
+      width: 100%;
+      min-width: 0;
     }
 
     .overview-only .asset-profit-metric {
@@ -3965,6 +3862,10 @@
       color: var(--color-muted-2) !important;
     }
 
+    .neutral-color {
+      color: var(--color-ink) !important;
+    }
+
     .overview-actions {
       gap: 10px;
     }
@@ -3974,28 +3875,26 @@
     .detail-actions .primary,
     .settings-add .secondary,
     .picker-save {
-      background: #1677ff !important;
+      background: #009bff !important;
       color: #ffffff !important;
       box-shadow: 0 10px 22px rgba(22, 119, 255, 0.22) !important;
     }
 
     .overview-action.income-action {
       background: #eaf3ff !important;
-      color: #1677ff !important;
+      color: #009bff !important;
       box-shadow: none !important;
     }
 
     .period-mode,
-    .year-switcher,
-    .tabs {
+    .year-switcher {
       background: rgba(255, 255, 255, 0.92);
       border-color: #edf1f7;
       box-shadow: 0 10px 26px rgba(31, 63, 113, 0.06);
     }
 
-    .mode-btn.active,
-    .tab-btn.active {
-      background: #1677ff !important;
+    .mode-btn.active {
+      background: #009bff !important;
       color: #ffffff !important;
       box-shadow: 0 10px 22px rgba(22, 119, 255, 0.22);
     }
@@ -4105,7 +4004,7 @@
     }
 
     .summary-allocation-value.spend strong:not(.muted-color) {
-      color: #1677ff !important;
+      color: #009bff !important;
     }
 
     .summary-allocation-value.saved strong:not(.muted-color) {
@@ -4130,7 +4029,7 @@
 
     .summary-allocation-spend {
       flex: 0 0 var(--spend-share, 50%);
-      background: #1677ff;
+      background: #009bff;
       border-radius: 999px 0 0 999px;
     }
 
@@ -4143,6 +4042,240 @@
     .summary-allocation.is-empty .summary-allocation-spend,
     .summary-allocation.is-empty .summary-allocation-saved {
       background: #dfe6f2;
+    }
+
+    /* The weight view is an open calendar surface rather than a white dashboard card. */
+    .weight-page-panel {
+      position: relative;
+      min-height: 520px;
+      padding: 14px 0 20px;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .weight-page-panel .weight-grid:not([hidden]),
+    .weight-page-panel .weight-bar-chart:not([hidden]) {
+      display: grid;
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .weight-page-panel .weight-bar-chart:not([hidden]) {
+      display: block;
+    }
+
+    .weight-page-panel > .panel-title {
+      margin-bottom: 18px;
+      padding: 0 2px;
+    }
+
+    .weight-page-panel > .panel-title h2 {
+      font-size: 20px;
+      letter-spacing: 0;
+    }
+
+    .weight-page-panel .weight-toolbar {
+      gap: 16px;
+    }
+
+    .weight-page-panel .weight-person-tabs,
+    .weight-page-panel .weight-period-mode {
+      border: 0;
+      background: #e9eaf2;
+      box-shadow: none;
+    }
+
+    .weight-page-panel .weight-period-mode {
+      display: inline-grid;
+      grid-template-columns: repeat(2, max-content);
+      width: fit-content !important;
+      min-width: 0 !important;
+      max-width: 100%;
+      justify-self: end;
+      padding: 3px;
+    }
+
+    .weight-page-panel .weight-person-tabs {
+      display: grid;
+      grid-template-columns: repeat(var(--weight-person-count, 2), 36px);
+      grid-auto-flow: row;
+      grid-auto-columns: unset;
+      width: max-content !important;
+      min-width: 0 !important;
+      max-width: 100%;
+      justify-content: start;
+      justify-self: start !important;
+      align-self: start;
+      gap: 3px;
+      padding: 3px;
+    }
+
+    .weight-page-panel .weight-person-tabs .mode-btn {
+      width: 36px;
+      min-width: 36px;
+      min-height: 36px;
+      padding: 0;
+    }
+
+    .weight-page-panel .weight-person-tabs .mode-btn,
+    .weight-page-panel .weight-period-mode .mode-btn {
+      width: 36px;
+      min-width: 36px;
+      min-height: 36px;
+      padding: 0;
+      color: #7a7e8d;
+    }
+
+    .weight-page-panel .weight-person-tabs .mode-btn.active,
+    .weight-page-panel .weight-period-mode .mode-btn.active {
+      background: #ffffff;
+      color: #17191f;
+      box-shadow: 0 2px 8px rgba(38, 42, 56, 0.08);
+    }
+
+    .weight-page-panel .year-switcher {
+      border: 0;
+      width: fit-content;
+      max-width: 100%;
+      min-width: 0;
+      margin: 0 auto;
+      margin-bottom: 16px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #ffffff;
+      box-shadow: 0 6px 18px rgba(35, 46, 72, 0.08);
+    }
+
+    .weight-page-panel .weight-toolbar > .year-switcher {
+      width: fit-content !important;
+      min-width: 0 !important;
+      flex: 0 0 auto;
+    }
+
+    .weight-page-panel .weight-grid {
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .weight-page-panel .weight-weekday {
+      color: #8b8f9b;
+      padding-bottom: 2px;
+      font-weight: 600;
+    }
+
+    .weight-page-panel .weight-cell,
+    .weight-page-panel .weight-grid.is-day-calendar .weight-cell,
+    .weight-page-panel .weight-grid.is-day-calendar .weight-cell.is-empty {
+      aspect-ratio: 1 / 1;
+      min-height: 0;
+      border: 0;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.58);
+      box-shadow: none;
+    }
+
+    .weight-page-panel .weight-grid.is-day-calendar .weight-cell.is-empty {
+      visibility: visible;
+      background: transparent;
+    }
+
+    .weight-page-panel .weight-cell.is-current {
+      border: 0;
+      background: #ffffff;
+      color: #17191f;
+    }
+
+    .weight-page-panel .weight-cell.is-up {
+      background: #fff0f1;
+    }
+
+    .weight-page-panel .weight-cell.is-down {
+      background: #eef8f1;
+    }
+
+    .weight-page-panel .weight-cell.is-current.is-up {
+      background: #ffffff;
+    }
+
+    .weight-page-panel .weight-cell.is-current.is-down {
+      background: #ffffff;
+    }
+
+    .weight-page-panel .weight-cell.is-future .weight-cell-title,
+    .weight-page-panel .weight-cell.is-future .weight-value,
+    .weight-page-panel .weight-cell.is-future .weight-delta {
+      color: #b8bbc4;
+    }
+
+    .weight-page-panel .weight-grid:not(.is-day-calendar) .weight-cell.is-current .weight-cell-title,
+    .weight-page-panel .weight-grid:not(.is-day-calendar) .weight-cell.is-current .weight-value,
+    .weight-page-panel .weight-grid:not(.is-day-calendar) .weight-cell.is-current .weight-delta {
+      color: #17191f;
+    }
+
+    .weight-page-panel .weight-grid:not(.is-day-calendar) .weight-cell.is-current.is-up .weight-value,
+    .weight-page-panel .weight-grid:not(.is-day-calendar) .weight-cell.is-current.is-up .weight-delta {
+      color: #d94853;
+    }
+
+    .weight-page-panel .weight-grid:not(.is-day-calendar) .weight-cell.is-current.is-down .weight-value,
+    .weight-page-panel .weight-grid:not(.is-day-calendar) .weight-cell.is-current.is-down .weight-delta {
+      color: #2fa66a;
+    }
+
+    .weight-page-panel .weight-grid.is-day-calendar .weight-cell {
+      position: relative;
+      display: block;
+      padding: 7px;
+      text-align: left;
+    }
+
+    .weight-page-panel .weight-grid.is-day-calendar .weight-cell.is-day {
+      display: block;
+    }
+
+    .weight-page-panel .weight-grid.is-day-calendar .weight-cell .weight-cell-title {
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      color: #343944;
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1;
+      text-align: right;
+    }
+
+    .weight-page-panel .weight-grid.is-day-calendar .weight-cell.is-future .weight-cell-title {
+      color: #b8bbc4;
+    }
+
+    .weight-page-panel .weight-grid.is-day-calendar .weight-cell .weight-value {
+      position: absolute;
+      left: 7px;
+      bottom: 7px;
+      max-width: calc(100% - 14px);
+      color: #7f8490;
+      font-size: 11px;
+      font-weight: 680;
+      line-height: 1;
+      text-align: left;
+    }
+
+    .weight-page-panel .weight-grid.is-day-calendar .weight-cell.is-up .weight-value {
+      color: #d94853;
+    }
+
+    .weight-page-panel .weight-grid.is-day-calendar .weight-cell.is-down .weight-value {
+      color: #2fa66a;
+    }
+
+    .weight-page-panel .weight-grid.is-day-calendar .weight-cell.is-current .weight-cell-title {
+      color: #17191f;
+    }
+
+    .weight-page-panel .weight-grid.is-day-calendar .weight-cell.is-no-data .weight-value {
+      visibility: hidden;
     }
 
     @media (max-width: 430px) {
@@ -4158,7 +4291,7 @@
     }
 
     .period-cell.is-current-month {
-      border-color: #1677ff;
+      border-color: #009bff;
       background: #f4f9ff;
       box-shadow: 0 8px 22px rgba(22, 119, 255, 0.12);
     }
@@ -4191,7 +4324,7 @@
     textarea:focus,
     select:focus,
     .picker-trigger:focus-visible {
-      border-color: #1677ff;
+      border-color: #009bff;
       box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.12);
       outline: none;
     }
@@ -4201,16 +4334,56 @@
     }
 
     .picker-add {
-      color: #1677ff !important;
-    }
-
-    .tabs {
-      width: min(360px, calc(100vw - 48px));
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      color: #009bff !important;
     }
 
     .tabs .tab-btn {
       justify-content: center;
+    }
+
+    /* Bottom navigation: plain app tab bar */
+    .tabs {
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
+      width: 100% !important;
+      max-width: none !important;
+      height: auto !important;
+      transform: none !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      gap: 0 !important;
+      padding: 4px 0 calc(4px + var(--safe-bottom)) !important;
+      border: 0 !important;
+      border-top: 1px solid #e6edf6 !important;
+      border-radius: 0 !important;
+      background: rgba(255, 255, 255, 0.98) !important;
+      box-shadow: none !important;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .tabs .tab-btn {
+      width: 100% !important;
+      min-height: 48px !important;
+      height: 48px !important;
+      padding: 0 !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      color: #8a93a6 !important;
+      box-shadow: none !important;
+    }
+
+    .tabs .tab-btn.active {
+      background: transparent !important;
+      color: #009bff !important;
+      box-shadow: none !important;
+      animation: none !important;
+    }
+
+    .tabs .tab-btn svg {
+      width: 20px !important;
+      height: 20px !important;
+      stroke-width: 2 !important;
     }
 
     .overview-detail-panel {
@@ -4293,27 +4466,27 @@
     .weight-person-tabs {
       display: inline-grid;
       grid-auto-flow: column;
-      grid-auto-columns: 40px;
+      grid-auto-columns: 34px;
       grid-template-columns: none;
       justify-content: start;
       justify-self: start;
       width: auto !important;
-      gap: 8px;
-      padding: 0;
-      border: 0;
+      gap: 3px;
+      padding: 3px;
+      border: 1px solid #e8e0fb;
       border-radius: 999px;
-      background: transparent;
+      background: #f7f4ff;
     }
 
     .weight-person-tabs .mode-btn {
-      width: 40px;
-      min-height: 40px;
+      width: 34px;
+      min-height: 34px;
       padding: 0;
       border-radius: 999px;
-      background: #f4f1ff;
+      background: transparent;
       color: #7d748c;
-      font-size: 14px;
-      font-weight: 760;
+      font-size: 13px;
+      font-weight: 720;
     }
 
     .weight-person-tabs .mode-btn.active {
@@ -4324,27 +4497,17 @@
 
     .weight-period-mode {
       grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .weight-view-mode {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      width: auto;
-      min-width: 92px;
+      justify-self: end;
+      width: min(100%, 150px) !important;
       padding: 3px;
       border-radius: 999px;
     }
 
-    .weight-view-mode .mode-btn {
-      width: 40px;
-      min-height: 32px;
-      padding: 0;
+    .weight-period-mode .mode-btn {
+      min-height: 30px;
       border-radius: 999px;
-    }
-
-    .weight-view-mode .mode-btn svg {
-      width: 17px;
-      height: 17px;
-      stroke-width: 1.9;
+      padding: 0 8px;
+      font-size: 13px;
     }
 
     .weight-actions {
@@ -4400,10 +4563,19 @@
     }
 
     .weight-grid.is-day-calendar .weight-cell {
-      min-height: 72px;
+      position: relative;
       gap: 4px;
+      min-height: 72px;
       padding: 8px 6px;
       text-align: center;
+    }
+
+    .weight-grid.is-day-calendar .weight-cell.is-day {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
     }
 
     .weight-grid.is-day-calendar .weight-cell.is-empty {
@@ -4415,8 +4587,37 @@
     }
 
     .weight-cell.is-current {
-      border-color: #1677ff;
-      background: #eff6ff;
+      border-color: #009bff;
+      background: #009bff;
+      color: #ffffff;
+    }
+
+    .weight-cell.is-up {
+      border-color: #ffd6d8;
+      background: #fff1f3;
+    }
+
+    .weight-cell.is-down {
+      border-color: #cdeedc;
+      background: #effaf4;
+    }
+
+    .weight-cell.is-current.is-up {
+      border-color: #d94853;
+      background: #d94853;
+    }
+
+    .weight-cell.is-current.is-down {
+      border-color: #2fa66a;
+      background: #2fa66a;
+    }
+
+    .weight-cell.is-current .weight-cell-title,
+    .weight-cell.is-current .weight-value,
+    .weight-cell.is-current .weight-delta,
+    .weight-cell.is-current.is-up .weight-value,
+    .weight-cell.is-current.is-down .weight-value {
+      color: #ffffff;
     }
 
     .weight-cell .weight-cell-title {
@@ -4427,19 +4628,45 @@
     }
 
     .weight-grid.is-day-calendar .weight-cell .weight-cell-title {
-      font-size: 14px;
-      font-weight: 760;
+      position: static;
+      transform: none;
+      color: var(--color-muted);
+      font-size: 12px;
+      font-weight: 650;
+      text-align: center;
+    }
+
+    .weight-grid.is-day-calendar .weight-cell.is-current .weight-cell-title {
+      color: #ffffff;
     }
 
     .weight-cell .weight-value {
       color: var(--color-ink);
       font-size: 16px;
       font-weight: 760;
+      letter-spacing: 0;
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "tnum" 1;
+      white-space: nowrap;
     }
 
     .weight-grid.is-day-calendar .weight-cell .weight-value {
-      font-size: 12px;
-      font-weight: 720;
+      position: static;
+      transform: none;
+      max-width: calc(100% - 8px);
+      font-size: 10px;
+      font-weight: 680;
+      line-height: 1;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .weight-cell.is-up .weight-value {
+      color: var(--color-danger);
+    }
+
+    .weight-cell.is-down .weight-value {
+      color: var(--color-success);
     }
 
     .weight-cell .weight-delta {
@@ -4449,8 +4676,7 @@
     }
 
     .weight-grid.is-day-calendar .weight-cell .weight-delta {
-      font-size: 11px;
-      font-weight: 660;
+      display: none;
     }
 
     .weight-cell .weight-delta.up {
@@ -4461,18 +4687,212 @@
       color: var(--color-success);
     }
 
-    .weight-chart {
-      margin-top: 14px;
-      padding: 12px;
-      border-radius: 12px;
-      background: #fff;
-      border: 1px solid #edf0f6;
+    .weight-bar-chart {
+      margin-top: 18px;
+      padding: 14px 0 2px;
+      border-top: 1px solid rgba(139, 143, 155, 0.16);
     }
 
-    .weight-chart svg {
-      display: block;
+    .weight-bar-chart-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .weight-bar-chart-header h3 {
+      margin: 0;
+      color: #343944;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .weight-bar-chart-header span {
+      color: #9a9eaa;
+      font-size: 12px;
+    }
+
+    .weight-selected-tip {
+      position: absolute;
+      top: -48px;
+      left: 50%;
+      z-index: 2;
+      display: grid;
+      gap: 3px;
+      min-width: 76px;
+      padding: 7px 10px;
+      border-radius: 9px;
+      background: #2c2d31;
+      color: #ffffff;
+      transform: translateX(-50%);
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .weight-selected-tip::after {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      width: 0;
+      height: var(--tip-line-height, 82px);
+      border-left: 1px dashed rgba(44, 45, 49, 0.58);
+      content: "";
+      transform: translateX(-50%);
+    }
+
+    .weight-bar-item.is-edge-start .weight-selected-tip {
+      left: 0;
+      transform: none;
+    }
+
+    .weight-bar-item.is-edge-start .weight-selected-tip::after {
+      left: 5px;
+      transform: none;
+    }
+
+    .weight-bar-item.is-edge-end .weight-selected-tip {
+      right: 0;
+      left: auto;
+      transform: none;
+    }
+
+    .weight-bar-item.is-edge-end .weight-selected-tip::after {
+      right: 5px;
+      left: auto;
+      transform: none;
+    }
+
+    .weight-selected-tip span {
+      color: #ffffff;
+      font-size: 11px;
+    }
+
+    .weight-selected-tip strong {
+      color: #bfc3ca;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .weight-selected-tip.is-up strong {
+      color: #ef747b;
+    }
+
+    .weight-selected-tip.is-down strong {
+      color: #62c18a;
+    }
+
+    .weight-selected-tip.is-empty strong {
+      color: #c4c7cf;
+    }
+
+    .weight-bars {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      min-height: 146px;
+      padding: 0 2px;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scrollbar-width: thin;
+    }
+
+    .weight-bars.is-daily {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 0;
       width: 100%;
-      height: 220px;
+      padding-top: 52px;
+      overflow: visible;
+      overflow-y: hidden;
+    }
+
+    .weight-bars.is-daily .weight-bar-item {
+      flex: 0 1 9px;
+      min-height: 146px;
+      gap: 5px;
+    }
+
+    .weight-bars.is-daily .weight-bar-value {
+      display: none;
+    }
+
+    .weight-bars.is-daily .weight-bar {
+      width: 6px;
+    }
+
+    .weight-bars.is-daily .weight-bar-label {
+      font-size: 8px;
+    }
+
+    .weight-bars.is-monthly {
+      justify-content: space-between;
+      gap: 0;
+      width: 100%;
+      padding-top: 52px;
+      overflow: visible;
+    }
+
+    .weight-bars.is-monthly .weight-bar-item {
+      flex: 0 1 26px;
+      min-width: 0;
+    }
+
+    .weight-bar-item {
+      position: relative;
+      display: flex;
+      flex: 0 0 26px;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 5px;
+      min-height: 146px;
+    }
+
+    .weight-bar-value {
+      min-height: 14px;
+      color: #7f8490;
+      font-size: 10px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .weight-bar {
+      width: 18px;
+      height: var(--bar-height, 8px);
+      min-height: 4px;
+      border-radius: 6px 6px 3px 3px;
+      background: #cfd3dc;
+    }
+
+    .weight-bar-item[data-weight-bar-date] {
+      cursor: pointer;
+    }
+
+    .weight-bar-item.is-selected .weight-bar {
+      box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px #009bff;
+    }
+
+    .weight-bar-item.is-up .weight-bar {
+      background: #e36a73;
+    }
+
+    .weight-bar-item.is-down .weight-bar {
+      background: #55b383;
+    }
+
+    .weight-bar-item.is-empty .weight-bar {
+      min-height: 4px;
+      background: rgba(207, 211, 220, 0.38);
+    }
+
+    .weight-bar-label {
+      color: #8b8f9b;
+      font-size: 11px;
+      line-height: 1;
+      white-space: nowrap;
     }
 
     .weight-dropdown {
@@ -4502,13 +4922,41 @@
 
     @media (max-width: 430px) {
       .overview-detail-filters,
-      .weight-toolbar-row,
       .weight-actions {
         grid-template-columns: 1fr;
       }
 
+      .weight-toolbar-row {
+        grid-template-columns: auto minmax(126px, 150px);
+        align-items: end;
+      }
+
+      .weight-period-mode {
+        width: 100% !important;
+      }
+
       .weight-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .weight-page-panel .weight-grid:not(.is-day-calendar) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .weight-grid.is-day-calendar {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 4px;
+      }
+
+      .weight-grid.is-day-calendar .weight-cell,
+      .weight-grid.is-day-calendar .weight-cell.is-empty {
+        aspect-ratio: 1 / 1;
+        min-height: 0;
+      }
+
+      .weight-grid.is-day-calendar .weight-cell {
+        gap: 2px;
+        padding: 4px 2px;
       }
     }
 
@@ -4546,7 +4994,7 @@
       bottom: 12px;
       width: 4px;
       border-radius: 999px;
-      background: #1677ff;
+      background: #009bff;
     }
 
     .record-card.income-entry {
@@ -4568,7 +5016,7 @@
     }
 
     .record-card.saved-entry::before {
-      background: #1677ff;
+      background: #009bff;
     }
 
     .record-main {
@@ -4591,7 +5039,7 @@
       padding: 0 9px;
       border-radius: 999px;
       background: #edf5ff;
-      color: #1677ff;
+      color: #009bff;
       font-size: 13px !important;
       font-weight: 760 !important;
       white-space: nowrap;
@@ -4604,7 +5052,7 @@
 
     .record-card.saved-entry .record-title-row strong {
       background: #edf5ff;
-      color: #1677ff;
+      color: #009bff;
     }
 
     .record-title-row .record-date {
@@ -4676,7 +5124,7 @@
     }
 
     .record-side .amount.saved-color {
-      color: #1677ff !important;
+      color: #009bff !important;
     }
 
     .mini-actions {
@@ -4703,6 +5151,220 @@
       width: 15px;
       height: 15px;
       stroke-width: 1.7;
+    }
+
+    /* Blue finance card */
+    #viewOverview > .overview-only {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+      min-width: 0;
+      min-height: 0;
+      margin: 0 0 16px;
+      padding: 22px 16px 26px;
+      border: 0;
+      border-radius: 24px;
+      background: linear-gradient(155deg, #009bff 0%, #0087e6 56%, #006ac4 100%);
+      color: #ffffff;
+      box-shadow: 0 18px 38px rgba(28, 91, 190, 0.24);
+      overflow: hidden;
+    }
+
+    #viewOverview > .overview-only .overview-hero-copy {
+      display: grid;
+      grid-column: 1 / -1;
+      gap: 5px;
+      min-width: 0;
+      padding: 0;
+    }
+
+    #viewOverview > .overview-only .overview-hero-copy span {
+      color: rgba(255, 255, 255, 0.68) !important;
+      font-size: 12px !important;
+      font-weight: 650 !important;
+    }
+
+    #viewOverview > .overview-only .overview-hero-copy h1 {
+      color: #ffffff;
+      font-size: clamp(22px, 5.3vw, 28px) !important;
+      font-weight: 780;
+    }
+
+    #viewOverview > .overview-only .overview-hero-copy p {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 12px !important;
+    }
+
+    #viewOverview > .overview-only .metric.asset-total-metric,
+    #viewOverview > .overview-only .metric:first-of-type.asset-total-metric {
+      display: grid;
+      grid-column: 1 / -1;
+      gap: 8px;
+      width: 100%;
+      min-width: 0;
+      min-height: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    #viewOverview > .overview-only .metric.asset-total-metric span {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.72) !important;
+      font-size: 12px !important;
+      font-weight: 600 !important;
+    }
+
+    #viewOverview > .overview-only .metric.asset-total-metric strong,
+    #viewOverview > .overview-only .metric.asset-total-metric strong.saved-color {
+      display: block;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      color: #ffffff !important;
+      font-size: clamp(30px, 9vw, 42px) !important;
+      font-weight: 780;
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    #viewOverview > .overview-only .overview-actions {
+      display: grid;
+      grid-column: 1 / -1;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      min-width: 0;
+    }
+
+    #viewOverview > .overview-only .overview-action,
+    #viewOverview > .overview-only .overview-action.income-action {
+      min-width: 0;
+      min-height: 42px;
+      padding: 0 14px;
+      border: 0;
+      border-radius: 999px;
+      background: #ffffff !important;
+      color: #009bff !important;
+      box-shadow: 0 8px 16px rgba(9, 55, 126, 0.14) !important;
+      font-size: 14px;
+      font-weight: 720;
+    }
+
+    #viewOverview > .overview-only .overview-action:active {
+      transform: translateY(1px);
+    }
+
+    /* Check-in workspace */
+    .checkin-page { display: grid; gap: 16px; }
+    #checkinList { display: grid; gap: 0; padding: 0; background: transparent; }
+    #checkinList.is-week-list { padding: 8px 16px; border-radius: 24px; background: #fff; }
+    #checkinList.is-month-list { gap: 8px; }
+    #checkinList.is-year-list { gap: 8px; }
+    .checkin-toolbar { display: grid; gap: 14px; padding: 2px 0 4px; }
+    .checkin-toolbar-row, .checkin-period-row, .checkin-card-head {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .checkin-title { color: var(--color-ink); font-size: 22px; font-weight: 800; }
+    .checkin-add {
+      min-height: 36px; padding: 0 14px; border: 0; border-radius: 999px;
+      background: var(--color-accent); color: #fff; font-size: 14px; font-weight: 750;
+      box-shadow: 0 6px 14px rgba(22, 119, 255, 0.16);
+    }
+    .checkin-add-form {
+      display: none;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 8px;
+      align-items: center;
+    }
+    .checkin-add-form.is-open { display: grid; }
+    .checkin-add-form input {
+      grid-column: 1 / -1; width: 100%; min-height: 40px; padding: 0 12px; border: 1px solid #e3eaf4;
+      border-radius: 10px; background: #fff; color: var(--color-ink); font-size: 14px;
+    }
+    .checkin-color-picker { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; }
+    .checkin-color-swatch {
+      flex: 0 0 12px; width: 12px !important; min-width: 12px; height: 12px !important; min-height: 12px; padding: 0 !important; border: 2px solid transparent; border-radius: 3px;
+      background: var(--swatch-color); box-shadow: inset 0 0 0 1px rgba(31, 41, 55, 0.08);
+    }
+    .checkin-color-swatch.is-selected { border-color: var(--color-ink); box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--color-ink); }
+    .checkin-add-form .checkin-color-swatch {
+      flex: 0 0 12px !important; width: 12px !important; min-width: 12px !important;
+      height: 12px !important; min-height: 12px !important; max-height: 12px !important;
+      aspect-ratio: 1 / 1 !important; align-self: flex-start;
+    }
+    .checkin-add-form button {
+      min-height: 40px; padding: 0 12px; border: 0; border-radius: 10px;
+      background: var(--color-accent); color: #fff; font-size: 13px; font-weight: 700;
+    }
+    .checkin-add-form button[type="button"] { background: #eef2f7; color: var(--color-muted); }
+    .checkin-period {
+      display: inline-grid; grid-template-columns: repeat(3, minmax(44px, 1fr)); gap: 3px;
+      padding: 3px; border-radius: 999px; background: #e8edf5;
+    }
+    .checkin-period button {
+      min-height: 32px; padding: 0 12px; border: 0; border-radius: 999px;
+      background: transparent; color: var(--color-muted); font-size: 13px; font-weight: 700;
+    }
+    .checkin-period button.active { background: #fff; color: var(--color-accent); box-shadow: 0 3px 8px rgba(31, 63, 113, 0.1); }
+    .checkin-range { display: inline-flex; align-items: center; gap: 8px; color: var(--color-ink); font-size: 14px; font-weight: 700; }
+    .checkin-range-label { padding: 0; border: 0; background: transparent; color: inherit; font: inherit; white-space: nowrap; }
+    .checkin-time-picker { position: fixed; left: 0; top: 0; width: 1px; height: 1px; opacity: 0.01; pointer-events: none; }
+    .checkin-range button {
+      width: 30px; height: 30px; padding: 0; border: 0; border-radius: 999px;
+      background: #fff; color: var(--color-muted); box-shadow: 0 4px 10px rgba(31, 63, 113, 0.07);
+    }
+    .checkin-range .checkin-range-label { width: auto; min-width: max-content; height: auto; padding: 0; border-radius: 0; background: transparent; box-shadow: none; color: var(--color-ink); }
+    .checkin-card {
+      display: grid; gap: 8px; padding: 8px 0; border: 0; border-radius: 0;
+      background: transparent; box-shadow: none;
+    }
+    .checkin-card.is-week { grid-template-columns: minmax(0, 1fr) auto; gap: 8px; padding: 8px 0; }
+    .checkin-card.is-week .checkin-card-head { grid-column: 1; align-self: center; }
+    .checkin-card.is-week .checkin-delete { display: none; }
+    .checkin-card.is-week .checkin-name { font-size: 14px; }
+    .checkin-card.is-week .checkin-days { grid-column: 2; grid-row: 1; grid-template-columns: repeat(7, 24px); gap: 8px; }
+    .checkin-card.is-week .checkin-weekdays { display: grid; grid-column: 1 / -1; grid-template-columns: repeat(7, 24px); gap: 8px; }
+    .checkin-card.is-week .checkin-weekday { font-size: 10px; line-height: 12px; }
+    .checkin-global-weekdays { display: grid; grid-template-columns: minmax(0, 1fr) auto; padding: 0; }
+    .checkin-global-weekdays .checkin-weekdays { display: grid; grid-column: 2; grid-template-columns: repeat(7, 24px); gap: 8px; }
+    .checkin-card.is-week .checkin-weekday { font-size: 9px; line-height: 12px; }
+    .checkin-card.is-week .checkin-day { width: 24px; height: 24px; border-radius: 8px; font-size: 10px !important; font-weight: 400 !important; line-height: 1 !important; letter-spacing: 0; }
+    .checkin-card.is-week .checkin-day.is-today { outline-width: 2px; outline-offset: 1px; outline-color: var(--checkin-color); }
+    .checkin-card.is-week .checkin-day.is-empty { display: block; visibility: hidden; }
+    .checkin-card.is-month { position: relative; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; row-gap: 12px; padding: 12px; border-radius: 16px; background: #fff; }
+    .checkin-card.is-month .checkin-card-head { grid-column: 1; grid-row: 1; }
+    .checkin-card.is-month .checkin-stats { position: absolute; top: 48px; left: 0; grid-column: 1; grid-row: auto; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left; }
+    .checkin-card.is-month .checkin-delete { position: absolute; left: 12px; bottom: 12px; }
+    .checkin-card.is-month .checkin-days { grid-column: 2; grid-row: 1 / span 2; grid-template-columns: repeat(7, 24px); justify-content: end; gap: 6px; }
+    .checkin-card.is-month .checkin-day { width: 24px; height: 24px; border-radius: 8px; font-size: 10px !important; font-weight: 400 !important; }
+    .checkin-card.is-year { gap: 12px; padding: 12px; border-radius: 16px; background: #fff; }
+    .checkin-card-head { align-items: flex-start; }
+    .checkin-name { display: flex; align-items: center; min-width: 0; gap: 8px; color: var(--color-ink); font-size: 17px; font-weight: 780; }
+    .checkin-name span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .checkin-delete { width: 28px; height: 28px; padding: 0; border: 0; border-radius: 999px; background: #f5f8fd; color: #a2aabc; }
+    .checkin-stats { display: flex; flex-wrap: wrap; gap: 8px 14px; color: var(--color-muted); font-size: 12px; font-weight: 650; }
+    .checkin-stats strong { color: var(--checkin-color, var(--color-accent)); font-size: 15px; }
+    .checkin-days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 7px; }
+    .checkin-weekday { color: var(--color-muted-2); font-size: 11px; text-align: center; }
+    .checkin-day { aspect-ratio: 1; min-width: 0; padding: 0; border: 0; border-radius: 16px; background: #eef2f7; color: var(--color-muted-2); font-size: 11px; font-weight: 700; }
+    .checkin-day.is-complete { background: var(--checkin-color, #009bff); color: #fff; }
+    .checkin-day.is-today { outline: 2px solid var(--checkin-color, var(--color-accent)); outline-offset: 2px; }
+    .checkin-day.is-future { opacity: 0.42; }
+    .checkin-day.is-empty { visibility: hidden; }
+    .checkin-year-grid { display: grid; width: 100%; min-width: 0; grid-template-columns: repeat(20, minmax(0, 1fr)); grid-auto-flow: row; gap: 4px 0; }
+    .checkin-year-dot { justify-self: center; width: 12px; height: 12px; border-radius: 2px; background: #eef2f7; }
+    .checkin-year-dot.is-complete { background: var(--checkin-color, #009bff); }
+    .checkin-year-dot.is-today { outline: 1px solid var(--checkin-color); outline-offset: 1px; }
+    .checkin-year-dot.is-future { opacity: 0.42; }
+    .checkin-year-dot.is-empty { visibility: hidden; }
+
+    @media (max-width: 430px) {
+      .checkin-page { gap: 12px; }
+      .checkin-card { padding: 8px 0; }
+      .checkin-days { gap: 5px; }
+      .checkin-period button { padding: 0 9px; }
+      .checkin-year-grid { gap: 4px; }
     }
 
     @media (max-width: 430px) {
@@ -4781,10 +5443,6 @@
         <div class="metric asset-total-metric">
           <span>存款总额</span>
           <strong id="assetTotal" class="saved-color">0</strong>
-        </div>
-        <div class="metric asset-profit-metric">
-          <span>总盈亏</span>
-          <strong id="assetProfit">0</strong>
         </div>
         <button class="asset-add-saved" id="assetAddSaved" type="button">
           <span aria-hidden="true">+</span>
@@ -4930,25 +5588,7 @@
     </section>
 
     <section class="view" id="viewWeight">
-      <div class="panel">
-        <div class="panel-title">
-          <h2>体重管理</h2>
-          <div class="period-mode weight-view-mode" aria-label="体重展示方式">
-            <button class="mode-btn active" data-weight-view="calendar" aria-label="日历视图" title="日历视图">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-                <rect x="4" y="5" width="16" height="15" rx="3"></rect>
-                <path d="M8 3v4M16 3v4M4 10h16M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01"></path>
-              </svg>
-            </button>
-            <button class="mode-btn" data-weight-view="chart" aria-label="折线图视图" title="折线图视图">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-                <path d="M4 19h16"></path>
-                <path d="M5 16l4-5 4 3 5-7"></path>
-                <path d="M9 11h.01M13 14h.01M18 7h.01"></path>
-              </svg>
-            </button>
-          </div>
-        </div>
+      <div class="panel weight-page-panel">
         <div class="weight-toolbar">
           <div class="weight-toolbar-row">
             <label class="weight-person-field">
@@ -4958,11 +5598,7 @@
             <div class="period-mode weight-period-mode" aria-label="体重统计粒度">
               <button class="mode-btn active" data-weight-period="day">日</button>
               <button class="mode-btn" data-weight-period="month">月</button>
-              <button class="mode-btn" data-weight-period="year">年</button>
             </div>
-          </div>
-          <div class="weight-actions">
-            <button class="primary" id="openWeightForm" type="button">记录体重</button>
           </div>
           <div class="year-switcher" aria-label="体重时间切换">
             <button class="icon-btn" id="weightPrev" aria-label="上一段">
@@ -4975,7 +5611,38 @@
           </div>
         </div>
         <div class="weight-grid" id="weightGrid"></div>
-        <div class="weight-chart" id="weightChart" hidden></div>
+        <div class="weight-bar-chart" id="weightBarChart"></div>
+      </div>
+    </section>
+
+    <section class="view" id="viewCheckin">
+      <div class="checkin-page">
+        <div class="checkin-toolbar">
+          <div class="checkin-toolbar-row">
+            <h1 class="checkin-title">打卡</h1>
+            <button class="checkin-add" id="addCheckin" type="button">+ 新增打卡</button>
+          </div>
+          <div class="checkin-period-row">
+            <div class="checkin-period" aria-label="打卡统计粒度">
+              <button type="button" class="active" data-checkin-period="week">周</button>
+              <button type="button" data-checkin-period="month">月</button>
+              <button type="button" data-checkin-period="year">年</button>
+            </div>
+            <div class="checkin-range">
+              <button type="button" id="checkinPrev" aria-label="上一段">‹</button>
+              <button type="button" class="checkin-range-label" id="checkinRangeLabel" aria-label="选择周/月/年"></button>
+              <input class="checkin-time-picker" id="checkinTimePicker" type="date" tabindex="-1" aria-label="选择时间">
+              <button type="button" id="checkinNext" aria-label="下一段">›</button>
+            </div>
+          </div>
+          <form class="checkin-add-form" id="checkinAddForm">
+            <input id="checkinNameInput" autocomplete="off" placeholder="输入打卡项目名称">
+            <div class="checkin-color-picker" id="checkinColorPicker" aria-label="选择打卡颜色"></div>
+            <button type="submit">保存</button>
+            <button type="button" id="cancelCheckinAdd">取消</button>
+          </form>
+        </div>
+        <div id="checkinList"></div>
       </div>
     </section>
 
@@ -5029,8 +5696,8 @@
               <button class="picker-trigger" type="button" id="categoryPickerTrigger" data-picker="category"></button>
             </div>
             <div class="field" id="computedProfitField" hidden>
-              <label for="computedProfit">本月收益（自动）</label>
-              <output class="calculated-value" id="computedProfit">0</output>
+              <label for="computedProfit">本月收益<span class="required">*</span></label>
+              <input id="computedProfit" inputmode="decimal" autocomplete="off" placeholder="例如：100，可填负数">
             </div>
             <div class="field full">
               <label for="note">备注</label>
@@ -5051,31 +5718,39 @@
   </main>
 
   <nav class="tabs" aria-label="底部导航">
-    <button class="tab-btn active" data-view="viewOverview" aria-label="总览">
+    <button class="tab-btn active" data-view="viewOverview" aria-label="理财">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-        <path d="M5 5h6v6H5z"></path>
-        <path d="M13 5h6v6h-6z"></path>
-        <path d="M5 13h6v6H5z"></path>
-        <path d="M13 13h6v6h-6z"></path>
+        <path d="M5 7.5h12.5a2.5 2.5 0 0 1 2.5 2.5v6.5a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 2 16.5v-9A2.5 2.5 0 0 1 4.5 5H16"></path>
+        <path d="M16 12h4"></path>
+        <path d="M6.5 11.5h5"></path>
+        <path d="M6.5 14.5h3"></path>
       </svg>
-      <span>总览</span>
+      <span>理财</span>
     </button>
     <button class="tab-btn" data-view="viewWeight" aria-label="体重">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-        <path d="M6 18h12"></path>
-        <path d="M8 18l2-10h4l2 10"></path>
-        <path d="M10 8h4"></path>
+        <rect x="4.5" y="4.5" width="15" height="15" rx="4"></rect>
+        <path d="M8.5 9.5a4.2 4.2 0 0 1 7 0"></path>
+        <path d="M12 9.5l1.6-2.2"></path>
+        <path d="M9 16h6"></path>
       </svg>
       <span>体重</span>
+    </button>
+    <button class="tab-btn" data-view="viewCheckin" aria-label="打卡">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+        <path d="M6 4.5h12a2 2 0 0 1 2 2v13H4v-13a2 2 0 0 1 2-2Z"></path>
+        <path d="M8 2.5v4M16 2.5v4M7.5 11h9M7.5 15h6"></path>
+      </svg>
+      <span>打卡</span>
     </button>
   </nav>
 
   <div class="toast" id="toast"></div>
 
   <div class="weight-dropdown" id="weightDropdown" hidden>
-    <div class="weight-modal">
-      <div class="panel-title">
-        <h2>记录体重</h2>
+      <div class="weight-modal">
+        <div class="panel-title">
+        <h2 id="weightFormTitle">记录体重</h2>
         <button class="secondary" id="closeWeightForm" type="button">关闭</button>
       </div>
       <form id="weightForm">
@@ -5089,8 +5764,8 @@
             <input id="weightDate" type="date" min="2026-01-01" required>
           </div>
           <div class="field">
-            <label for="weightValue">体重<span class="required">*</span></label>
-            <input id="weightValue" inputmode="decimal" autocomplete="off" placeholder="例如：52.5" required>
+            <label for="weightValue">体重</label>
+            <input id="weightValue" inputmode="decimal" autocomplete="off" placeholder="例如：119.1">
           </div>
           <div class="field full">
             <label for="weightNote">备注</label>
@@ -5105,6 +5780,8 @@
   <script>
     const STORAGE_KEY = "income-savings-estimator-v1";
     const WEIGHT_STORAGE_KEY = "household-weight-records-v1";
+    const CHECKIN_STORAGE_KEY = "household-checkins-v1";
+    const CHECKIN_COLORS = ["#FFC48A", "#99D98C", "#B5E48C", "#D9ED92", "#FEC5BB", "#64B5F6", "#90CAF9", "#BBDEFB", "#FFEC8F", "#93DCCD", "#FFB5D1", "#E7C7FF"];
     const SETTINGS_KEY = "income-savings-estimator-settings-v1";
     const LEGACY_KEY = "personal-savings-deposits-v1";
     const MIN_YEAR = 2026;
@@ -5129,9 +5806,14 @@
       weightEntries: [],
       weightPerson: defaultIncomeOwners[0],
       weightPeriod: "day",
-      weightView: "calendar",
+      weightSelectedDate: toDateInput(new Date()),
+      weightSelectedMonth: new Date().getMonth() + 1,
       weightYear: Math.max(MIN_YEAR, new Date().getFullYear()),
       weightMonth: new Date().getMonth() + 1,
+      checkins: [],
+      checkinPeriod: "week",
+      checkinDate: toDateInput(new Date()),
+      checkinDraftColor: CHECKIN_COLORS[5],
       entryViewYear: Math.max(MIN_YEAR, new Date().getFullYear()),
       entryPeriodMode: "month",
       detail: null,
@@ -5154,7 +5836,6 @@
       periodProfit: document.getElementById("periodProfit"),
       periodSpend: document.getElementById("periodSpend"),
       assetTotal: document.getElementById("assetTotal"),
-      assetProfit: document.getElementById("assetProfit"),
       yearLabel: document.getElementById("yearLabel"),
       periodGrid: document.getElementById("periodGrid"),
       overviewDetailYear: document.getElementById("overviewDetailYear"),
@@ -5168,11 +5849,21 @@
       weightPerson: document.getElementById("weightPerson"),
       weightPeriodLabel: document.getElementById("weightPeriodLabel"),
       weightGrid: document.getElementById("weightGrid"),
-      weightChart: document.getElementById("weightChart"),
-      openWeightForm: document.getElementById("openWeightForm"),
+      weightBarChart: document.getElementById("weightBarChart"),
+      checkinList: document.getElementById("checkinList"),
+      checkinRangeLabel: document.getElementById("checkinRangeLabel"),
+      checkinTimePicker: document.getElementById("checkinTimePicker"),
+      addCheckin: document.getElementById("addCheckin"),
+      checkinAddForm: document.getElementById("checkinAddForm"),
+      checkinNameInput: document.getElementById("checkinNameInput"),
+      checkinColorPicker: document.getElementById("checkinColorPicker"),
+      cancelCheckinAdd: document.getElementById("cancelCheckinAdd"),
+      checkinPrev: document.getElementById("checkinPrev"),
+      checkinNext: document.getElementById("checkinNext"),
       weightDropdown: document.getElementById("weightDropdown"),
       closeWeightForm: document.getElementById("closeWeightForm"),
       weightForm: document.getElementById("weightForm"),
+      weightFormTitle: document.getElementById("weightFormTitle"),
       weightFormPerson: document.getElementById("weightFormPerson"),
       weightDate: document.getElementById("weightDate"),
       weightValue: document.getElementById("weightValue"),
@@ -5262,6 +5953,15 @@
 
     function moneyInDetail(value) {
       return detailAmountFormatter.format(Math.trunc(value || 0));
+    }
+
+    const recordAmountFormatter = new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+
+    function moneyInRecord(value) {
+      return recordAmountFormatter.format(value || 0);
     }
 
     function signedMoney(value) {
@@ -5357,24 +6057,26 @@
       return nextIndex === -1 ? snapshots[snapshots.length - 1] : snapshots[nextIndex - 1];
     }
 
-    function calculatedProfit(item) {
+    function storedSavedProfit(item) {
       if (item.type !== "saved") return 0;
-      const previous = previousSavedSnapshot(item);
-      if (!previous) {
-        return Number(item.schemaVersion) >= 2
-          ? 0
-          : (Number.isFinite(Number(item.periodProfit)) ? Number(item.periodProfit) : 0);
-      }
-      return savedCurrentValue(item) - savedCurrentValue(previous) - savedAmount(item);
+      return Number.isFinite(Number(item.periodProfit)) ? Number(item.periodProfit) : 0;
     }
 
     function savedProfit(item) {
-      return roundMoney(calculatedProfit(item));
+      return roundMoney(storedSavedProfit(item));
+    }
+
+    function calculatedSavedAmount(item) {
+      if (item.type !== "saved") return 0;
+      const previous = previousSavedSnapshot(item);
+      const previousValue = previous ? savedCurrentValue(previous) : 0;
+      return roundMoney(savedCurrentValue(item) - previousValue - savedProfit(item));
     }
 
     function recalculateSavedProfits() {
       savedSnapshots().forEach(item => {
         item.periodProfit = savedProfit(item);
+        item.amount = calculatedSavedAmount(item);
       });
     }
 
@@ -5390,7 +6092,7 @@
         const legacyProfit = Number.isFinite(Number(item.yieldAmount))
           ? Number(item.yieldAmount)
           : (Number.isFinite(Number(rawCurrent)) ? Number(rawCurrent) - rawAmount : 0);
-        const savedDate = item.date !== undefined ? item.date : (item.depositDate || fallbackDate);
+        const savedDate = item.date || item.depositDate || fallbackDate;
         return {
           id: item.id || crypto.randomUUID(),
           type,
@@ -5466,6 +6168,7 @@
     function save() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state.entries));
       localStorage.setItem(WEIGHT_STORAGE_KEY, JSON.stringify(state.weightEntries));
+      localStorage.setItem(CHECKIN_STORAGE_KEY, JSON.stringify(state.checkins));
     }
 
     function load() {
@@ -5481,6 +6184,29 @@
           .filter(item => item.weight > 0);
       } catch {
         state.weightEntries = [];
+      }
+      try {
+        const storedCheckins = JSON.parse(localStorage.getItem(CHECKIN_STORAGE_KEY) || "[]");
+        state.checkins = Array.isArray(storedCheckins) ? storedCheckins.filter(item => item && item.id && item.title).map(item => ({
+          id: item.id,
+          title: String(item.title),
+          emoji: item.emoji || "✓",
+          color: item.color || "#009bff",
+          records: item.records && typeof item.records === "object" ? item.records : {}
+        })) : [];
+      } catch {
+        state.checkins = [];
+      }
+      state.checkins.forEach(item => {
+        if (item.title === "运动") item.color = CHECKIN_COLORS[5];
+        if (item.title === "阅读") item.color = CHECKIN_COLORS[10];
+      });
+      if (!localStorage.getItem(CHECKIN_STORAGE_KEY)) {
+        state.checkins = [
+          { id: crypto.randomUUID(), title: "早起", emoji: "☀", color: CHECKIN_COLORS[8], records: {} },
+          { id: crypto.randomUUID(), title: "运动", emoji: "⌁", color: CHECKIN_COLORS[5], records: {} },
+          { id: crypto.randomUUID(), title: "阅读", emoji: "▤", color: CHECKIN_COLORS[10], records: {} }
+        ];
       }
       if (!state.entries.length) {
         try {
@@ -5565,7 +6291,7 @@
 
     function spendClass(summary) {
       if (!summary.hasIncome) return "muted-color";
-      return summary.spend < 0 ? "loss-color" : "spend-color";
+      return summary.spend < 0 ? "loss-color" : "neutral-color";
     }
 
     function profitClass(value) {
@@ -5574,9 +6300,8 @@
 
     function assetTotals() {
       const snapshots = savedSnapshots();
-      const current = snapshots.reduce((sum, item) => {
-        return sum + (item.date ? savedAmount(item) : savedCurrentValue(item));
-      }, 0);
+      const latest = snapshots[snapshots.length - 1];
+      const current = latest ? savedCurrentValue(latest) : 0;
       const profit = snapshots.reduce((sum, item) => sum + savedProfit(item), 0);
       return { current, profit, hasData: snapshots.length > 0 };
     }
@@ -5585,8 +6310,6 @@
       const assets = assetTotals();
       els.assetTotal.textContent = dataText(assets.current, assets.hasData);
       els.assetTotal.className = assets.hasData ? "saved-color" : "muted-color";
-      els.assetProfit.textContent = assets.hasData ? signedMoney(assets.profit) : "--";
-      els.assetProfit.className = !assets.hasData ? "muted-color" : profitClass(assets.profit);
     }
 
     function renderMonthGrid() {
@@ -5962,9 +6685,9 @@
         const profit = savedProfit(item);
         return [
           row("位置", escapeHtml(item.category)),
-          item.date ? row("本月存入", moneyInDetail(savedAmount(item))) : "",
-          row("当前总数", moneyInDetail(savedCurrentValue(item))),
-          row("本月收益", moneyInDetail(profit), profitClass(profit)),
+          item.date ? row("本月存入", moneyInRecord(savedAmount(item))) : "",
+          row("当前总数", moneyInRecord(savedCurrentValue(item))),
+          row("本月收益", moneyInRecord(profit), profitClass(profit)),
           item.note ? row("备注", escapeHtml(item.note)) : ""
         ].join("");
       }
@@ -5991,7 +6714,7 @@
             <div class="record-meta-grid">${entryMetaRows(item)}</div>
           </div>
           <div class="record-side">
-            <div class="amount ${item.type === "income" ? "income-color" : ((item.date ? savedAmount(item) : savedCurrentValue(item)) < 0 ? "loss-color" : "saved-color")}">${moneyInDetail(item.type === "saved" ? (item.date ? savedAmount(item) : savedCurrentValue(item)) : item.amount)}</div>
+            <div class="amount ${item.type === "income" ? "income-color" : ((item.date ? savedAmount(item) : savedCurrentValue(item)) < 0 ? "loss-color" : "saved-color")}">${moneyInRecord(item.type === "saved" ? (item.date ? savedAmount(item) : savedCurrentValue(item)) : item.amount)}</div>
             <div class="mini-actions">
               <button data-action="edit" data-id="${item.id}" aria-label="编辑">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
@@ -6099,7 +6822,7 @@
     }
 
     function weightText(value, hasData = true) {
-      return hasData ? `${Number(value).toFixed(1)} kg` : "--";
+      return hasData ? `${Number(value).toFixed(1)}` : "--";
     }
 
     function weightDate(year, month, day) {
@@ -6142,12 +6865,15 @@
 
     function weightDeltaText(delta) {
       if (!Number.isFinite(delta) || delta === 0) return "持平";
-      return `${delta > 0 ? "+" : ""}${delta.toFixed(1)} kg`;
+      return `${delta > 0 ? "+" : ""}${delta.toFixed(1)}`;
     }
 
-    function weightCellHtml({ label, value, hasData, delta, isCurrent }) {
+    function weightCellHtml({ label, value, hasData, delta, isCurrent, isDay = false, isFuture = false, date = "", person = "" }) {
+      const dayAttrs = isDay ? ` role="button" tabindex="0" data-weight-date="${escapeHtml(date)}" data-weight-person="${escapeHtml(person)}"` : "";
+      const trendClass = hasData ? weightDeltaClass(delta) : "";
+      const cardTrendClass = trendClass ? `is-${trendClass}` : "";
       return `
-        <div class="weight-cell ${isCurrent ? "is-current" : ""}">
+        <div class="weight-cell ${isCurrent ? "is-current" : ""} ${isFuture ? "is-future" : ""} ${hasData ? "" : "is-no-data"} ${isDay ? "is-day" : ""} ${cardTrendClass}"${dayAttrs}>
           <div class="weight-cell-title">${label}</div>
           <div class="weight-value">${weightText(value, hasData)}</div>
           <div class="weight-delta ${weightDeltaClass(delta)}">${hasData ? weightDeltaText(delta) : "--"}</div>
@@ -6156,12 +6882,12 @@
     }
 
     function renderWeightDayGrid() {
-      const maxDay = state.weightYear === currentYear() && state.weightMonth === currentMonth()
-        ? new Date().getDate()
-        : daysInMonth(state.weightYear, state.weightMonth);
+      const maxDay = daysInMonth(state.weightYear, state.weightMonth);
+      const today = toDateInput(new Date());
       const firstWeekday = (new Date(state.weightYear, state.weightMonth - 1, 1).getDay() + 6) % 7;
       const weekdays = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
-      els.weightPeriodLabel.textContent = `${state.weightYear}年${state.weightMonth}月`;
+      const chineseMonths = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
+      els.weightPeriodLabel.textContent = `${state.weightYear} ${chineseMonths[state.weightMonth - 1]}`;
       els.weightGrid.classList.add("is-day-calendar");
       const weekdayHeader = weekdays.map(day => `<div class="weight-weekday">${day}</div>`).join("");
       const leadingBlanks = Array.from({ length: firstWeekday }, () => `<div class="weight-cell is-empty" aria-hidden="true"></div>`).join("");
@@ -6171,19 +6897,24 @@
         const record = weightOnDate(date);
         const previous = previousWeightBefore(date);
         const delta = record && previous ? record.weight - previous.weight : NaN;
+        const isFuture = date > today;
         return weightCellHtml({
-          label: `${day}日`,
+          label: `${day}`,
           value: record?.weight,
           hasData: Boolean(record),
           delta,
-          isCurrent: state.weightYear === currentYear() && state.weightMonth === currentMonth() && day === new Date().getDate()
+          isCurrent: date === today,
+          isFuture,
+          isDay: true,
+          date,
+          person: state.weightPerson
         });
       }).join("");
       els.weightGrid.innerHTML = `${weekdayHeader}${leadingBlanks}${dayCells}`;
     }
 
     function renderWeightMonthGrid() {
-      const maxMonth = state.weightYear === currentYear() ? currentMonth() : 12;
+      const maxMonth = 12;
       els.weightPeriodLabel.textContent = `${state.weightYear}年`;
       els.weightGrid.classList.remove("is-day-calendar");
       els.weightGrid.innerHTML = Array.from({ length: maxMonth }, (_, index) => {
@@ -6193,75 +6924,103 @@
         const record = lastWeightBetween(start, end);
         const previous = previousWeightBefore(start);
         const delta = record && previous ? record.weight - previous.weight : NaN;
+        const isFuture = state.weightYear === currentYear() && month > currentMonth();
         return weightCellHtml({
           label: `${month}月`,
           value: record?.weight,
           hasData: Boolean(record),
           delta,
-          isCurrent: state.weightYear === currentYear() && month === currentMonth()
+          isCurrent: state.weightYear === currentYear() && month === currentMonth(),
+          isFuture
         });
       }).join("");
     }
 
-    function renderWeightYearGrid() {
-      els.weightPeriodLabel.textContent = `${MIN_YEAR}-${currentYear()}`;
-      els.weightGrid.classList.remove("is-day-calendar");
-      els.weightGrid.innerHTML = Array.from({ length: currentYear() - MIN_YEAR + 1 }, (_, index) => {
-        const year = MIN_YEAR + index;
-        const start = `${year}-01-01`;
-        const end = `${year}-12-31`;
-        const record = lastWeightBetween(start, end);
-        const previous = previousWeightBefore(start);
-        const delta = record && previous ? record.weight - previous.weight : NaN;
-        return weightCellHtml({
-          label: `${year}`,
-          value: record?.weight,
-          hasData: Boolean(record),
-          delta,
-          isCurrent: year === currentYear()
-        });
-      }).join("");
-    }
-
-    function renderWeightChart() {
-      const records = sortedWeights().filter(item => {
-        const year = Number(item.date.slice(0, 4));
-        const month = Number(item.date.slice(5, 7));
-        if (state.weightPeriod === "day") return year === state.weightYear && month === state.weightMonth;
-        if (state.weightPeriod === "month") return year === state.weightYear;
-        return year >= MIN_YEAR && year <= currentYear();
-      });
-      if (state.weightPeriod === "day") els.weightPeriodLabel.textContent = `${state.weightYear}年${state.weightMonth}月`;
-      if (state.weightPeriod === "month") els.weightPeriodLabel.textContent = `${state.weightYear}年`;
-      if (state.weightPeriod === "year") els.weightPeriodLabel.textContent = `${MIN_YEAR}-${currentYear()}`;
-      if (records.length < 2) {
-        els.weightChart.innerHTML = `<div class="empty">至少记录 2 条体重后显示折线图。</div>`;
-        return;
+    function renderWeightBarChart() {
+      const items = [];
+      if (state.weightPeriod === "day") {
+        const maxDay = daysInMonth(state.weightYear, state.weightMonth);
+        const monthPrefix = `${state.weightYear}-${String(state.weightMonth).padStart(2, "0")}-`;
+        if (!state.weightSelectedDate?.startsWith(monthPrefix)) {
+          state.weightSelectedDate = state.weightYear === currentYear() && state.weightMonth === currentMonth()
+            ? toDateInput(new Date())
+            : weightDate(state.weightYear, state.weightMonth, 1);
+        }
+        for (let day = 1; day <= maxDay; day += 1) {
+          const date = weightDate(state.weightYear, state.weightMonth, day);
+          const record = weightOnDate(date);
+          const previous = previousWeightBefore(date);
+          items.push({
+            label: `${day}`,
+            date,
+            value: record?.weight,
+            hasData: Boolean(record),
+            delta: record && previous ? record.weight - previous.weight : NaN,
+            isSelected: date === state.weightSelectedDate
+          });
+        }
+      } else {
+        if (!Number.isInteger(state.weightSelectedMonth) || state.weightSelectedMonth < 1 || state.weightSelectedMonth > 12) {
+          state.weightSelectedMonth = state.weightYear === currentYear() ? currentMonth() : 1;
+        }
+        for (let month = 1; month <= 12; month += 1) {
+          const start = weightDate(state.weightYear, month, 1);
+          const end = weightDate(state.weightYear, month, daysInMonth(state.weightYear, month));
+          const record = lastWeightBetween(start, end);
+          const previous = previousWeightBefore(start);
+          items.push({
+            label: `${month}月`,
+            value: record?.weight,
+            hasData: Boolean(record),
+            delta: record && previous ? record.weight - previous.weight : NaN,
+            month,
+            isSelected: month === state.weightSelectedMonth
+          });
+        }
       }
-      const width = 360;
-      const height = 220;
-      const padding = 26;
-      const weights = records.map(item => item.weight);
-      const min = Math.min(...weights);
-      const max = Math.max(...weights);
+
+      const values = items.filter(item => item.hasData).map(item => item.value);
+      const min = values.length ? Math.min(...values) : 0;
+      const max = values.length ? Math.max(...values) : 1;
       const range = Math.max(1, max - min);
-      const points = records.map((item, index) => {
-        const x = padding + (index / Math.max(1, records.length - 1)) * (width - padding * 2);
-        const y = height - padding - ((item.weight - min) / range) * (height - padding * 2);
-        return { x, y, item };
-      });
-      const path = points.map((point, index) => `${index ? "L" : "M"} ${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join(" ");
-      els.weightChart.innerHTML = `
-        <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="体重折线图">
-          <path d="M ${padding} ${height - padding} H ${width - padding}" stroke="#e6eaf2" stroke-width="1" fill="none"/>
-          <path d="${path}" stroke="#1677ff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-          ${points.map(point => `<circle cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="4" fill="#1677ff"><title>${point.item.date} ${weightText(point.item.weight)}</title></circle>`).join("")}
-          <text x="${padding}" y="18" fill="#6f6a78" font-size="12">${weightText(min)} - ${weightText(max)}</text>
-        </svg>
+      const bars = items.map((item, index) => {
+        const trend = weightDeltaClass(item.delta);
+        const barHeight = item.hasData ? Math.max(18, 24 + ((item.value - min) / range) * 78) : 4;
+        const tipLineHeight = Math.max(14, 141 - barHeight);
+        const edgeClass = item.isSelected && ["day", "month"].includes(state.weightPeriod)
+          ? (index < 3 ? "is-edge-start" : index >= items.length - 3 ? "is-edge-end" : "")
+          : "";
+        const selectedLabel = item.date
+          ? `${state.weightMonth}月${Number(item.label)}日`
+          : `${item.month}月`;
+        const barTarget = item.date
+          ? ` data-weight-bar-date="${item.date}"`
+          : item.month
+            ? ` data-weight-bar-month="${item.month}"`
+            : "";
+        return `
+          <div class="weight-bar-item ${item.hasData && trend ? `is-${trend}` : item.hasData ? "" : "is-empty"} ${item.isSelected ? "is-selected" : ""} ${edgeClass}" style="--bar-height:${barHeight.toFixed(1)}px; --tip-line-height:${tipLineHeight.toFixed(1)}px"${barTarget ? ` role="button" tabindex="0"${barTarget}` : ""}>
+            ${item.isSelected ? `<div class="weight-selected-tip is-${trend || "empty"}"><span>${selectedLabel}</span><strong>${item.hasData ? weightText(item.value, true) : "无"}</strong></div>` : ""}
+            <span class="weight-bar-value">${item.hasData ? weightText(item.value, true) : ""}</span>
+            <span class="weight-bar"></span>
+            <span class="weight-bar-label">${item.label}</span>
+          </div>
+        `;
+      }).join("");
+
+      els.weightBarChart.innerHTML = `
+        <div class="weight-bar-chart-header">
+          <h3>${state.weightPeriod === "day" ? "每日对比" : "每月对比"}</h3>
+          <span>${state.weightPeriod === "day" ? "按日" : "按月"}</span>
+        </div>
+        <div class="weight-bars ${state.weightPeriod === "day" ? "is-daily" : "is-monthly"}" aria-label="${state.weightPeriod === "day" ? "当月每日体重" : "全年每月体重"}">${bars}</div>
       `;
     }
 
     function renderWeightPersonTabs() {
+      const personCount = Math.max(1, incomeOwners.length);
+      els.weightPerson.style.setProperty("--weight-person-count", personCount);
+      els.weightPerson.style.setProperty("width", `${personCount * 36 + Math.max(0, personCount - 1) * 3 + 6}px`, "important");
       els.weightPerson.innerHTML = incomeOwners.map(person => `
         <button class="mode-btn ${person === state.weightPerson ? "active" : ""}" type="button" data-weight-person="${escapeHtml(person)}">${escapeHtml(person)}</button>
       `).join("");
@@ -6272,21 +7031,17 @@
       state.weightYear = clampVisibleYear(state.weightYear);
       if (state.weightYear === currentYear()) state.weightMonth = Math.min(state.weightMonth, currentMonth());
       state.weightMonth = Math.max(1, Math.min(12, state.weightMonth));
+      if (!["day", "month"].includes(state.weightPeriod)) state.weightPeriod = "day";
       if (!incomeOwners.includes(state.weightPerson)) state.weightPerson = incomeOwners[0] || defaultIncomeOwners[0];
       syncSelectOptions(els.weightFormPerson, incomeOwners);
       renderWeightPersonTabs();
       document.querySelectorAll("[data-weight-period]").forEach(button => {
         button.classList.toggle("active", button.dataset.weightPeriod === state.weightPeriod);
       });
-      document.querySelectorAll("[data-weight-view]").forEach(button => {
-        button.classList.toggle("active", button.dataset.weightView === state.weightView);
-      });
-      els.weightGrid.hidden = state.weightView !== "calendar";
-      els.weightChart.hidden = state.weightView !== "chart";
-      if (state.weightView === "chart") renderWeightChart();
-      else if (state.weightPeriod === "day") renderWeightDayGrid();
-      else if (state.weightPeriod === "month") renderWeightMonthGrid();
-      else renderWeightYearGrid();
+      els.weightGrid.hidden = false;
+      if (state.weightPeriod === "day") renderWeightDayGrid();
+      else renderWeightMonthGrid();
+      renderWeightBarChart();
     }
 
     function settingList(kind) {
@@ -6394,6 +7149,8 @@
       state.pickerKind = null;
       state.pickerAdding = false;
       els.pickerLayer.hidden = true;
+      els.pickerLayer.classList.remove("is-year-picker");
+      els.pickerList.classList.remove("year-picker-grid");
       syncModalState();
     }
 
@@ -6529,11 +7286,216 @@
       document.body.classList.toggle("modal-open", isModalOpen);
     }
 
+    function checkinDateObject(value) {
+      return new Date(`${value}T12:00:00`);
+    }
+
+    function checkinDateKey(date) {
+      return toDateInput(date);
+    }
+
+    function checkinPeriodDates() {
+      const selected = checkinDateObject(state.checkinDate);
+      if (state.checkinPeriod === "week") {
+        const mondayOffset = (selected.getDay() + 6) % 7;
+        const start = new Date(selected);
+        start.setDate(selected.getDate() - mondayOffset);
+        return Array.from({ length: 7 }, (_, index) => {
+          const date = new Date(start);
+          date.setDate(start.getDate() + index);
+          return date;
+        });
+      }
+      if (state.checkinPeriod === "month") {
+        const start = new Date(selected.getFullYear(), selected.getMonth(), 1, 12);
+        return Array.from({ length: new Date(selected.getFullYear(), selected.getMonth() + 1, 0).getDate() }, (_, index) => {
+          const date = new Date(start);
+          date.setDate(index + 1);
+          return date;
+        });
+      }
+      const year = selected.getFullYear();
+      const daysInYear = (Date.UTC(year + 1, 0, 1) - Date.UTC(year, 0, 1)) / 86400000;
+      return Array.from({ length: daysInYear }, (_, index) => new Date(year, 0, index + 1, 12));
+    }
+
+    function checkinRangeLabel() {
+      const dates = checkinPeriodDates();
+      if (state.checkinPeriod === "week") {
+        const first = dates[0];
+        const last = dates[dates.length - 1];
+        const formatMonthDay = date => `${String(date.getMonth() + 1).padStart(2, "0")}/${String(date.getDate()).padStart(2, "0")}`;
+        return `${formatMonthDay(first)} - ${formatMonthDay(last)}`;
+      }
+      if (state.checkinPeriod === "month") {
+        const date = checkinDateObject(state.checkinDate);
+        return `${date.getFullYear()}年${date.getMonth() + 1}月`;
+      }
+      return `${checkinDateObject(state.checkinDate).getFullYear()}年`;
+    }
+
+    function openCheckinTimePicker() {
+      if (state.checkinPeriod === "year") {
+        const selectedYear = checkinDateObject(state.checkinDate).getFullYear();
+        const currentYear = new Date().getFullYear();
+        state.pickerKind = "checkin-year";
+        state.pickerAdding = false;
+        els.pickerLayer.classList.add("is-year-picker");
+        els.pickerTitle.textContent = "选择年份";
+        els.pickerList.classList.add("year-picker-grid");
+        els.pickerList.innerHTML = Array.from({ length: currentYear - 1999 }, (_, index) => currentYear - index)
+          .map(year => `<button class="year-picker-option ${year === selectedYear ? "active" : ""}" type="button" data-checkin-year="${year}" aria-pressed="${year === selectedYear}">${year}年</button>`)
+          .join("");
+        els.pickerLayer.hidden = false;
+        syncModalState();
+        return;
+      }
+      els.pickerLayer.classList.remove("is-year-picker");
+      els.pickerList.classList.remove("year-picker-grid");
+      const picker = els.checkinTimePicker;
+      picker.type = state.checkinPeriod === "month" ? "month" : "date";
+      const today = toDateInput(new Date());
+      picker.max = state.checkinPeriod === "month" ? today.slice(0, 7) : today;
+      picker.value = state.checkinPeriod === "month" ? state.checkinDate.slice(0, 7) : state.checkinDate;
+      try {
+        picker.showPicker();
+      } catch {
+        picker.focus();
+        picker.click();
+      }
+    }
+
+    function selectCheckinTime() {
+      const value = els.checkinTimePicker.value;
+      if (!value) return;
+      if (state.checkinPeriod === "month") {
+        state.checkinDate = `${value}-01`;
+      } else if (state.checkinPeriod === "year") {
+        state.checkinDate = `${value.slice(0, 4)}-01-01`;
+      } else {
+        state.checkinDate = value;
+      }
+      renderCheckins();
+    }
+
+    function checkinStats(item, dates) {
+      const completed = dates.filter(date => item.records[checkinDateKey(date)]).length;
+      const available = dates.filter(date => date <= new Date()).length || dates.length;
+      return { completed, percent: Math.round((completed / available) * 100) };
+    }
+
+    function renderCheckinCard(item) {
+      const selected = checkinDateObject(state.checkinDate);
+      const dates = checkinPeriodDates();
+      const stats = checkinStats(item, dates);
+      const color = escapeHtml(item.color);
+      let content = "";
+
+      if (state.checkinPeriod === "year") {
+        const year = selected.getFullYear();
+        const daysInYear = (Date.UTC(year + 1, 0, 1) - Date.UTC(year, 0, 1)) / 86400000;
+        const leadingDays = 0;
+        const dots = Array.from({ length: leadingDays + daysInYear }, (_, index) => {
+          if (index < leadingDays) return `<span class="checkin-year-dot is-empty" aria-hidden="true"></span>`;
+          const dayIndex = index - leadingDays;
+          const date = new Date(year, 0, dayIndex + 1, 12);
+          const key = checkinDateKey(date);
+          const isComplete = Boolean(item.records[key]);
+          const isFuture = key > checkinDateKey(new Date());
+          const isToday = key === checkinDateKey(new Date());
+          return `<span class="checkin-year-dot ${isComplete ? "is-complete" : ""} ${isFuture ? "is-future" : ""} ${isToday ? "is-today" : ""}" style="--checkin-color:${color}" title="${key}${isComplete ? " 已完成" : " 未完成"}"></span>`;
+        }).join("");
+        content = `<div class="checkin-year-grid">${dots}</div>`;
+      } else {
+        const leading = state.checkinPeriod === "month" ? ((dates[0].getDay() + 6) % 7) : 0;
+        const weekdayLabels = ["一", "二", "三", "四", "五", "六", "日"].map(day => `<span class="checkin-weekday">${day}</span>`).join("");
+        const weekdays = state.checkinPeriod === "month" ? weekdayLabels : "";
+        const blanks = Array.from({ length: leading }, () => `<button class="checkin-day is-empty" tabindex="-1" aria-hidden="true"></button>`).join("");
+        const days = dates.map(date => {
+          const key = checkinDateKey(date);
+          const isFuture = key > checkinDateKey(new Date());
+          const isToday = key === checkinDateKey(new Date());
+          const isComplete = Boolean(item.records[key]);
+          return `<button class="checkin-day ${isComplete ? "is-complete" : ""} ${isToday ? "is-today" : ""} ${isFuture ? "is-future" : ""}" style="--checkin-color:${color}" data-checkin-id="${escapeHtml(item.id)}" data-checkin-date="${key}" aria-label="${key}${isComplete ? " 已完成" : " 未完成"}">${date.getDate()}</button>`;
+        }).join("");
+        content = `<div class="checkin-days">${weekdays}${blanks}${days}</div>`;
+      }
+
+      return `<article class="checkin-card ${state.checkinPeriod === "week" ? "is-week" : state.checkinPeriod === "month" ? "is-month" : "is-year"}">
+        <div class="checkin-card-head">
+          <div class="checkin-name"><span>${escapeHtml(item.title)}</span></div>
+          <button class="checkin-delete" type="button" data-checkin-delete="${escapeHtml(item.id)}" aria-label="删除${escapeHtml(item.title)}">×</button>
+        </div>
+        ${state.checkinPeriod === "week" ? "" : `<div class="checkin-stats" style="--checkin-color:${color}"><span>完成 <strong>${stats.completed}</strong> 次</span><span>完成率 <strong>${stats.percent}%</strong></span></div>`}
+        ${content}
+      </article>`;
+    }
+
+    function renderCheckins() {
+      if (!els.checkinList) return;
+      els.checkinRangeLabel.textContent = checkinRangeLabel();
+      els.checkinList.classList.toggle("is-week-list", state.checkinPeriod === "week");
+      els.checkinList.classList.toggle("is-month-list", state.checkinPeriod === "month");
+      els.checkinList.classList.toggle("is-year-list", state.checkinPeriod === "year");
+      document.querySelectorAll("[data-checkin-period]").forEach(button => {
+        button.classList.toggle("active", button.dataset.checkinPeriod === state.checkinPeriod);
+      });
+      const weekdayHeader = state.checkinPeriod === "week"
+        ? `<div class="checkin-global-weekdays"><div class="checkin-weekdays">${["一", "二", "三", "四", "五", "六", "日"].map(day => `<span class="checkin-weekday">${day}</span>`).join("")}</div></div>`
+        : "";
+      els.checkinList.innerHTML = state.checkins.length
+        ? `${weekdayHeader}${state.checkins.map(renderCheckinCard).join("")}`
+        : `<div class="empty-state">还没有打卡项目，先新增一个吧</div>`;
+    }
+
+    function addCheckin() {
+      renderCheckinColorPicker();
+      els.checkinAddForm.classList.add("is-open");
+      els.checkinNameInput.focus();
+    }
+
+    function renderCheckinColorPicker() {
+      if (!els.checkinColorPicker) return;
+      els.checkinColorPicker.innerHTML = CHECKIN_COLORS.map(color => `<button type="button" class="checkin-color-swatch ${color === state.checkinDraftColor ? "is-selected" : ""}" style="--swatch-color:${color};background:${color}" data-checkin-color="${color}" aria-label="选择颜色 ${color}"></button>`).join("");
+    }
+
+    function saveNewCheckin(event) {
+      event.preventDefault();
+      const title = String(els.checkinNameInput.value || "").trim();
+      if (!title) return;
+      state.checkins.push({ id: crypto.randomUUID(), title, emoji: "✓", color: state.checkinDraftColor, records: {} });
+      save();
+      els.checkinNameInput.value = "";
+      state.checkinDraftColor = CHECKIN_COLORS[5];
+      els.checkinAddForm.classList.remove("is-open");
+      renderCheckins();
+      showToast("已新增打卡");
+    }
+
+    function toggleCheckin(id, date) {
+      const item = state.checkins.find(checkin => checkin.id === id);
+      if (!item || date > checkinDateKey(new Date())) return showToast("还没到这一天");
+      item.records[date] = !item.records[date];
+      if (!item.records[date]) delete item.records[date];
+      save();
+      renderCheckins();
+    }
+
+    function deleteCheckin(id) {
+      const item = state.checkins.find(checkin => checkin.id === id);
+      if (!item || !confirm(`确定删除“${item.title}”吗？`)) return;
+      state.checkins = state.checkins.filter(checkin => checkin.id !== id);
+      save();
+      renderCheckins();
+      showToast("已删除");
+    }
+
     function render() {
       renderSummary();
       renderPeriodGrid();
       renderOverviewLists();
       renderWeight();
+      renderCheckins();
       renderEntryPeriodGrid();
       renderEntryList();
       renderDetailPage();
@@ -6574,10 +7536,12 @@
       els.owner.value = incomeOwners.includes(previousOwner) ? previousOwner : (incomeOwners[0] || "");
       const isSaved = type === "saved";
       els.openEntryForm.textContent = isSaved ? "又存一笔" : "又赚一笔";
-      els.amountLabel.innerHTML = isSaved ? "本月存入" : '金额<span class="required">*</span>';
+      els.amountLabel.innerHTML = isSaved ? "本月存入（自动）" : '金额<span class="required">*</span>';
       els.categoryLabel.innerHTML = isSaved ? '存款位置<span class="required">*</span>' : '分类<span class="required">*</span>';
-      els.amount.placeholder = isSaved ? "例如：1100，没存填 0" : "0.00";
+      els.amount.placeholder = isSaved ? "根据总数和收益自动计算" : "0.00";
       els.amount.required = !isSaved;
+      els.amount.readOnly = isSaved;
+      if (!isSaved) els.amount.className = "";
       els.ownerField.hidden = isSaved;
       els.owner.required = !isSaved;
       els.currentValueField.hidden = !isSaved;
@@ -6585,13 +7549,14 @@
       els.computedProfitField.hidden = !isSaved;
       els.computedProfitField.style.display = isSaved ? "" : "none";
       els.currentValue.required = isSaved;
+      els.computedProfit.required = isSaved;
       if (!isSaved) {
         els.currentValue.value = "";
-        els.computedProfit.textContent = "0";
-        els.computedProfit.className = "calculated-value";
+        els.computedProfit.value = "";
+        els.computedProfit.className = "";
       }
-      els.date.required = !isSaved;
-      els.dateLabel.innerHTML = isSaved ? "日期" : '日期<span class="required">*</span>';
+      els.date.required = true;
+      els.dateLabel.innerHTML = '日期<span class="required">*</span>';
       updateDateChip();
       updateComputedProfitPreview();
       renderPickerTriggers();
@@ -6602,12 +7567,14 @@
     function resetForm(type = state.entryType) {
       state.editingId = null;
       els.form.reset();
+      els.amount.className = "";
+      els.computedProfit.className = "";
       els.formTitle.textContent = type === "saved" ? "又存一笔" : "又赚一笔";
       els.saveBtn.textContent = "保存";
       els.cancelEdit.textContent = "关闭";
       els.cancelEdit.hidden = true;
       setEntryType(type);
-      els.date.value = type === "saved" ? "" : incomeDateForContext(els.owner.value, null);
+      els.date.value = type === "saved" ? toDateInput(new Date()) : incomeDateForContext(els.owner.value, null);
       updateDateChip();
       updateComputedProfitPreview();
       renderPickerTriggers();
@@ -6621,7 +7588,7 @@
         els.owner.value = incomeOwners.includes(els.owner.value) ? els.owner.value : (incomeOwners[0] || "");
         els.date.value = incomeDateForContext(els.owner.value, detailContext);
       } else {
-        els.date.value = detailContext ? dateFromDetail(detailContext) : "";
+        els.date.value = detailContext ? dateFromDetail(detailContext) : toDateInput(new Date());
       }
       updateComputedProfitPreview();
       updateDateChip();
@@ -6638,10 +7605,23 @@
     function openWeightModal() {
       els.weightForm.reset();
       syncSelectOptions(els.weightFormPerson, incomeOwners);
+      els.weightFormTitle.textContent = "记录体重";
       els.weightFormPerson.value = state.weightPerson;
       els.weightDate.value = toDateInput(new Date());
       els.weightValue.value = "";
       els.weightNote.value = "";
+      setWeightDropdown(true);
+    }
+
+    function openWeightDayEditor(date, person = state.weightPerson) {
+      const record = weightOnDate(date, person);
+      els.weightForm.reset();
+      syncSelectOptions(els.weightFormPerson, incomeOwners);
+      els.weightFormTitle.textContent = record ? "编辑体重" : "记录体重";
+      els.weightFormPerson.value = person;
+      els.weightDate.value = date;
+      els.weightValue.value = record ? String(record.weight) : "";
+      els.weightNote.value = record?.note || "";
       setWeightDropdown(true);
     }
 
@@ -6656,11 +7636,27 @@
         showToast("日期必填");
         return;
       }
+      const existingIndex = state.weightEntries.findIndex(item => item.person === els.weightFormPerson.value && item.date === els.weightDate.value);
+      if (!els.weightValue.value.trim()) {
+        if (existingIndex >= 0) {
+          state.weightEntries.splice(existingIndex, 1);
+          state.weightPerson = els.weightFormPerson.value;
+          state.weightYear = Number(els.weightDate.value.slice(0, 4));
+          state.weightMonth = Number(els.weightDate.value.slice(5, 7));
+          save();
+          renderWeight();
+          setWeightDropdown(false);
+          showToast("体重记录已删除");
+        } else {
+          setWeightDropdown(false);
+          showToast("未添加空记录");
+        }
+        return;
+      }
       if (weight <= 0) {
         showToast("体重要大于 0");
         return;
       }
-      const existingIndex = state.weightEntries.findIndex(item => item.person === els.weightFormPerson.value && item.date === els.weightDate.value);
       const payload = normalizeWeightEntry({
         id: existingIndex >= 0 ? state.weightEntries[existingIndex].id : crypto.randomUUID(),
         person: els.weightFormPerson.value,
@@ -6683,28 +7679,32 @@
 
     function draftSavedEntry() {
       const existing = state.entries.find(item => item.id === state.editingId);
-      return {
+      const draft = {
         id: state.editingId || "__draft_saved_entry__",
         type: "saved",
         schemaVersion: 2,
-        amount: roundMoney(parseNumber(els.amount.value)),
+        amount: 0,
         currentValue: roundMoney(parseNumber(els.currentValue.value)),
-        periodProfit: 0,
+        periodProfit: roundMoney(parseNumber(els.computedProfit.value)),
         date: els.date.value || "",
         createdAt: existing?.createdAt || Date.now()
       };
+      draft.amount = calculatedSavedAmount(draft);
+      return draft;
     }
 
     function updateComputedProfitPreview() {
       if (state.entryType !== "saved" || !els.computedProfit) return;
-      if (!els.currentValue.value.trim()) {
-        els.computedProfit.textContent = "0";
-        els.computedProfit.className = "calculated-value";
+      if (!els.currentValue.value.trim() || !els.computedProfit.value.trim()) {
+        els.amount.value = "";
+        els.computedProfit.className = "";
         return;
       }
-      const profit = savedProfit(draftSavedEntry());
-      els.computedProfit.textContent = money(profit);
-      els.computedProfit.className = `calculated-value ${profitClass(profit)}`;
+      const saved = calculatedSavedAmount(draftSavedEntry());
+      const profit = parseNumber(els.computedProfit.value);
+      els.amount.value = money(saved);
+      els.amount.className = profitClass(saved);
+      els.computedProfit.className = profitClass(profit);
     }
 
     function upsertEntry(event) {
@@ -6713,10 +7713,6 @@
       const isSaved = state.entryType === "saved";
       if (!isSaved && amount <= 0) {
         showToast("金额要大于 0");
-        return;
-      }
-      if (isSaved && amount < 0) {
-        showToast("本月存入不能小于 0");
         return;
       }
       const existing = state.entries.find(item => item.id === state.editingId);
@@ -6733,6 +7729,10 @@
         showToast("当前存款总数必填");
         return;
       }
+      if (isSaved && !els.computedProfit.value.trim()) {
+        showToast("本月收益必填");
+        return;
+      }
       if (isSaved && !els.category.value) {
         showToast("存款位置必填");
         return;
@@ -6741,13 +7741,14 @@
         showToast("当前存款总数不能小于 0");
         return;
       }
+      const savedDraft = isSaved ? draftSavedEntry() : null;
       const payload = {
         id: state.editingId || crypto.randomUUID(),
         type: state.entryType,
         schemaVersion: 2,
-        amount: roundMoney(amount),
+        amount: isSaved ? savedDraft.amount : roundMoney(amount),
         currentValue: isSaved ? roundMoney(currentValue) : 0,
-        periodProfit: 0,
+        periodProfit: isSaved ? savedDraft.periodProfit : 0,
         date: els.date.value,
         category: els.category.value,
         owner: isSaved ? "" : els.owner.value,
@@ -6778,6 +7779,7 @@
       els.category.value = item.category;
       els.owner.value = item.type === "income" && incomeOwners.includes(item.owner) ? item.owner : incomeOwners[0];
       els.currentValue.value = item.type === "saved" ? savedCurrentValue(item) : "";
+      els.computedProfit.value = item.type === "saved" ? savedProfit(item) : "";
       els.note.value = item.note || "";
       els.formTitle.textContent = "编辑记录";
       els.saveBtn.textContent = "保存修改";
@@ -6826,6 +7828,7 @@
       "类型",
       "日期",
       "金额/本月存入",
+      "本月收益",
       "当前存款总数",
       "分类/存款位置",
       "收入人",
@@ -6862,6 +7865,7 @@
         "类型": item.type === "income" ? "收入" : "存入",
         "日期": item.date || "",
         "金额/本月存入": item.type === "saved" ? savedAmount(item) : item.amount,
+        "本月收益": item.type === "saved" ? savedProfit(item) : "",
         "当前存款总数": item.type === "saved" ? savedCurrentValue(item) : "",
         "分类/存款位置": item.category || "",
         "收入人": item.type === "income" ? (item.owner || "") : "",
@@ -6881,6 +7885,7 @@
           "类型": "收入",
           "日期": "2026-07-31",
           "金额/本月存入": "10000",
+          "本月收益": "",
           "当前存款总数": "",
           "分类/存款位置": "工资",
           "收入人": "陈",
@@ -6889,7 +7894,8 @@
         {
           "类型": "存入",
           "日期": "2026-07-31",
-          "金额/本月存入": "3000",
+          "金额/本月存入": "系统自动计算，可不填",
+          "本月收益": "200",
           "当前存款总数": "50000",
           "分类/存款位置": "微众银行",
           "收入人": "",
@@ -6956,6 +7962,7 @@
           const type = row["类型"] === "存入" ? "saved" : row["类型"] === "收入" ? "income" : "";
           if (!type) return null;
           const amount = roundMoney(parseNumber(row["金额/本月存入"]));
+          const periodProfit = roundMoney(parseNumber(row["本月收益"] || row["月收益"] || row["收益"]));
           const currentValueText = (row["当前存款总数"] || "").trim();
           const currentValue = roundMoney(parseNumber(currentValueText));
           const date = (row["日期"] || "").trim();
@@ -6973,7 +7980,7 @@
             schemaVersion: 2,
             amount: type === "saved" ? amount : amount,
             currentValue: type === "saved" ? currentValue : 0,
-            periodProfit: 0,
+            periodProfit: type === "saved" ? periodProfit : 0,
             date,
             category,
             owner: type === "income" ? owner : "",
@@ -7062,11 +8069,49 @@
         renderWeight();
       });
     });
-    document.querySelectorAll("[data-weight-view]").forEach(button => {
+    document.querySelectorAll("[data-checkin-period]").forEach(button => {
       button.addEventListener("click", () => {
-        state.weightView = button.dataset.weightView;
-        renderWeight();
+        state.checkinPeriod = button.dataset.checkinPeriod;
+        renderCheckins();
       });
+    });
+    els.checkinRangeLabel.addEventListener("click", openCheckinTimePicker);
+    els.checkinTimePicker.addEventListener("change", selectCheckinTime);
+    els.addCheckin.addEventListener("click", addCheckin);
+    els.checkinAddForm.addEventListener("submit", saveNewCheckin);
+    els.cancelCheckinAdd.addEventListener("click", () => {
+      els.checkinNameInput.value = "";
+      els.checkinAddForm.classList.remove("is-open");
+    });
+    els.checkinColorPicker.addEventListener("click", event => {
+      const swatch = event.target.closest("[data-checkin-color]");
+      if (!swatch) return;
+      state.checkinDraftColor = swatch.dataset.checkinColor;
+      renderCheckinColorPicker();
+    });
+    els.checkinList.addEventListener("click", event => {
+      const day = event.target.closest("[data-checkin-id][data-checkin-date]");
+      if (day) toggleCheckin(day.dataset.checkinId, day.dataset.checkinDate);
+      const deleteButton = event.target.closest("[data-checkin-delete]");
+      if (deleteButton) deleteCheckin(deleteButton.dataset.checkinDelete);
+    });
+    els.checkinPrev.addEventListener("click", () => {
+      const date = checkinDateObject(state.checkinDate);
+      if (state.checkinPeriod === "week") date.setDate(date.getDate() - 7);
+      if (state.checkinPeriod === "month") date.setMonth(date.getMonth() - 1);
+      if (state.checkinPeriod === "year") date.setFullYear(date.getFullYear() - 1);
+      state.checkinDate = checkinDateKey(date);
+      renderCheckins();
+    });
+    els.checkinNext.addEventListener("click", () => {
+      const date = checkinDateObject(state.checkinDate);
+      if (state.checkinPeriod === "week") date.setDate(date.getDate() + 7);
+      if (state.checkinPeriod === "month") date.setMonth(date.getMonth() + 1);
+      if (state.checkinPeriod === "year") date.setFullYear(date.getFullYear() + 1);
+      const today = checkinDateObject(toDateInput(new Date()));
+      if (date > today) return showToast("还没有到这个时间");
+      state.checkinDate = checkinDateKey(date);
+      renderCheckins();
     });
     els.weightPerson.addEventListener("click", event => {
       const button = event.target.closest("[data-weight-person]");
@@ -7074,7 +8119,34 @@
       state.weightPerson = button.dataset.weightPerson;
       renderWeight();
     });
-    els.openWeightForm.addEventListener("click", openWeightModal);
+    els.weightGrid.addEventListener("click", event => {
+      const cell = event.target.closest(".weight-cell.is-day[data-weight-date]");
+      if (!cell) return;
+      openWeightDayEditor(cell.dataset.weightDate, cell.dataset.weightPerson);
+    });
+    els.weightGrid.addEventListener("keydown", event => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      const cell = event.target.closest(".weight-cell.is-day[data-weight-date]");
+      if (!cell) return;
+      event.preventDefault();
+      openWeightDayEditor(cell.dataset.weightDate, cell.dataset.weightPerson);
+    });
+    els.weightBarChart.addEventListener("click", event => {
+      const bar = event.target.closest("[data-weight-bar-date], [data-weight-bar-month]");
+      if (!bar) return;
+      if (bar.dataset.weightBarDate) state.weightSelectedDate = bar.dataset.weightBarDate;
+      if (bar.dataset.weightBarMonth) state.weightSelectedMonth = Number(bar.dataset.weightBarMonth);
+      renderWeightBarChart();
+    });
+    els.weightBarChart.addEventListener("keydown", event => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      const bar = event.target.closest("[data-weight-bar-date], [data-weight-bar-month]");
+      if (!bar) return;
+      event.preventDefault();
+      if (bar.dataset.weightBarDate) state.weightSelectedDate = bar.dataset.weightBarDate;
+      if (bar.dataset.weightBarMonth) state.weightSelectedMonth = Number(bar.dataset.weightBarMonth);
+      renderWeightBarChart();
+    });
     els.closeWeightForm.addEventListener("click", () => setWeightDropdown(false));
     els.weightDropdown.addEventListener("click", event => {
       if (event.target === els.weightDropdown) setWeightDropdown(false);
@@ -7129,6 +8201,7 @@
     });
     els.amount.addEventListener("input", updateComputedProfitPreview);
     els.currentValue.addEventListener("input", updateComputedProfitPreview);
+    els.computedProfit.addEventListener("input", updateComputedProfitPreview);
     els.date.addEventListener("change", () => {
       updateComputedProfitPreview();
       updateDateChip();
@@ -7171,6 +8244,13 @@
       event.target.value = "";
     });
     els.pickerList.addEventListener("click", handlePickerAction);
+    els.pickerList.addEventListener("click", event => {
+      const yearButton = event.target.closest("[data-checkin-year]");
+      if (!yearButton) return;
+      state.checkinDate = `${yearButton.dataset.checkinYear}-01-01`;
+      closePicker();
+      renderCheckins();
+    });
     els.pickerList.addEventListener("submit", handlePickerSubmit);
     els.pickerLayer.addEventListener("click", event => {
       if (event.target === els.pickerLayer) closePicker();
@@ -7198,12 +8278,6 @@
     load();
     resetForm();
     render();
-
-    if ("serviceWorker" in navigator && location.protocol !== "file:") {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./service-worker.js?v=2").catch(() => {});
-      });
-    }
   </script>
 </body>
 </html>
