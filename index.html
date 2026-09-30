@@ -6118,11 +6118,19 @@
     }
 
     function maxVisibleMonth(year) {
-      return year >= currentYear() ? currentMonth() : 12;
+      return 12;
     }
 
-    function clampVisibleYear(year) {
-      return Math.min(currentYear(), Math.max(MIN_YEAR, year));
+    function maxAvailableYear() {
+      const dataYears = state.entries
+        .map(item => Number((item.date || "").slice(0, 4)))
+        .filter(year => Number.isFinite(year) && year >= MIN_YEAR);
+      return Math.max(currentYear() + 1, ...dataYears);
+    }
+
+    function clampVisibleYear(year, allowFuture = false) {
+      const maxYear = allowFuture ? maxAvailableYear() : currentYear();
+      return Math.min(maxYear, Math.max(MIN_YEAR, year));
     }
 
     const amountFormatter = new Intl.NumberFormat("zh-CN", {
@@ -6501,7 +6509,7 @@
     }
 
     function renderMonthGrid() {
-      state.viewYear = clampVisibleYear(state.viewYear);
+      state.viewYear = clampVisibleYear(state.viewYear, true);
       const yearTotals = totals(entriesForYear(state.viewYear));
       const rows = Array.from({ length: maxVisibleMonth(state.viewYear) }, (_, index) => {
         const month = index + 1;
@@ -6676,7 +6684,7 @@
     }
 
     function renderEntryMonthGrid() {
-      state.entryViewYear = clampVisibleYear(state.entryViewYear);
+      state.entryViewYear = clampVisibleYear(state.entryViewYear, true);
       const scopedEntries = state.entries.filter(item => item.type === state.entryType);
       const yearTotals = totals(scopedEntries.filter(item => Number((item.date || "").slice(0, 4)) === state.entryViewYear));
       const rows = Array.from({ length: maxVisibleMonth(state.entryViewYear) }, (_, index) => {
@@ -6939,7 +6947,7 @@
     function renderEntryList() {
       const isSaved = state.entryType === "saved";
       els.entryListTitle.textContent = isSaved ? "存入明细" : "收入明细";
-      const selectedYear = clampVisibleYear(state.entryViewYear);
+      const selectedYear = clampVisibleYear(state.entryViewYear, state.entryPeriodMode === "month");
       const entries = state.entries
         .filter(item => item.type === state.entryType)
         .filter(item => Number((item.date || "").slice(0, 4)) === selectedYear);
@@ -6950,7 +6958,7 @@
       ensurePickerList("owner");
       ensurePickerList("category");
       ensurePickerList("saved");
-      state.overviewDetailYear = clampVisibleYear(state.overviewDetailYear);
+      state.overviewDetailYear = clampVisibleYear(state.overviewDetailYear, true);
       document.querySelectorAll("[data-overview-detail-type]").forEach(button => {
         button.classList.toggle("active", button.dataset.overviewDetailType === state.overviewDetailType);
       });
@@ -6959,8 +6967,8 @@
         new Set([
           ...state.entries
             .map(item => Number((item.date || "").slice(0, 4)))
-            .filter(year => Number.isFinite(year) && year >= MIN_YEAR && year <= currentYear()),
-          ...Array.from({ length: currentYear() - MIN_YEAR + 1 }, (_, index) => MIN_YEAR + index)
+            .filter(year => Number.isFinite(year) && year >= MIN_YEAR && year <= maxAvailableYear()),
+          ...Array.from({ length: maxAvailableYear() - MIN_YEAR + 1 }, (_, index) => MIN_YEAR + index)
         ])
       ).sort((a, b) => b - a);
 
@@ -8533,7 +8541,8 @@
     });
     document.getElementById("nextYear").addEventListener("click", () => {
       state.detail = null;
-      state.viewYear = clampVisibleYear(state.viewYear + (state.periodMode === "year" ? 12 : 1));
+      const nextYear = state.viewYear + (state.periodMode === "year" ? 12 : 1);
+      state.viewYear = clampVisibleYear(nextYear, state.periodMode === "month");
       render();
     });
     document.getElementById("entryPrevYear").addEventListener("click", () => {
@@ -8543,7 +8552,8 @@
     });
     document.getElementById("entryNextYear").addEventListener("click", () => {
       state.detail = null;
-      state.entryViewYear = clampVisibleYear(state.entryViewYear + (state.entryPeriodMode === "year" ? 12 : 1));
+      const nextYear = state.entryViewYear + (state.entryPeriodMode === "year" ? 12 : 1);
+      state.entryViewYear = clampVisibleYear(nextYear, state.entryPeriodMode === "month");
       render();
     });
     load();
