@@ -3669,8 +3669,12 @@
     .period-cell strong {
       font-size: 12px !important;
       line-height: 1.25;
-      font-weight: 740 !important;
+      font-weight: 700 !important;
       letter-spacing: 0;
+    }
+
+    .period-cell .mini-row {
+      font-weight: 400 !important;
     }
 
     .records,
@@ -3776,7 +3780,7 @@
     }
 
     .app {
-      padding-top: calc(14px + var(--safe-top));
+      padding-top: calc(26px + var(--safe-top));
     }
 
     .panel,
@@ -3960,6 +3964,28 @@
       background: #f6f8fc !important;
     }
 
+    #viewOverview .overview-period-summary .metric:first-child,
+    #viewOverview .overview-period-summary .metric:nth-child(3) {
+      background: #f6f8fc !important;
+    }
+
+    #viewOverview .overview-period-summary .metric:first-child,
+    #viewOverview .overview-period-summary .metric:nth-child(3),
+    #viewOverview .overview-period-summary .period-allocation-metric {
+      background: transparent !important;
+      border: 0 !important;
+      border-radius: 0;
+      box-shadow: none !important;
+    }
+
+    #viewOverview .overview-period-summary .metric:first-child {
+      border-right: 1px solid #e8edf5 !important;
+    }
+
+    #viewOverview .overview-period-summary .period-allocation-metric {
+      border-top: 1px solid #e8edf5 !important;
+    }
+
     #viewOverview .overview-period-summary .period-allocation-metric > span {
       display: none;
     }
@@ -4008,11 +4034,11 @@
     }
 
     .summary-allocation-value.spend strong:not(.muted-color) {
-      color: #009bff !important;
+      color: #64b5f6 !important;
     }
 
     .summary-allocation-value.saved strong:not(.muted-color) {
-      color: #ff8a00 !important;
+      color: #93dccd !important;
     }
 
     .summary-allocation-bar {
@@ -4033,13 +4059,13 @@
 
     .summary-allocation-spend {
       flex: 0 0 var(--spend-share, 50%);
-      background: #009bff;
+      background: #64b5f6;
       border-radius: 999px 0 0 999px;
     }
 
     .summary-allocation-saved {
       flex: 1 1 auto;
-      background: #ff8a00;
+      background: #93dccd;
       border-radius: 0 999px 999px 0;
     }
 
@@ -4282,6 +4308,16 @@
       visibility: hidden;
     }
 
+    .weight-page-panel .weight-grid.is-day-calendar .weight-cell.is-current {
+      border: 2px solid #009bff !important;
+      background: #ffffff !important;
+      box-shadow: 0 0 0 1px rgba(0, 155, 255, 0.12);
+    }
+
+    .weight-page-panel .weight-grid.is-day-calendar .weight-cell.is-current .weight-cell-title {
+      color: #1f2329 !important;
+    }
+
     @media (max-width: 430px) {
       #viewOverview .overview-period-summary {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -4291,13 +4327,13 @@
     .period-cell {
       background: #ffffff;
       border-color: #e9eef7;
-      box-shadow: 0 6px 18px rgba(31, 63, 113, 0.045);
+      box-shadow: none;
     }
 
     .period-cell.is-current-month {
       border-color: #009bff;
       background: #f4f9ff;
-      box-shadow: 0 8px 22px rgba(22, 119, 255, 0.12);
+      box-shadow: none;
     }
 
     .period-cell h3,
@@ -4887,6 +4923,22 @@
       background: #55b383;
     }
 
+    .weight-bars.is-daily .weight-bar-item.is-up .weight-bar {
+      background: #fec5bb;
+    }
+
+    .weight-bars.is-daily .weight-bar-item.is-down .weight-bar {
+      background: #99d98c;
+    }
+
+    .weight-bars.is-daily .weight-selected-tip.is-up strong {
+      color: #fec5bb;
+    }
+
+    .weight-bars.is-daily .weight-selected-tip.is-down strong {
+      color: #99d98c;
+    }
+
     .weight-bar-item.is-empty .weight-bar {
       min-height: 4px;
       background: rgba(207, 211, 220, 0.38);
@@ -5418,6 +5470,42 @@
 
     #viewEntry > .entry-toggle {
       display: none !important;
+    }
+
+    /* Use the check-in segmented-control style across the three modules. */
+    .period-mode,
+    .weight-page-panel .weight-period-mode,
+    .weight-page-panel .weight-person-tabs {
+      gap: 3px;
+      padding: 3px;
+      border: 0;
+      border-radius: 999px;
+      background: #e8edf5;
+      box-shadow: none;
+    }
+
+    .period-mode .mode-btn,
+    .weight-page-panel .weight-period-mode .mode-btn,
+    .weight-page-panel .weight-person-tabs .mode-btn {
+      min-height: 32px;
+      border-radius: 999px;
+      background: transparent;
+      color: #697386;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .period-mode .mode-btn.active,
+    .weight-page-panel .weight-period-mode .mode-btn.active,
+    .weight-page-panel .weight-person-tabs .mode-btn.active {
+      background: #ffffff !important;
+      color: #009bff !important;
+      box-shadow: 0 3px 8px rgba(31, 63, 113, 0.1) !important;
+    }
+
+    #viewOverview .period-mode,
+    #viewEntry .period-mode {
+      background: #f4f9ff;
     }
 
     /* Keep iOS Safari from zooming the page when a form control receives focus. */
